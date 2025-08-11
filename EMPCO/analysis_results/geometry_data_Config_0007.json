@@ -1,5 +1,5 @@
 {
-  "configuration_id": "Config_0001",
+  "configuration_id": "Config_0007",
   "slope_geometry": {
     "angle_degrees": 15,
     "height_ft": 20,
@@ -27,7 +27,7 @@
     }
   ],
   "groundwater": {
-    "depth_below_surface_ft": 10.0
+    "depth_below_surface_ft": 18.0
   },
   "pipeline": {
     "diameter_in": 24.0,
@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 2.2,
-    "effective_stress_fos": 0.83,
+    "total_stress_fos": 1.87,
+    "effective_stress_fos": 1.36,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }

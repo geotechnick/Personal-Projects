@@ -1,5 +1,5 @@
 {
-  "configuration_id": "Config_0001",
+  "configuration_id": "Config_0006",
   "slope_geometry": {
     "angle_degrees": 15,
     "height_ft": 20,
@@ -11,23 +11,23 @@
   "soil_layers": [
     {
       "name": "Slope Material",
-      "unit_weight_pcf": 120,
-      "cohesion_total_psf": 200,
-      "cohesion_effective_psf": 100,
-      "friction_angle_degrees": 25,
+      "unit_weight_pcf": 115,
+      "cohesion_total_psf": 100,
+      "cohesion_effective_psf": 50,
+      "friction_angle_degrees": 15,
       "thickness_ft": 20
     },
     {
       "name": "Foundation Material",
-      "unit_weight_pcf": 125,
-      "cohesion_total_psf": 400,
-      "cohesion_effective_psf": 200,
-      "friction_angle_degrees": 35,
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 200,
+      "cohesion_effective_psf": 100,
+      "friction_angle_degrees": 25,
       "thickness_ft": 30
     }
   ],
   "groundwater": {
-    "depth_below_surface_ft": 10.0
+    "depth_below_surface_ft": 18.0
   },
   "pipeline": {
     "diameter_in": 24.0,
@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 2.2,
-    "effective_stress_fos": 0.83,
+    "total_stress_fos": 1.5,
+    "effective_stress_fos": 2.12,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }

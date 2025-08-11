@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 2.01,
-    "effective_stress_fos": 1.77,
+    "total_stress_fos": 1.12,
+    "effective_stress_fos": 1.91,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }

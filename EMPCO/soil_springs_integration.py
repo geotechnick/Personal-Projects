@@ -330,7 +330,7 @@ class IntegratedAnalysisEngine:
                         if spring_results:
                             # Create integrated result
                             integrated_result = IntegratedAnalysisResult(
-                                config_id=f"{slope_result.config_id}_{pipeline_config.pipe_od}in_{pipeline_config.pgd_path}",
+                                config_id=f"{slope_result.config_id}_{pipeline_config.pipe_od}in_{pipeline_config.pgd_direction}",
                                 slope_fos=min_fos,
                                 pipeline_config=pipeline_config,
                                 soil_params=soil_params,

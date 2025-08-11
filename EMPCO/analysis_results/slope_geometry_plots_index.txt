@@ -2,8 +2,8 @@
 SLOPE GEOMETRY VISUALIZATION INDEX
 ================================================================================
 
-Generated: 2025-08-11 21:09:02
-Total individual plots: 3
+Generated: 2025-08-11 21:12:29
+Total individual plots: 10
 
 SLOPE COMPARISON PLOT:
 ------------------------------
@@ -24,12 +24,47 @@ INDIVIDUAL SLOPE GEOMETRY PLOTS:
   Configuration: Config_0002
   Shows: Slope geometry, soil layers, failure surface, pipeline location
 
+• slope_geometry_Config_0003.png
+  Configuration: Config_0003
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0004.png
+  Configuration: Config_0004
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0005.png
+  Configuration: Config_0005
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0006.png
+  Configuration: Config_0006
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0007.png
+  Configuration: Config_0007
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0008.png
+  Configuration: Config_0008
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
+• slope_geometry_Config_0009.png
+  Configuration: Config_0009
+  Shows: Slope geometry, soil layers, failure surface, pipeline location
+
 GEOMETRY DATA FILES:
 -------------------------
 JSON files with detailed geometric parameters available:
 • geometry_data_Config_0000.json
 • geometry_data_Config_0001.json
 • geometry_data_Config_0002.json
+• geometry_data_Config_0003.json
+• geometry_data_Config_0004.json
+• geometry_data_Config_0005.json
+• geometry_data_Config_0006.json
+• geometry_data_Config_0007.json
+• geometry_data_Config_0008.json
+• geometry_data_Config_0009.json
 
 ================================================================================
 VISUALIZATION CONTENTS:
