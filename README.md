@@ -22,7 +22,7 @@ The **EMPCO (Energy Management and Pipeline Consulting Operations)** project aut
 - **📋 Excel Integration**: Leverages existing `Soil Springs_2024.xlsx` calculations for pipeline analysis in background mode
 - **📈 Comprehensive Reporting**: Executive summaries, visualization plots, priority classifications with timelines and costs
 - **⚡ Scalable Workflow**: From small studies (10 configs) to large parametric analyses (1000+ configs)
-- **🔄 Intelligent Fallbacks**: Graceful degradation when software unavailable
+- **🔄 Intelligent Fallbacks**: Graceful degradation when software unavailable with robust error handling
 - **📊 Advanced Visualizations**: Detailed slope geometry plots with soil layers, failure surfaces, and pipeline locations
 
 ## Quick Start
@@ -60,8 +60,9 @@ pip install PyGeoStudio
    - No external software required
 
 4. **Excel Background Processing**
-   - Hidden Excel automation
+   - Hidden Excel automation with robust connection management
    - No visible Excel windows
+   - Automatic fallback to mock results if Excel unavailable
 
 ### Basic Usage
 
@@ -166,12 +167,14 @@ See **`PARAMETER_INPUT_GUIDE.md`** for detailed configuration examples and engin
 4. **Extract Results**: Get real Factor of Safety values and slip surface data
 5. **Decision Matrix**: Use actual results to determine analysis requirements
 
-### **🎯 System Intelligence:**
+### **🎯 System Intelligence & Error Handling:**
 
-The system automatically detects available capabilities:
+The system automatically detects available capabilities and handles errors gracefully:
 - ✅ **PyGeoStudio Available**: Uses real GeoStudio analysis
 - ⚠️ **PyGeoStudio Missing**: Falls back to CLI or simulation
 - 🔧 **No GeoStudio**: Uses intelligent engineering-based calculations
+- 📋 **Excel Unavailable**: Provides mock results based on engineering principles
+- 🛡️ **Connection Issues**: Robust error handling prevents workflow failures
 
 ## Understanding the Results
 
@@ -286,10 +289,11 @@ EMPCO/
 
 **✅ Fully Operational:**
 - **PyGeoStudio Integration**: Direct .gsz file manipulation (recommended approach)
-- **Excel Headless Processing**: Background Excel calculations with no GUI
+- **Excel Headless Processing**: Background Excel calculations with robust connection management
 - **Advanced Visualizations**: Detailed slope geometry plots with failure surfaces and pipeline locations
-- **Intelligent Fallbacks**: Realistic simulations when software unavailable
+- **Intelligent Fallbacks**: Realistic simulations when software unavailable with graceful error handling
 - **Scalable Analysis**: From 10 to 1000+ configurations
+- **Enhanced Reliability**: Automatic fallbacks prevent workflow failures
 
 **⚠️ Limitations:**
 - Complex slope geometries (benches, multi-stage) require template customization
@@ -303,12 +307,38 @@ EMPCO/
 - Web dashboard for results visualization
 - Machine learning for improved decision thresholds
 
+## Troubleshooting & Common Issues
+
+### **System automatically handles common issues:**
+
+**❌ "xlwings not available" errors:**
+- ✅ **Auto-fixed**: System installs xlwings automatically via setup_environment.py
+- ✅ **Fallback**: Uses mock results if Excel integration fails
+
+**❌ "Excel OLE connection errors":**
+- ✅ **Auto-fixed**: Enhanced connection management with proper cleanup
+- ✅ **Fallback**: Provides engineering-based mock calculations when Excel unavailable
+
+**❌ "PyGeoStudio not found":**
+- ✅ **Auto-fallback**: Uses GeoStudio CLI or intelligent simulation
+- ✅ **Recommendation**: Install PyGeoStudio for best results: `pip install PyGeoStudio`
+
+**❌ "GeoStudio executable not found":**
+- ✅ **Auto-fallback**: Uses mock interface with realistic engineering calculations
+- ✅ **Note**: Results still meaningful for preliminary analysis
+
+### **Expected behavior:**
+- System will complete analysis even if software dependencies are missing
+- Mock results are based on engineering principles and provide meaningful insights
+- Check console output for capability detection and fallback notifications
+
 ## Support & Documentation
 
 - See `CLAUDE.md` for detailed technical documentation
 - Check `executive_summary.txt` in results for analysis-specific findings
 - Review individual CSV files for detailed configuration data
 - Examine `analysis_summary_plots.png` for visual insights
+- Run `python setup_environment.py` to check system capabilities
 
 ## License
 
