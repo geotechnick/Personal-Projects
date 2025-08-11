@@ -1,0 +1,49 @@
+project_name: "Quick Slope Study"
+description: "Simple parametric study for preliminary assessment"
+
+# Slope geometry parameters
+slope_angles: [30, 35, 40]  # degrees
+slope_heights: [40, 60, 80]  # feet
+
+# Soil scenarios - simplified
+soil_scenarios:
+  - name: "Conservative Soil"
+    layers:
+      - name: "Weak Clay"
+        unit_weight: 115
+        cohesion_total: 100
+        cohesion_effective: 50
+        friction_angle: 15
+        thickness: 20
+      - name: "Medium Soil" 
+        unit_weight: 120
+        cohesion_total: 200
+        cohesion_effective: 100
+        friction_angle: 25
+        thickness: 30
+
+  - name: "Typical Soil"
+    layers:
+      - name: "Medium Clay"
+        unit_weight: 120
+        cohesion_total: 200
+        cohesion_effective: 100
+        friction_angle: 25
+        thickness: 25
+      - name: "Dense Soil"
+        unit_weight: 125
+        cohesion_total: 400
+        cohesion_effective: 200
+        friction_angle: 35
+        thickness: 35
+
+# Pipeline parameters - common sizes only
+pipeline_sizes:
+  - [20, 0.5]    # 20" OD, 0.5" wall
+  - [24, 0.5]    # 24" OD, 0.5" wall
+
+pipeline_grades: ["X-60"]
+depths_of_cover: [8, 10, 12]
+internal_pressures: [1440]
+pgd_lengths: [15, 25]
+groundwater_ratios: [0.7]

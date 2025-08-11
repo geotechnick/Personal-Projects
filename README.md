@@ -90,6 +90,59 @@ python setup_environment.py
 **📊 View Results:**
 Results are automatically saved to `analysis_results/` directory with comprehensive CSV files, plots, and executive summary.
 
+## 📋 Parameter Input Methods
+
+Users can specify slope, soil, and pipeline parameters using **5 flexible methods**:
+
+### **1. Configuration Files (Recommended)**
+```bash
+# Create template files first
+python automated_decision_workflow.py --create-templates
+
+# Use JSON configuration
+python automated_decision_workflow.py --config-json "my_project.json"
+
+# Use YAML configuration  
+python automated_decision_workflow.py --config-yaml "my_project.yaml"
+
+# Use Excel configuration
+python automated_decision_workflow.py --config-excel "my_project.xlsx"
+```
+
+### **2. Interactive Input**
+```bash
+python automated_decision_workflow.py --interactive
+```
+
+### **3. Command Line Overrides**
+```bash
+python automated_decision_workflow.py --angles "25,30,35" --heights "40,60,80" --project-name "Site Alpha"
+```
+
+### **4. Example Parameter Categories:**
+
+**🏔️ Slope Parameters:**
+- Angles: 15-45 degrees
+- Heights: 20-100 feet
+- Groundwater ratios: 0.5-0.9
+
+**🌍 Soil Parameters:**
+- Unit weight: 110-140 pcf
+- Cohesion: 50-500 psf  
+- Friction angle: 15-40 degrees
+
+**🔧 Pipeline Parameters:**
+- Sizes: 16"-36" diameter
+- Grades: X-52 to X-70
+- Pressures: 1000-1600 psi
+
+### **5. Template Files Generated:**
+- `project_parameters_template.json`
+- `project_parameters_template.yaml`
+- `project_parameters_template.xlsx`
+
+See **`PARAMETER_INPUT_GUIDE.md`** for detailed configuration examples and engineering guidance.
+
 ## PyGeoStudio Integration Details
 
 ### **🏗️ What PyGeoStudio Enables:**

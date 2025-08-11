@@ -119,6 +119,65 @@ class AutomatedDecisionWorkflow:
             self.logger.error(f"Error in complete analysis workflow: {e}")
             raise
     
+    def run_complete_analysis_with_configs(self, 
+                                         slope_configurations: List,
+                                         pipeline_configurations: List,
+                                         generate_plots: bool = True) -> pd.DataFrame:
+        """Run complete analysis with pre-generated configurations"""
+        
+        self.logger.info("Starting complete analysis with custom configurations")
+        
+        try:
+            # Step 1: Run slope stability analysis on provided configurations
+            self.logger.info(f"Step 1: Running slope stability analysis on {len(slope_configurations)} configurations")
+            slope_results = self.slope_analyzer.batch_analyze(slope_configurations)
+            
+            # Step 2: Create initial decision matrix
+            self.logger.info("Step 2: Creating slope stability decision matrix")
+            slope_decision_matrix = self.slope_analyzer.create_decision_matrix()
+            
+            # Export slope-only results
+            slope_decision_matrix.to_csv(self.output_dir / "slope_stability_decision_matrix.csv", index=False)
+            
+            # Step 3: Integrate with soil springs analysis for detailed cases
+            self.logger.info("Step 3: Integrating with soil springs analysis")
+            detailed_slope_results = [r for r in slope_results if r.requires_detailed_analysis]
+            detailed_slope_configs = [c for c in slope_configurations 
+                                    if any(r.config_id == c.config_id for r in detailed_slope_results)]
+            
+            if detailed_slope_results:
+                integrated_results = self.integration_engine.integrate_analyses(
+                    detailed_slope_results, detailed_slope_configs, pipeline_configurations
+                )
+                
+                # Step 4: Create comprehensive decision matrix
+                self.logger.info("Step 4: Creating comprehensive decision matrix")
+                comprehensive_matrix = self.integration_engine.create_comprehensive_decision_matrix()
+                
+                # Export comprehensive results
+                self.integration_engine.export_comprehensive_results(str(self.output_dir))
+                
+            else:
+                self.logger.info("No configurations require detailed soil springs analysis")
+                comprehensive_matrix = pd.DataFrame()
+            
+            # Step 5: Generate summary report and visualizations
+            if generate_plots:
+                self.logger.info("Step 5: Generating analysis visualizations")
+                self._generate_analysis_plots(slope_decision_matrix, comprehensive_matrix)
+            
+            # Step 6: Create executive summary
+            self.logger.info("Step 6: Creating executive summary")
+            self._create_executive_summary(slope_decision_matrix, comprehensive_matrix)
+            
+            self.logger.info("Complete analysis workflow finished successfully")
+            
+            return comprehensive_matrix if not comprehensive_matrix.empty else slope_decision_matrix
+            
+        except Exception as e:
+            self.logger.error(f"Error in complete analysis workflow: {e}")
+            raise
+    
     def _generate_analysis_plots(self, slope_matrix: pd.DataFrame, 
                                comprehensive_matrix: pd.DataFrame):
         """Generate visualization plots for analysis results"""
@@ -383,18 +442,85 @@ def main():
     """Main execution function with command line interface"""
     
     parser = argparse.ArgumentParser(description="Automated Slope Stability and Pipeline Analysis")
+    
+    # Analysis configuration
     parser.add_argument("--template", default="Slope Template/uncompressed/SlopeTemplate.xml",
                        help="Path to GeoStudio template XML file")
     parser.add_argument("--excel", default="Soil Springs_2024.xlsx", 
                        help="Path to Soil Springs Excel file")
     parser.add_argument("--output", default="analysis_results",
                        help="Output directory for results")
-    parser.add_argument("--limit", type=int, default=10,
-                       help="Limit number of configurations for demo (default: 10)")
+    parser.add_argument("--limit", type=int, default=None,
+                       help="Limit number of configurations (default: use all from parameters)")
     parser.add_argument("--no-plots", action="store_true",
                        help="Skip generating visualization plots")
     
+    # Parameter input methods
+    param_group = parser.add_mutually_exclusive_group()
+    param_group.add_argument("--config-json", type=str,
+                           help="Load parameters from JSON file")
+    param_group.add_argument("--config-yaml", type=str,
+                           help="Load parameters from YAML file")
+    param_group.add_argument("--config-excel", type=str,
+                           help="Load parameters from Excel file")
+    param_group.add_argument("--interactive", action="store_true",
+                           help="Interactive parameter input")
+    param_group.add_argument("--create-templates", action="store_true",
+                           help="Create parameter template files and exit")
+    
+    # Quick parameter overrides
+    parser.add_argument("--angles", type=str,
+                       help="Slope angles (comma-separated, e.g., '25,30,35')")
+    parser.add_argument("--heights", type=str,
+                       help="Slope heights (comma-separated, e.g., '30,50,80')")
+    parser.add_argument("--project-name", type=str,
+                       help="Project name for analysis")
+    
     args = parser.parse_args()
+    
+    # Handle template creation
+    if args.create_templates:
+        from parameter_input_system import create_default_config_files
+        create_default_config_files()
+        print("\n✅ Template files created!")
+        print("📝 Edit the templates and use --config-json, --config-yaml, or --config-excel to load them")
+        return 0
+    
+    # Load parameters using the parameter input system
+    from parameter_input_system import ParameterInputManager
+    param_manager = ParameterInputManager()
+    
+    if args.interactive:
+        print("🎯 Interactive Parameter Input Mode")
+        parameters = param_manager.get_parameters_interactive()
+    elif args.config_json:
+        print(f"📄 Loading parameters from JSON: {args.config_json}")
+        parameters = param_manager.load_parameters_from_json(args.config_json)
+    elif args.config_yaml:
+        print(f"📄 Loading parameters from YAML: {args.config_yaml}")
+        parameters = param_manager.load_parameters_from_yaml(args.config_yaml)
+    elif args.config_excel:
+        print(f"📊 Loading parameters from Excel: {args.config_excel}")
+        parameters = param_manager.load_parameters_from_excel(args.config_excel)
+    else:
+        print("🔧 Using default parameters (create custom config with --create-templates)")
+        parameters = param_manager.default_parameters
+        
+        # Apply command line overrides
+        parameters = param_manager.get_parameters_from_args(args)
+    
+    # Generate configurations from parameters
+    print(f"\n🏗️ Generating configurations for: {parameters.project_name}")
+    slope_configurations = param_manager.generate_slope_configurations(parameters)
+    pipeline_configurations = param_manager.generate_pipeline_configurations(parameters)
+    
+    print(f"📊 Generated {len(slope_configurations)} slope configurations")
+    print(f"🔧 Generated {len(pipeline_configurations)} pipeline configurations")
+    
+    # Apply limit if specified
+    if args.limit:
+        slope_configurations = slope_configurations[:args.limit]
+        print(f"⚡ Limited to {len(slope_configurations)} slope configurations")
     
     # Initialize workflow
     workflow = AutomatedDecisionWorkflow(
@@ -404,9 +530,11 @@ def main():
     )
     
     try:
-        # Run complete analysis
-        results = workflow.run_complete_analysis(
-            limit_configurations=args.limit,
+        # Run analysis with custom configurations
+        print(f"\n🚀 Starting analysis workflow...")
+        results = workflow.run_complete_analysis_with_configs(
+            slope_configurations=slope_configurations,
+            pipeline_configurations=pipeline_configurations,
             generate_plots=not args.no_plots
         )
         

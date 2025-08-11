@@ -1,0 +1,73 @@
+{
+  "project_name": "Pipeline Slope Analysis - Site Alpha",
+  "description": "Comprehensive slope stability analysis for new pipeline route through varied terrain",
+  "slope_angles": [25, 30, 35, 40],
+  "slope_heights": [30, 50, 75, 100],
+  "soil_scenarios": [
+    {
+      "name": "River Valley Soils",
+      "layers": [
+        {
+          "name": "Soft Clay",
+          "unit_weight": 110,
+          "cohesion_total": 150,
+          "cohesion_effective": 75,
+          "friction_angle": 18,
+          "thickness": 15
+        },
+        {
+          "name": "Dense Sand",
+          "unit_weight": 125,
+          "cohesion_total": 0,
+          "cohesion_effective": 0,
+          "friction_angle": 32,
+          "thickness": 25
+        }
+      ]
+    },
+    {
+      "name": "Upland Soils",
+      "layers": [
+        {
+          "name": "Stiff Clay",
+          "unit_weight": 120,
+          "cohesion_total": 300,
+          "cohesion_effective": 150,
+          "friction_angle": 22,
+          "thickness": 20
+        },
+        {
+          "name": "Weathered Rock",
+          "unit_weight": 135,
+          "cohesion_total": 800,
+          "cohesion_effective": 400,
+          "friction_angle": 38,
+          "thickness": 30
+        }
+      ]
+    },
+    {
+      "name": "Rocky Terrain",
+      "layers": [
+        {
+          "name": "Fractured Rock",
+          "unit_weight": 140,
+          "cohesion_total": 1200,
+          "cohesion_effective": 600,
+          "friction_angle": 42,
+          "thickness": 25
+        }
+      ]
+    }
+  ],
+  "pipeline_sizes": [
+    [20, 0.5],
+    [24, 0.5],
+    [30, 0.625]
+  ],
+  "pipeline_grades": ["X-60", "X-65"],
+  "depths_of_cover": [6, 8, 10, 12],
+  "internal_pressures": [1200, 1440],
+  "pgd_lengths": [10, 20, 30],
+  "groundwater_ratios": [0.6, 0.8]
+}
