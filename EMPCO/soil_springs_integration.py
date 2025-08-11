@@ -60,9 +60,15 @@ class SoilSpringsAnalyzer:
         self.input_sheet = None
         self.calc_sheet = None
     
-    def open_excel(self):
+    def open_excel(self, visible=False):
         """Open Excel file for analysis"""
-        self.wb = xw.Book(str(self.excel_path))
+        # Configure Excel to run in background without visible interface
+        if not visible:
+            app = xw.App(visible=False, add_book=False)
+            self.wb = app.books.open(str(self.excel_path))
+        else:
+            self.wb = xw.Book(str(self.excel_path))
+        
         self.input_sheet = self.wb.sheets['Input&Summary'] 
         self.calc_sheet = self.wb.sheets['Calcs']
     
@@ -224,7 +230,8 @@ class IntegratedAnalysisEngine:
         
         print(f"Integrating {len(slope_results)} slope results with {len(pipeline_configs)} pipeline configurations...")
         
-        self.soil_springs_analyzer.open_excel()
+        # Use headless Excel mode
+        self.soil_springs_analyzer.open_excel(visible=False)
         
         try:
             for slope_result in slope_results:

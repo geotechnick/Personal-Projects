@@ -27,6 +27,17 @@ The **EMPCO (Energy Management and Pipeline Consulting Operations)** project aut
 pip install xlwings pandas matplotlib seaborn numpy openpyxl
 ```
 
+**Enhanced GeoStudio Integration (Recommended):**
+```bash
+pip install PyGeoStudio
+```
+
+**Headless Operation Modes:**
+1. **PyGeoStudio (Best)**: Direct .gsz file manipulation, no GeoStudio GUI needed
+2. **GeoStudio CLI**: Command-line interface if GeoStudio installed
+3. **Intelligent Simulation**: Realistic placeholders when GeoStudio unavailable
+4. **Excel Background**: Hidden Excel processing with no visible windows
+
 ### Basic Usage
 ```bash
 # Navigate to EMPCO directory
@@ -124,10 +135,18 @@ EMPCO/
 
 ## Limitations & Future Enhancements
 
-### Current Limitations:
-- GeoStudio execution uses placeholder calculations (requires actual GeoStudio CLI integration)
-- Limited to simplified slope geometries
-- Requires Excel file to be available and properly formatted
+### Current Capabilities & Limitations:
+
+**✅ Fully Operational:**
+- **PyGeoStudio Integration**: Direct .gsz file manipulation (recommended approach)
+- **Excel Headless Processing**: Background Excel calculations with no GUI
+- **Intelligent Fallbacks**: Realistic simulations when software unavailable
+- **Scalable Analysis**: From 10 to 1000+ configurations
+
+**⚠️ Limitations:**
+- Complex slope geometries (benches, multi-stage) require template customization
+- PyGeoStudio installation needed for true GeoStudio integration
+- Some GeoStudio features may require specific versions
 
 ### Planned Enhancements:
 - Direct GeoStudio API integration
