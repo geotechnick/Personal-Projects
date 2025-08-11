@@ -19,11 +19,13 @@ class PipelineConfiguration:
     """Pipeline configuration parameters"""
     pipe_od: float  # inches - Outside Diameter
     pipe_wt: float  # inches - Wall Thickness  
-    pipe_smys: str  # API grade (e.g., "X-52")
+    pipe_grade: str  # API grade (e.g., "X-52")
+    pipe_smys: float  # psi - Specified Minimum Yield Strength
     pipe_doc: float  # feet - Depth of Cover
     pipe_length_in_pgd: float  # feet - Length in PGD zone
+    pipe_coating: str  # Coating type (e.g., "FBE", "3LPE", "Concrete")
     internal_pressure: float  # psi
-    pgd_direction: str  # "Parallel" or "Perpendicular"
+    pgd_path: str  # "perpendicular" or "parallel" to pipe
 
 
 @dataclass 
@@ -180,10 +182,19 @@ class IntegratedAnalysisEngine:
         
         return configurations
     
-    def convert_slope_to_soil_params(self, slope_config: SlopeConfiguration) -> SoilSpringParameters:
-        """Convert slope soil properties to soil spring parameters"""
+    def convert_slope_to_soil_params(self, slope_config: SlopeConfiguration, 
+                                   pipe_depth_of_cover: float = None) -> SoilSpringParameters:
+        """
+        Convert slope soil properties to soil spring parameters based on pipe location
         
-        # Use weighted average of soil layers (simplified approach)
+        Args:
+            slope_config: Slope configuration with soil layers
+            pipe_depth_of_cover: Pipe depth of cover in feet (if provided, determines which soil layer pipe is in)
+        
+        Returns:
+            Soil parameters for the layer containing the pipe
+        """
+        
         if not slope_config.soil_layers:
             # Default parameters if no layers
             return SoilSpringParameters(
@@ -193,6 +204,30 @@ class IntegratedAnalysisEngine:
                 soil_type="Default"
             )
         
+        # If pipe depth is specified, determine which soil layer the pipe is in
+        if pipe_depth_of_cover is not None:
+            current_depth = 0
+            for layer in slope_config.soil_layers:
+                # Check if pipe is within this layer
+                if current_depth <= pipe_depth_of_cover <= (current_depth + layer.thickness):
+                    return SoilSpringParameters(
+                        friction_angle=layer.friction_angle,
+                        cohesion=layer.cohesion_effective,
+                        unit_weight=layer.unit_weight,
+                        soil_type=f"{layer.name} (at {pipe_depth_of_cover} ft depth)"
+                    )
+                current_depth += layer.thickness
+            
+            # If pipe is deeper than all defined layers, use the deepest layer
+            deepest_layer = slope_config.soil_layers[-1]
+            return SoilSpringParameters(
+                friction_angle=deepest_layer.friction_angle,
+                cohesion=deepest_layer.cohesion_effective,
+                unit_weight=deepest_layer.unit_weight,
+                soil_type=f"{deepest_layer.name} (extrapolated to {pipe_depth_of_cover} ft depth)"
+            )
+        
+        # Fallback: Use weighted average of all layers (original approach)
         total_thickness = sum(layer.thickness for layer in slope_config.soil_layers)
         if total_thickness == 0:
             layer = slope_config.soil_layers[0]
@@ -217,7 +252,7 @@ class IntegratedAnalysisEngine:
             friction_angle=weighted_phi,
             cohesion=weighted_cohesion,
             unit_weight=weighted_unit_weight,
-            soil_type=soil_type
+            soil_type=f"Weighted average: {soil_type}"
         )
     
     def integrate_analyses(self, 
@@ -242,9 +277,6 @@ class IntegratedAnalysisEngine:
                 if not slope_config:
                     continue
                 
-                # Convert slope soil properties to soil spring parameters
-                soil_params = self.convert_slope_to_soil_params(slope_config)
-                
                 # Only analyze pipeline configs if slope requires detailed analysis
                 # or if FoS is close to threshold
                 min_fos = min(slope_result.total_stress_fos, slope_result.effective_stress_fos)
@@ -253,6 +285,9 @@ class IntegratedAnalysisEngine:
                     
                     for pipeline_config in pipeline_configs[:5]:  # Limit for demo
                         
+                        # Convert slope soil properties to soil spring parameters for specific pipe depth
+                        soil_params = self.convert_slope_to_soil_params(slope_config, pipeline_config.pipe_doc)
+                        
                         # Run soil springs analysis
                         spring_results = self.soil_springs_analyzer.analyze_pipeline_configuration(
                             pipeline_config, soil_params)
@@ -260,7 +295,7 @@ class IntegratedAnalysisEngine:
                         if spring_results:
                             # Create integrated result
                             integrated_result = IntegratedAnalysisResult(
-                                config_id=f"{slope_result.config_id}_{pipeline_config.pipe_od}in_{pipeline_config.pgd_direction}",
+                                config_id=f"{slope_result.config_id}_{pipeline_config.pipe_od}in_{pipeline_config.pgd_path}",
                                 slope_fos=min_fos,
                                 pipeline_config=pipeline_config,
                                 soil_params=soil_params,

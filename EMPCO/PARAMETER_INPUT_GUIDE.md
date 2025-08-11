@@ -67,19 +67,29 @@ Each soil scenario contains multiple layers with:
 - **Friction Angle**: Effective friction angle in degrees (e.g., 18)
 - **Thickness**: Layer thickness in feet (e.g., 15)
 
-### 🔧 **Pipeline Parameters**
-- **Pipeline Sizes**: List of [Outside Diameter, Wall Thickness] in inches
-- **Pipeline Grades**: Material grades (e.g., ["X-60", "X-65", "X-70"])
-- **Depths of Cover**: Burial depths in feet (e.g., [6, 8, 10, 12])
-- **Internal Pressures**: Operating pressures in psi (e.g., [1200, 1440])
-- **PGD Lengths**: Permanent ground deformation lengths in feet (e.g., [10, 20, 30])
+### 🔧 **Pipeline Parameters** ⭐ **ENHANCED**
+
+**User-Requested Parameters (All Available):**
+- **Pipe OD (in)**: Outside diameter options in inches (e.g., [16, 20, 24, 30, 36])
+- **Pipe wt (in)**: Wall thickness options in inches (e.g., [0.375, 0.5, 0.625, 0.75])  
+- **Pipe SMYS (psi)**: Specified Minimum Yield Strength values (e.g., [52000, 60000, 65000, 70000])
+- **Pipe DOC (ft)**: Depth of Cover options in feet (e.g., [4, 6, 8, 10, 12, 15])
+- **Length of Pipe in PGD (ft)**: Pipe length in PGD zone (e.g., [5, 10, 15, 20, 30, 50])
+- **Pipe Coating**: Coating type options (e.g., ["FBE", "3LPE", "Concrete", "Tape"])
+- **Internal Pressure (psi)**: Operating pressures (e.g., [1000, 1200, 1440, 1600])
+- **PGD Path**: Fault orientation relative to pipe (["perpendicular", "parallel"])
+
+**Additional System Parameters:**
+- **Pipeline Grades**: Material grade strings (e.g., ["X-52", "X-60", "X-65", "X-70"])
+- **Groundwater Ratios**: Groundwater depth as fraction of slope height (e.g., [0.5, 0.7, 0.9])
 
 ## 📋 Configuration File Examples
 
-### Simple JSON Example:
+### Enhanced JSON Example with All Pipeline Parameters:
 ```json
 {
   "project_name": "Site Alpha Analysis",
+  "description": "Comprehensive slope and pipeline analysis",
   "slope_angles": [30, 35, 40],
   "slope_heights": [40, 60, 80],
   "soil_scenarios": [
@@ -97,18 +107,34 @@ Each soil scenario contains multiple layers with:
       ]
     }
   ],
-  "pipeline_sizes": [[20, 0.5], [24, 0.5]]
+  "pipe_outside_diameters": [20, 24, 30],
+  "pipe_wall_thicknesses": [0.5, 0.625],
+  "pipe_grades": ["X-60", "X-65"],
+  "pipe_smys_values": [60000, 65000],
+  "pipe_depths_of_cover": [6, 8, 10],
+  "pipe_lengths_in_pgd": [10, 20, 30],
+  "pipe_coatings": ["FBE", "3LPE"],
+  "internal_pressures": [1200, 1440],
+  "pgd_paths": ["perpendicular", "parallel"],
+  "groundwater_ratios": [0.7]
 }
 ```
 
-### YAML Example:
+### Enhanced YAML Example:
 ```yaml
 project_name: "Quick Assessment"
 slope_angles: [30, 35, 40]
 slope_heights: [40, 60, 80]
-pipeline_sizes:
-  - [20, 0.5]    # 20" OD, 0.5" wall
-  - [24, 0.5]    # 24" OD, 0.5" wall
+
+# Enhanced pipeline parameters
+pipe_outside_diameters: [20, 24]  # Pipe OD (in)
+pipe_wall_thicknesses: [0.5, 0.625]  # Pipe wt (in)
+pipe_smys_values: [60000, 65000]  # Pipe SMYS (psi)
+pipe_depths_of_cover: [6, 8, 10]  # Pipe DOC (ft)
+pipe_lengths_in_pgd: [10, 20]  # Length of Pipe in PGD (ft)
+pipe_coatings: ["FBE", "3LPE"]  # Pipe Coating
+internal_pressures: [1200, 1440]  # Internal Pressure (psi)
+pgd_paths: ["perpendicular", "parallel"]  # PGD Path
 ```
 
 ## 📊 Excel Configuration Format
@@ -173,8 +199,11 @@ The system automatically validates:
 
 ### **Pipeline Considerations**:
 - **Small diameter**: 16-20" (lower stress, less critical)
-- **Large diameter**: 24-36" (higher stress, more critical)
+- **Large diameter**: 24-36" (higher stress, more critical)  
 - **High pressure**: >1200 psi (increased risk)
+- **Wall thickness**: Affects stress capacity (thicker = stronger)
+- **Coating type**: Affects soil interaction ("FBE" standard, "3LPE" for harsh environments)
+- **PGD path**: "perpendicular" typically more critical than "parallel"
 
 ## 🚀 Advanced Usage
 

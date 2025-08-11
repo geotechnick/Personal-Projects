@@ -24,11 +24,18 @@ class ProjectParameters:
     slope_angles: List[float]  # degrees
     slope_heights: List[float]  # feet
     soil_scenarios: List[Dict[str, Any]]  # List of soil layer definitions
-    pipeline_sizes: List[Tuple[float, float]]  # (OD, wall_thickness)
-    pipeline_grades: List[str]  # Material grades
-    depths_of_cover: List[float]  # feet
-    internal_pressures: List[float]  # psi
-    pgd_lengths: List[float]  # feet
+    
+    # Pipeline parameters - comprehensive set
+    pipe_outside_diameters: List[float]  # inches - Pipe OD
+    pipe_wall_thicknesses: List[float]  # inches - Pipe wall thickness
+    pipe_grades: List[str]  # Material grades (e.g., "X-52", "X-60")
+    pipe_smys_values: List[float]  # psi - Specified Minimum Yield Strength values
+    pipe_depths_of_cover: List[float]  # feet - Depth of Cover
+    pipe_lengths_in_pgd: List[float]  # feet - Length of Pipe in PGD zone
+    pipe_coatings: List[str]  # Coating types (e.g., "FBE", "3LPE", "Concrete")
+    internal_pressures: List[float]  # psi - Internal operating pressure
+    pgd_paths: List[str]  # "perpendicular" or "parallel" to pipe
+    
     groundwater_ratios: List[float]  # ratio of slope height
 
 
@@ -74,11 +81,16 @@ class ParameterInputManager:
                     ]
                 }
             ],
-            pipeline_sizes=[(16, 0.375), (20, 0.5), (24, 0.5), (30, 0.625), (36, 0.75)],
-            pipeline_grades=["X-52", "X-60", "X-65", "X-70"],
-            depths_of_cover=[4, 6, 8, 10, 12, 15],
-            internal_pressures=[1000, 1200, 1440, 1600],
-            pgd_lengths=[5, 10, 15, 20, 30, 50],
+            # Pipeline parameters with comprehensive options
+            pipe_outside_diameters=[16, 20, 24, 30, 36],  # inches
+            pipe_wall_thicknesses=[0.375, 0.500, 0.625, 0.750],  # inches  
+            pipe_grades=["X-52", "X-60", "X-65", "X-70"],
+            pipe_smys_values=[52000, 60000, 65000, 70000],  # psi - corresponding to grades
+            pipe_depths_of_cover=[4, 6, 8, 10, 12, 15],  # feet
+            pipe_lengths_in_pgd=[5, 10, 15, 20, 30, 50],  # feet
+            pipe_coatings=["FBE", "3LPE", "Concrete", "Tape"],  # coating types
+            internal_pressures=[1000, 1200, 1440, 1600],  # psi
+            pgd_paths=["perpendicular", "parallel"],  # relative to pipe
             groundwater_ratios=[0.5, 0.7, 0.9]  # GW depth as ratio of slope height
         )
     
@@ -161,14 +173,21 @@ class ParameterInputManager:
             
             # Pipeline parameters
             pipeline_data = []
-            for size in parameters.pipeline_sizes:
-                pipeline_data.append({
-                    'Outside_Diameter_in': size[0],
-                    'Wall_Thickness_in': size[1]
-                })
+            for od in parameters.pipe_outside_diameters:
+                for wt in parameters.pipe_wall_thicknesses:
+                    pipeline_data.append({
+                        'Outside_Diameter_in': od,
+                        'Wall_Thickness_in': wt
+                    })
             
             pipeline_df = pd.DataFrame(pipeline_data)
-            pipeline_df['Grades'] = parameters.pipeline_grades + [None] * (len(pipeline_df) - len(parameters.pipeline_grades))
+            pipeline_df['Grades'] = parameters.pipe_grades + [None] * (len(pipeline_df) - len(parameters.pipe_grades))
+            pipeline_df['SMYS_psi'] = parameters.pipe_smys_values + [None] * (len(pipeline_df) - len(parameters.pipe_smys_values))
+            pipeline_df['Depths_of_Cover_ft'] = parameters.pipe_depths_of_cover + [None] * (len(pipeline_df) - len(parameters.pipe_depths_of_cover))
+            pipeline_df['PGD_Lengths_ft'] = parameters.pipe_lengths_in_pgd + [None] * (len(pipeline_df) - len(parameters.pipe_lengths_in_pgd))
+            pipeline_df['Coatings'] = parameters.pipe_coatings + [None] * (len(pipeline_df) - len(parameters.pipe_coatings))
+            pipeline_df['Internal_Pressures_psi'] = parameters.internal_pressures + [None] * (len(pipeline_df) - len(parameters.internal_pressures))
+            pipeline_df['PGD_Paths'] = parameters.pgd_paths + [None] * (len(pipeline_df) - len(parameters.pgd_paths))
             pipeline_df.to_excel(writer, sheet_name='Pipeline_Sizes', index=False)
             
             # Other parameters
@@ -223,13 +242,17 @@ class ParameterInputManager:
                 })
             
             # Extract pipeline parameters
-            pipeline_sizes = list(zip(pipeline_df['Outside_Diameter_in'], pipeline_df['Wall_Thickness_in']))
-            pipeline_grades = pipeline_df['Grades'].dropna().tolist()
+            pipe_outside_diameters = pipeline_df['Outside_Diameter_in'].dropna().unique().tolist()
+            pipe_wall_thicknesses = pipeline_df['Wall_Thickness_in'].dropna().unique().tolist()
+            pipe_grades = pipeline_df['Grades'].dropna().unique().tolist()
+            pipe_smys_values = pipeline_df['SMYS_psi'].dropna().unique().tolist() if 'SMYS_psi' in pipeline_df.columns else []
+            pipe_coatings = pipeline_df['Coatings'].dropna().unique().tolist() if 'Coatings' in pipeline_df.columns else ["FBE"]
+            pgd_paths = pipeline_df['PGD_Paths'].dropna().unique().tolist() if 'PGD_Paths' in pipeline_df.columns else ["perpendicular"]
             
             # Extract other parameters
-            depths_of_cover = other_df['Depths_of_Cover_ft'].dropna().tolist()
-            internal_pressures = other_df['Internal_Pressures_psi'].dropna().tolist()
-            pgd_lengths = other_df['PGD_Lengths_ft'].dropna().tolist()
+            pipe_depths_of_cover = pipeline_df['Depths_of_Cover_ft'].dropna().unique().tolist() if 'Depths_of_Cover_ft' in pipeline_df.columns else other_df['Depths_of_Cover_ft'].dropna().tolist()
+            pipe_lengths_in_pgd = pipeline_df['PGD_Lengths_ft'].dropna().unique().tolist() if 'PGD_Lengths_ft' in pipeline_df.columns else other_df['PGD_Lengths_ft'].dropna().tolist()
+            internal_pressures = pipeline_df['Internal_Pressures_psi'].dropna().unique().tolist() if 'Internal_Pressures_psi' in pipeline_df.columns else other_df['Internal_Pressures_psi'].dropna().tolist()
             groundwater_ratios = other_df['Groundwater_Ratios'].dropna().tolist()
             
             return ProjectParameters(
@@ -238,11 +261,15 @@ class ParameterInputManager:
                 slope_angles=slope_angles,
                 slope_heights=slope_heights,
                 soil_scenarios=soil_scenarios,
-                pipeline_sizes=pipeline_sizes,
-                pipeline_grades=pipeline_grades,
-                depths_of_cover=depths_of_cover,
+                pipe_outside_diameters=pipe_outside_diameters,
+                pipe_wall_thicknesses=pipe_wall_thicknesses,
+                pipe_grades=pipe_grades,
+                pipe_smys_values=pipe_smys_values,
+                pipe_depths_of_cover=pipe_depths_of_cover,
+                pipe_lengths_in_pgd=pipe_lengths_in_pgd,
+                pipe_coatings=pipe_coatings,
                 internal_pressures=internal_pressures,
-                pgd_lengths=pgd_lengths,
+                pgd_paths=pgd_paths,
                 groundwater_ratios=groundwater_ratios
             )
             
@@ -298,11 +325,15 @@ class ParameterInputManager:
             slope_angles=slope_angles,
             slope_heights=slope_heights,
             soil_scenarios=self.default_parameters.soil_scenarios,
-            pipeline_sizes=self.default_parameters.pipeline_sizes,
-            pipeline_grades=self.default_parameters.pipeline_grades,
-            depths_of_cover=self.default_parameters.depths_of_cover,
+            pipe_outside_diameters=self.default_parameters.pipe_outside_diameters,
+            pipe_wall_thicknesses=self.default_parameters.pipe_wall_thicknesses,
+            pipe_grades=self.default_parameters.pipe_grades,
+            pipe_smys_values=self.default_parameters.pipe_smys_values,
+            pipe_depths_of_cover=self.default_parameters.pipe_depths_of_cover,
+            pipe_lengths_in_pgd=self.default_parameters.pipe_lengths_in_pgd,
+            pipe_coatings=self.default_parameters.pipe_coatings,
             internal_pressures=self.default_parameters.internal_pressures,
-            pgd_lengths=self.default_parameters.pgd_lengths,
+            pgd_paths=self.default_parameters.pgd_paths,
             groundwater_ratios=self.default_parameters.groundwater_ratios
         )
     
@@ -372,24 +403,44 @@ class ParameterInputManager:
         """Generate pipeline configurations from parameters"""
         configurations = []
         
-        for (od, wt) in parameters.pipeline_sizes[:3]:  # Limit for demo
-            for grade in parameters.pipeline_grades[:2]:  # Limit for demo
-                for doc in parameters.depths_of_cover[:3]:  # Limit for demo
-                    for pressure in parameters.internal_pressures[:2]:  # Limit for demo
-                        for length in parameters.pgd_lengths[:3]:  # Limit for demo
-                            for direction in ["Parallel", "Perpendicular"]:
-                                
-                                config = PipelineConfiguration(
-                                    pipe_od=od,
-                                    pipe_wt=wt,
-                                    pipe_smys=grade,
-                                    pipe_doc=doc,
-                                    pipe_length_in_pgd=length,
-                                    internal_pressure=pressure,
-                                    pgd_direction=direction
-                                )
-                                
-                                configurations.append(config)
+        # Helper function to get SMYS value for a grade
+        def get_smys_for_grade(grade: str) -> float:
+            grade_to_smys = {
+                "X-52": 52000, "X-60": 60000, "X-65": 65000, "X-70": 70000, "X-80": 80000
+            }
+            return grade_to_smys.get(grade, 52000)  # default to X-52 if unknown
+        
+        # Use first few values from each parameter list for manageable combinations
+        for od in parameters.pipe_outside_diameters[:3]:  # Limit for demo
+            for wt in parameters.pipe_wall_thicknesses[:2]:  # Limit for demo
+                for grade in parameters.pipe_grades[:2]:  # Limit for demo
+                    # Get corresponding SMYS value
+                    smys = get_smys_for_grade(grade)
+                    if parameters.pipe_smys_values:
+                        # Use specified SMYS if available
+                        grade_index = parameters.pipe_grades.index(grade) if grade in parameters.pipe_grades else 0
+                        if grade_index < len(parameters.pipe_smys_values):
+                            smys = parameters.pipe_smys_values[grade_index]
+                    
+                    for doc in parameters.pipe_depths_of_cover[:3]:  # Limit for demo
+                        for pressure in parameters.internal_pressures[:2]:  # Limit for demo
+                            for length in parameters.pipe_lengths_in_pgd[:3]:  # Limit for demo
+                                for coating in parameters.pipe_coatings[:2]:  # Limit for demo
+                                    for pgd_path in parameters.pgd_paths:
+                                        
+                                        config = PipelineConfiguration(
+                                            pipe_od=od,
+                                            pipe_wt=wt,
+                                            pipe_grade=grade,
+                                            pipe_smys=smys,
+                                            pipe_doc=doc,
+                                            pipe_length_in_pgd=length,
+                                            pipe_coating=coating,
+                                            internal_pressure=pressure,
+                                            pgd_path=pgd_path
+                                        )
+                                        
+                                        configurations.append(config)
         
         return configurations
 
@@ -427,7 +478,7 @@ def demonstrate_parameter_input():
     default_params = manager.default_parameters
     print(f"   Project: {default_params.project_name}")
     print(f"   Slope angles: {default_params.slope_angles}")
-    print(f"   Pipeline sizes: {default_params.pipeline_sizes}")
+    print(f"   Pipe diameters: {default_params.pipe_outside_diameters}")
     
     # Method 2: Save/load JSON
     print("\n2. JSON Configuration:")
@@ -451,11 +502,15 @@ def demonstrate_parameter_input():
         slope_angles=[30, 35],
         slope_heights=[40, 60],
         soil_scenarios=default_params.soil_scenarios[:1],  # Just one scenario
-        pipeline_sizes=default_params.pipeline_sizes[:2],
-        pipeline_grades=default_params.pipeline_grades[:1],
-        depths_of_cover=default_params.depths_of_cover[:2],
+        pipe_outside_diameters=default_params.pipe_outside_diameters[:2],
+        pipe_wall_thicknesses=default_params.pipe_wall_thicknesses[:1],
+        pipe_grades=default_params.pipe_grades[:1],
+        pipe_smys_values=default_params.pipe_smys_values[:1],
+        pipe_depths_of_cover=default_params.pipe_depths_of_cover[:2],
+        pipe_lengths_in_pgd=default_params.pipe_lengths_in_pgd[:2],
+        pipe_coatings=default_params.pipe_coatings[:1],
         internal_pressures=default_params.internal_pressures[:1],
-        pgd_lengths=default_params.pgd_lengths[:2],
+        pgd_paths=default_params.pgd_paths[:1],
         groundwater_ratios=[0.7]
     )
     
