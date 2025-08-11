@@ -229,21 +229,28 @@ The system follows established engineering practices:
 
 ```
 EMPCO/
-├── automated_decision_workflow.py    # Main workflow orchestrator
+├── automated_decision_workflow.py    # 🎯 Main workflow orchestrator
 ├── slope_stability_automation.py     # Slope analysis engine  
-├── pygeostudio_interface.py         # ⭐ PyGeoStudio integration (NEW)
+├── pygeostudio_interface.py         # ⭐ PyGeoStudio integration
 ├── soil_springs_integration.py       # Excel integration
 ├── headless_excel_analyzer.py        # Headless Excel processing
 ├── geostudio_cli_interface.py        # GeoStudio CLI fallback
+├── parameter_input_system.py         # 📋 User parameter input system
 ├── setup_environment.py              # 🚀 Automatic setup utility
 ├── read_soil_springs.py             # Formula extraction utility
 ├── Soil Springs_2024.xlsx           # Pipeline analysis spreadsheet
 ├── Slope Template/                   # GeoStudio templates
 │   ├── SlopeTemplate.gsz            # ⭐ Main template for PyGeoStudio
 │   └── uncompressed/SlopeTemplate.xml # XML fallback
-├── analysis_results/                 # Output directory (created)
+├── examples/                         # 📁 Example configuration files
+│   ├── example_project_config.json  # Complete project example
+│   ├── simple_config.yaml           # Minimal configuration
+│   └── README.md                     # Examples documentation
+├── references/                       # 📚 Reference documents and manuals
+├── analysis_results/                 # 📊 Output directory (created)
 ├── system_config.json               # System capabilities config
-└── Technical Documentation/          # PDFs and manuals
+├── PARAMETER_INPUT_GUIDE.md          # 📖 User guide for parameters
+└── project_parameters_template.*     # 📋 Template files (created)
 ```
 
 ## Limitations & Future Enhancements

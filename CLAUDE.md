@@ -11,10 +11,11 @@ This repository contains a **production-ready automated geotechnical engineering
 ├── EMPCO/                                    # Main engineering project directory
 │   ├── automated_decision_workflow.py       # 🎯 Main workflow orchestrator
 │   ├── slope_stability_automation.py        # Slope analysis engine with PyGeoStudio
-│   ├── pygeostudio_interface.py            # ⭐ PyGeoStudio integration (NEW)
+│   ├── pygeostudio_interface.py            # ⭐ PyGeoStudio integration
 │   ├── soil_springs_integration.py          # Excel integration with headless mode
 │   ├── headless_excel_analyzer.py          # Headless Excel processing alternatives
 │   ├── geostudio_cli_interface.py          # GeoStudio CLI fallback methods
+│   ├── parameter_input_system.py           # 📋 User parameter input system
 │   ├── setup_environment.py                # 🚀 Automatic environment setup
 │   ├── read_soil_springs.py                 # Excel formula extraction utility
 │   ├── Slope Template/                      # GeoStudio templates
@@ -22,11 +23,19 @@ This repository contains a **production-ready automated geotechnical engineering
 │   │   └── uncompressed/                    # XML fallback data
 │   │       └── SlopeTemplate.xml            # XML template for CLI methods
 │   ├── Soil Springs_2024.xlsx               # Pipeline analysis spreadsheet
+│   ├── examples/                            # 📁 Example configuration files
+│   │   ├── example_project_config.json      # Complete project example
+│   │   ├── simple_config.yaml               # Minimal configuration
+│   │   └── README.md                        # Examples documentation
+│   ├── references/                          # 📚 Reference documents and manuals
+│   │   ├── *.pdf                            # Technical manuals and procedures
+│   │   ├── *.docx                           # Documentation and reports
+│   │   ├── *.txt                            # Analysis outputs and explanations
+│   │   └── README.md                        # References documentation
 │   ├── system_config.json                   # System capabilities configuration
 │   ├── analysis_results/                    # 📊 Output directory (auto-created)
-│   ├── *.pdf                                # Technical manuals and procedures
-│   ├── *.docx                               # Documentation and reports
-│   └── *.txt                                # Analysis outputs and explanations
+│   ├── PARAMETER_INPUT_GUIDE.md             # 📖 User guide for parameters
+│   └── project_parameters_template.*        # 📋 Template files (created)
 ├── README.md                                # Complete usage documentation
 └── LICENSE                                  # MIT License
 
@@ -95,11 +104,19 @@ This repository contains a **production-ready automated geotechnical engineering
   - Effective Stress analysis  
 - **Usage**: Automated parameter modification and formula documentation
 
-### 6. Technical Documentation
-- Bank Stability Assessment Manual (Draft WCP)
-- VIV Evaluation Procedure
-- Geohazards Manual and Appendices
-- ASCE Pipeline Standards
+### 6. Reference Documentation and Examples
+- **`references/`**: Complete collection of technical manuals, procedures, and standards
+  - Bank Stability Assessment Manual (Draft WCP)
+  - VIV Evaluation Procedure  
+  - Geohazards Manual and Appendices
+  - ASCE Pipeline Standards
+  - Soil springs calculation documentation
+  - Real project examples (Bronte Creek)
+- **`examples/`**: User configuration examples
+  - JSON, YAML, Excel example configurations
+  - Simple and complex project setups
+  - Usage documentation and quick-start examples
+- **`PARAMETER_INPUT_GUIDE.md`**: Comprehensive user guide for parameter specification
 
 ## Engineering Context
 
