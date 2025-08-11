@@ -10,7 +10,7 @@
   },
   "soil_layers": [
     {
-      "name": "Dense Clay",
+      "name": "Slope Material",
       "unit_weight_pcf": 125,
       "cohesion_total_psf": 400,
       "cohesion_effective_psf": 200,
@@ -18,7 +18,7 @@
       "thickness_ft": 20
     },
     {
-      "name": "Rock",
+      "name": "Foundation Material",
       "unit_weight_pcf": 130,
       "cohesion_total_psf": 1000,
       "cohesion_effective_psf": 500,
@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 0.86,
-    "effective_stress_fos": 1.12,
+    "total_stress_fos": 2.01,
+    "effective_stress_fos": 1.77,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }

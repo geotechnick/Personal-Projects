@@ -213,12 +213,16 @@ class IntegratedAnalysisEngine:
         """
         Convert slope soil properties to soil spring parameters based on pipe location
         
+        Uses 2-layer soil system:
+        - Layer 1: Slope Material (upper layer)
+        - Layer 2: Foundation Material (lower layer)
+        
         Args:
-            slope_config: Slope configuration with soil layers
-            pipe_depth_of_cover: Pipe depth of cover in feet (if provided, determines which soil layer pipe is in)
+            slope_config: Slope configuration with exactly 2 soil layers
+            pipe_depth_of_cover: Pipe depth of cover in feet (determines which soil layer contains the pipe)
         
         Returns:
-            Soil parameters for the layer containing the pipe
+            Soil parameters for the specific layer containing the pipe
         """
         
         if not slope_config.soil_layers:

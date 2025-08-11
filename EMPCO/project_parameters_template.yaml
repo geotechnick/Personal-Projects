@@ -1,67 +1,116 @@
-project_name: "[PROJECT NAME - Enter your project name here]"
-description: "[PROJECT DESCRIPTION - Brief description of the analysis scope]"
-
-# Slope geometry parameters
-slope_angles: [15, 20, 25, 30, 35, 40, 45]  # degrees
-slope_heights: [20, 30, 40, 50, 60, 80, 100]  # feet
-
-# Soil scenarios - define different soil conditions
+description: Standard parametric slope stability analysis
+groundwater_ratios:
+- 0.5
+- 0.7
+- 0.9
+internal_pressures:
+- 1000
+- 1200
+- 1440
+- 1600
+pgd_paths:
+- perpendicular
+- parallel
+pipe_coatings:
+- FBE
+- 3LPE
+- Concrete
+- Tape
+pipe_depths_of_cover:
+- 4
+- 6
+- 8
+- 10
+- 12
+- 15
+pipe_grades:
+- X-52
+- X-60
+- X-65
+- X-70
+pipe_lengths_in_pgd:
+- 5
+- 10
+- 15
+- 20
+- 30
+- 50
+pipe_outside_diameters:
+- 16
+- 20
+- 24
+- 30
+- 36
+pipe_smys_values:
+- 52000
+- 60000
+- 65000
+- 70000
+pipe_wall_thicknesses:
+- 0.375
+- 0.5
+- 0.625
+- 0.75
+project_name: EMPCO Default Analysis
+slope_angles:
+- 15
+- 20
+- 25
+- 30
+- 35
+- 40
+- 45
+slope_heights:
+- 20
+- 30
+- 40
+- 50
+- 60
+- 80
+- 100
 soil_scenarios:
-  - name: "Weak Soil Scenario"
-    layers:
-      - name: "Weak Clay"
-        unit_weight: 115  # pcf
-        cohesion_total: 100  # psf
-        cohesion_effective: 50  # psf
-        friction_angle: 15  # degrees
-        thickness: 20  # feet
-      - name: "Medium Soil"
-        unit_weight: 120
-        cohesion_total: 200
-        cohesion_effective: 100
-        friction_angle: 25
-        thickness: 30
-
-  - name: "Medium Soil Scenario"
-    layers:
-      - name: "Medium Clay"
-        unit_weight: 120
-        cohesion_total: 200
-        cohesion_effective: 100
-        friction_angle: 25
-        thickness: 20
-      - name: "Dense Soil"
-        unit_weight: 125
-        cohesion_total: 400
-        cohesion_effective: 200
-        friction_angle: 35
-        thickness: 30
-
-  - name: "Strong Soil Scenario"
-    layers:
-      - name: "Dense Clay"
-        unit_weight: 125
-        cohesion_total: 400
-        cohesion_effective: 200
-        friction_angle: 35
-        thickness: 20
-      - name: "Rock"
-        unit_weight: 130
-        cohesion_total: 1000
-        cohesion_effective: 500
-        friction_angle: 40
-        thickness: 30
-
-# Pipeline parameters - User-requested parameters
-pipe_outside_diameters: [16, 20, 24, 30, 36]  # inches - Pipe OD (in)
-pipe_wall_thicknesses: [0.375, 0.5, 0.625, 0.75]  # inches - Pipe wt (in)
-pipe_grades: ["X-52", "X-60", "X-65", "X-70"]  # Material grades
-pipe_smys_values: [52000, 60000, 65000, 70000]  # psi - Pipe SMYS (psi)
-pipe_depths_of_cover: [4, 6, 8, 10, 12, 15]  # feet - Pipe DOC (ft)
-pipe_lengths_in_pgd: [5, 10, 15, 20, 30, 50]  # feet - Length of Pipe in PGD (ft)
-pipe_coatings: ["FBE", "3LPE", "Concrete", "Tape"]  # Pipe Coating options
-internal_pressures: [1000, 1200, 1440, 1600]  # psi - Internal Pressure (psi)
-pgd_paths: ["perpendicular", "parallel"]  # PGD Path relative to pipe
-
-# Groundwater parameters
-groundwater_ratios: [0.5, 0.7, 0.9]  # Groundwater depth as ratio of slope height
+- description: Low strength soils requiring detailed analysis
+  layers:
+  - cohesion_effective: 50
+    cohesion_total: 100
+    friction_angle: 15
+    name: Slope Material
+    thickness: 20
+    unit_weight: 115
+  - cohesion_effective: 100
+    cohesion_total: 200
+    friction_angle: 25
+    name: Foundation Material
+    thickness: 30
+    unit_weight: 120
+  name: Weak Soil Scenario
+- description: Moderate strength soils with typical properties
+  layers:
+  - cohesion_effective: 100
+    cohesion_total: 200
+    friction_angle: 25
+    name: Slope Material
+    thickness: 20
+    unit_weight: 120
+  - cohesion_effective: 200
+    cohesion_total: 400
+    friction_angle: 35
+    name: Foundation Material
+    thickness: 30
+    unit_weight: 125
+  name: Medium Soil Scenario
+- description: High strength soils with good stability characteristics
+  layers:
+  - cohesion_effective: 200
+    cohesion_total: 400
+    friction_angle: 35
+    name: Slope Material
+    thickness: 20
+    unit_weight: 125
+  - cohesion_effective: 500
+    cohesion_total: 1000
+    friction_angle: 40
+    name: Foundation Material
+    thickness: 30
+    unit_weight: 130
+  name: Strong Soil Scenario

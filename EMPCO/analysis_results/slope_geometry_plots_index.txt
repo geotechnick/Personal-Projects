@@ -2,8 +2,8 @@
 SLOPE GEOMETRY VISUALIZATION INDEX
 ================================================================================
 
-Generated: 2025-08-11 20:59:48
-Total individual plots: 5
+Generated: 2025-08-11 21:09:02
+Total individual plots: 3
 
 SLOPE COMPARISON PLOT:
 ------------------------------
@@ -24,22 +24,12 @@ INDIVIDUAL SLOPE GEOMETRY PLOTS:
   Configuration: Config_0002
   Shows: Slope geometry, soil layers, failure surface, pipeline location
 
-• slope_geometry_Config_0003.png
-  Configuration: Config_0003
-  Shows: Slope geometry, soil layers, failure surface, pipeline location
-
-• slope_geometry_Config_0004.png
-  Configuration: Config_0004
-  Shows: Slope geometry, soil layers, failure surface, pipeline location
-
 GEOMETRY DATA FILES:
 -------------------------
 JSON files with detailed geometric parameters available:
 • geometry_data_Config_0000.json
 • geometry_data_Config_0001.json
 • geometry_data_Config_0002.json
-• geometry_data_Config_0003.json
-• geometry_data_Config_0004.json
 
 ================================================================================
 VISUALIZATION CONTENTS:

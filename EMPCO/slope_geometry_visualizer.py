@@ -26,14 +26,17 @@ class SlopeGeometryVisualizer:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         
-        # Color schemes for different elements
+        # Color schemes for different elements - 2-layer system
         self.soil_colors = {
-            'Weak Clay': '#8B4513',      # Saddle brown
-            'Medium Clay': '#A0522D',    # Sienna
-            'Dense Clay': '#654321',     # Dark brown
-            'Medium Soil': '#D2B48C',    # Tan
-            'Dense Soil': '#F4A460',     # Sandy brown
-            'Rock': '#696969',           # Dim gray
+            'Slope Material': '#D2691E',         # Orange brown for slope material
+            'Foundation Material': '#8B4513',    # Saddle brown for foundation material
+            # Legacy colors for backward compatibility
+            'Weak Clay': '#8B4513',      
+            'Medium Clay': '#A0522D',    
+            'Dense Clay': '#654321',     
+            'Medium Soil': '#D2B48C',    
+            'Dense Soil': '#F4A460',     
+            'Rock': '#696969',           
         }
         
         self.default_soil_colors = ['#D2691E', '#CD853F', '#DEB887', '#BC8F8F', '#F5DEB3']

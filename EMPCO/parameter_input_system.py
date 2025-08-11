@@ -55,28 +55,31 @@ class ParameterInputManager:
             soil_scenarios=[
                 {
                     "name": "Weak Soil Scenario",
+                    "description": "Low strength soils requiring detailed analysis",
                     "layers": [
-                        {"name": "Weak Clay", "unit_weight": 115, "cohesion_total": 100, 
+                        {"name": "Slope Material", "unit_weight": 115, "cohesion_total": 100, 
                          "cohesion_effective": 50, "friction_angle": 15, "thickness": 20},
-                        {"name": "Medium Soil", "unit_weight": 120, "cohesion_total": 200, 
+                        {"name": "Foundation Material", "unit_weight": 120, "cohesion_total": 200, 
                          "cohesion_effective": 100, "friction_angle": 25, "thickness": 30}
                     ]
                 },
                 {
                     "name": "Medium Soil Scenario", 
+                    "description": "Moderate strength soils with typical properties",
                     "layers": [
-                        {"name": "Medium Clay", "unit_weight": 120, "cohesion_total": 200,
+                        {"name": "Slope Material", "unit_weight": 120, "cohesion_total": 200,
                          "cohesion_effective": 100, "friction_angle": 25, "thickness": 20},
-                        {"name": "Dense Soil", "unit_weight": 125, "cohesion_total": 400,
+                        {"name": "Foundation Material", "unit_weight": 125, "cohesion_total": 400,
                          "cohesion_effective": 200, "friction_angle": 35, "thickness": 30}
                     ]
                 },
                 {
                     "name": "Strong Soil Scenario",
+                    "description": "High strength soils with good stability characteristics",
                     "layers": [
-                        {"name": "Dense Clay", "unit_weight": 125, "cohesion_total": 400,
+                        {"name": "Slope Material", "unit_weight": 125, "cohesion_total": 400,
                          "cohesion_effective": 200, "friction_angle": 35, "thickness": 20},
-                        {"name": "Rock", "unit_weight": 130, "cohesion_total": 1000,
+                        {"name": "Foundation Material", "unit_weight": 130, "cohesion_total": 1000,
                          "cohesion_effective": 500, "friction_angle": 40, "thickness": 30}
                     ]
                 }
@@ -373,9 +376,19 @@ class ParameterInputManager:
                             toe_distance=50
                         )
                         
-                        # Create soil layers
+                        # Create soil layers - ensure exactly 2 layers (slope material + foundation material)
                         soil_layers = []
-                        for layer_data in soil_scenario['layers']:
+                        layers_data = soil_scenario['layers']
+                        
+                        # Validate exactly 2 layers
+                        if len(layers_data) != 2:
+                            raise ValueError(f"Soil scenario '{soil_scenario['name']}' must have exactly 2 layers (Slope Material and Foundation Material), found {len(layers_data)}")
+                        
+                        for i, layer_data in enumerate(layers_data):
+                            expected_names = ["Slope Material", "Foundation Material"]
+                            if layer_data['name'] not in expected_names:
+                                print(f"Warning: Layer {i+1} name '{layer_data['name']}' should be '{expected_names[i]}' for clarity")
+                            
                             layer = SoilLayer(
                                 name=layer_data['name'],
                                 unit_weight=layer_data['unit_weight'],

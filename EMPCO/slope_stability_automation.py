@@ -176,18 +176,20 @@ class SlopeStabilityAnalyzer:
         # Define parameter ranges for parametric study
         slope_angles = [15, 20, 25, 30, 35, 40, 45]  # degrees
         slope_heights = [20, 30, 40, 50, 60, 80, 100]  # feet
+        
+        # Two-layer soil system: slope material and foundation material
         soil_strength_scenarios = [
-            # Weak soil
-            [SoilLayer("Weak Clay", 115, 100, 50, 15, 20),
-             SoilLayer("Medium Soil", 120, 200, 100, 25, 30)],
+            # Weak soil scenario
+            [SoilLayer("Slope Material", 115, 100, 50, 15, 20),   # Upper slope material
+             SoilLayer("Foundation Material", 120, 200, 100, 25, 30)],  # Lower foundation material
             
-            # Medium soil
-            [SoilLayer("Medium Clay", 120, 200, 100, 25, 20),
-             SoilLayer("Dense Soil", 125, 400, 200, 35, 30)],
+            # Medium soil scenario
+            [SoilLayer("Slope Material", 120, 200, 100, 25, 20),   # Upper slope material
+             SoilLayer("Foundation Material", 125, 400, 200, 35, 30)],  # Lower foundation material
             
-            # Strong soil
-            [SoilLayer("Dense Clay", 125, 400, 200, 35, 20),
-             SoilLayer("Rock", 130, 1000, 500, 40, 30)],
+            # Strong soil scenario
+            [SoilLayer("Slope Material", 125, 400, 200, 35, 20),   # Upper slope material
+             SoilLayer("Foundation Material", 130, 1000, 500, 40, 30)], # Lower foundation material
         ]
         
         config_id = 0

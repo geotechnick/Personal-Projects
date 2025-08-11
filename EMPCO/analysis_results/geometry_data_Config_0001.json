@@ -10,7 +10,7 @@
   },
   "soil_layers": [
     {
-      "name": "Medium Clay",
+      "name": "Slope Material",
       "unit_weight_pcf": 120,
       "cohesion_total_psf": 200,
       "cohesion_effective_psf": 100,
@@ -18,7 +18,7 @@
       "thickness_ft": 20
     },
     {
-      "name": "Dense Soil",
+      "name": "Foundation Material",
       "unit_weight_pcf": 125,
       "cohesion_total_psf": 400,
       "cohesion_effective_psf": 200,
@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 2.29,
-    "effective_stress_fos": 0.71,
+    "total_stress_fos": 1.19,
+    "effective_stress_fos": 0.85,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }

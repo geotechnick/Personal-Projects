@@ -10,7 +10,7 @@
   },
   "soil_layers": [
     {
-      "name": "Weak Clay",
+      "name": "Slope Material",
       "unit_weight_pcf": 115,
       "cohesion_total_psf": 100,
       "cohesion_effective_psf": 50,
@@ -18,7 +18,7 @@
       "thickness_ft": 20
     },
     {
-      "name": "Medium Soil",
+      "name": "Foundation Material",
       "unit_weight_pcf": 120,
       "cohesion_total_psf": 200,
       "cohesion_effective_psf": 100,
@@ -70,8 +70,8 @@
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 1.66,
-    "effective_stress_fos": 1.32,
+    "total_stress_fos": 2.32,
+    "effective_stress_fos": 1.72,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }
