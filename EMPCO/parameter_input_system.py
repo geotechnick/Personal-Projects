@@ -368,13 +368,8 @@ class ParameterInputManager:
                 for gw_ratio in parameters.groundwater_ratios:
                     for soil_scenario in parameters.soil_scenarios:
                         
-                        # Create geometry
-                        geometry = SlopeGeometry(
-                            slope_angle=angle,
-                            slope_height=height,
-                            bench_width=0,  # Simple slope
-                            toe_distance=50
-                        )
+                        # Create geometry using coordinate-based system
+                        geometry = SlopeGeometry.create_standard_slope(angle, height)
                         
                         # Create soil layers - ensure exactly 2 layers (slope material + foundation material)
                         soil_layers = []

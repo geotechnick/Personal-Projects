@@ -15,12 +15,92 @@ import json
 
 
 @dataclass
+class GeometryPoint:
+    """Defines a geometry point with coordinates and constraints"""
+    id: int
+    x: float  # feet
+    y: float  # feet
+    label: str  # Point label/description
+    pinned: bool  # Whether the point is fixed in position
+
+@dataclass
 class SlopeGeometry:
-    """Defines slope geometry parameters"""
-    slope_angle: float  # degrees
-    slope_height: float  # feet
-    bench_width: float  # feet (0 for continuous slope)
-    toe_distance: float  # feet from toe to analysis point
+    """Defines slope geometry using coordinate points"""
+    points: List[GeometryPoint]
+    
+    @property
+    def slope_angle(self) -> float:
+        """Calculate slope angle from toe to crest points"""
+        # Points 1 (0,0) and 2 (20,20) define the slope face
+        toe_point = next(p for p in self.points if p.id == 1)
+        crest_point = next(p for p in self.points if p.id == 2)
+        
+        dx = crest_point.x - toe_point.x
+        dy = crest_point.y - toe_point.y
+        
+        if dx == 0:
+            return 90.0
+        
+        angle_rad = np.arctan(dy / dx)
+        return np.degrees(angle_rad)
+    
+    @property 
+    def slope_height(self) -> float:
+        """Calculate slope height from toe to crest points"""
+        toe_point = next(p for p in self.points if p.id == 1)
+        crest_point = next(p for p in self.points if p.id == 2)
+        return crest_point.y - toe_point.y
+    
+    @property
+    def slope_length(self) -> float:
+        """Calculate horizontal slope length"""
+        toe_point = next(p for p in self.points if p.id == 1)
+        crest_point = next(p for p in self.points if p.id == 2)
+        dx = crest_point.x - toe_point.x
+        dy = crest_point.y - toe_point.y
+        return np.sqrt(dx**2 + dy**2)
+    
+    @classmethod
+    def create_standard_slope(cls, slope_angle: float, slope_height: float) -> 'SlopeGeometry':
+        """Create standard slope geometry from angle and height (for backward compatibility)"""
+        # Calculate slope length based on angle and height
+        slope_length = slope_height / np.tan(np.radians(slope_angle))
+        
+        points = [
+            GeometryPoint(1, 0, 0, "Point+Number", True),  # Toe
+            GeometryPoint(2, slope_length, slope_height, "Point+Number", True),  # Crest
+            GeometryPoint(3, slope_length + 180, slope_height, "Point+Number", True),  # Plateau
+            GeometryPoint(4, -100, 0, "Point+Number", True),  # Left boundary at toe level
+            GeometryPoint(5, -100, -100, "Point+Number", True),  # Bottom left
+            GeometryPoint(6, slope_length + 180, -100, "Point+Number", True),  # Bottom right
+            GeometryPoint(7, slope_length + 180, 0, "Point+Number", False),  # Right boundary at toe level
+        ]
+        
+        return cls(points=points)
+    
+    @classmethod
+    def create_specified_slope(cls) -> 'SlopeGeometry':
+        """Create slope geometry with the exact coordinates from GeoStudio template"""
+        points = [
+            GeometryPoint(1, 0, 0, "Point+Number", True),        # Toe of slope
+            GeometryPoint(2, 20, 20, "Point+Number", True),      # Top of slope face  
+            GeometryPoint(3, 200, 20, "Point+Number", True),     # Top of slope plateau
+            GeometryPoint(4, -100, 0, "Point+Number", True),     # Left boundary
+            GeometryPoint(5, -100, -100, "Point+Number", True),  # Bottom left
+            GeometryPoint(6, 200, -100, "Point+Number", True),   # Bottom right
+            GeometryPoint(7, 200, 0, "Point+Number", False),     # Right boundary (not pinned)
+            # Additional points for soil layer boundaries (from template)
+            GeometryPoint(8, -100, -20, "Point+Number", True),   # Left at -20 ft
+            GeometryPoint(9, 200, -20, "Point+Number", True),    # Right at -20 ft
+            GeometryPoint(10, -100, -40, "Point+Number", True),  # Left at -40 ft
+            GeometryPoint(11, 200, -40, "Point+Number", True),   # Right at -40 ft
+            GeometryPoint(12, -100, -60, "Point+Number", True),  # Left at -60 ft
+            GeometryPoint(13, 200, -60, "Point+Number", True),   # Right at -60 ft
+            GeometryPoint(14, -100, -80, "Point+Number", True),  # Left at -80 ft
+            GeometryPoint(15, 200, -80, "Point+Number", True),   # Right at -80 ft
+        ]
+        
+        return cls(points=points)
 
 
 @dataclass
@@ -98,25 +178,9 @@ class GeoStudioXMLHandler:
                 self._update_material_properties(eff_mat, layer, stress_type='effective')
     
     def _calculate_slope_points(self, geometry: SlopeGeometry) -> List[Tuple[float, float]]:
-        """Calculate point coordinates for slope geometry"""
-        points = []
-        
-        # Simplified slope geometry calculation
-        # This would be expanded for complex geometries
-        slope_rad = np.radians(geometry.slope_angle)
-        
-        # Example points for a simple slope
-        points = [
-            (0, 0),  # Toe
-            (geometry.slope_height / np.tan(slope_rad), geometry.slope_height),  # Crest
-            (geometry.toe_distance, 0),  # Extended toe
-            (-100, 0),  # Left boundary
-            (-100, -100),  # Left bottom
-            (200, -100),  # Right bottom
-            (200, 0),  # Right boundary
-        ]
-        
-        return points
+        """Extract point coordinates directly from geometry points"""
+        # Convert GeometryPoint objects to coordinate tuples
+        return [(point.x, point.y) for point in geometry.points]
     
     def _update_material_properties(self, material_elem, layer: SoilLayer, stress_type: str):
         """Update individual material properties"""
@@ -196,12 +260,8 @@ class SlopeStabilityAnalyzer:
         for angle in slope_angles:
             for height in slope_heights:
                 for soil_scenario in soil_strength_scenarios:
-                    geometry = SlopeGeometry(
-                        slope_angle=angle,
-                        slope_height=height,
-                        bench_width=0,  # Continuous slope
-                        toe_distance=50
-                    )
+                    # Use the exact coordinate specification instead of calculated geometry
+                    geometry = SlopeGeometry.create_specified_slope()
                     
                     config = SlopeConfiguration(
                         config_id=f"Config_{config_id:03d}",

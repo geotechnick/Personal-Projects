@@ -3,26 +3,24 @@ AUTOMATED SLOPE STABILITY AND PIPELINE ANALYSIS
 EXECUTIVE SUMMARY REPORT
 ================================================================================
 
-Analysis Date: 2025-08-11 21:12:29
+Analysis Date: 2025-08-11 21:24:33
 Output Directory: analysis_results
 
 SLOPE STABILITY ANALYSIS SUMMARY
 ----------------------------------------
-Total Configurations Analyzed: 10
-Configurations Requiring Detailed Analysis: 10 (100.0%)
-Factor of Safety Range: 0.83 - 1.80
-Average Factor of Safety: 1.24
+Total Configurations Analyzed: 2
+Configurations Requiring Detailed Analysis: 2 (100.0%)
+Factor of Safety Range: 0.82 - 1.18
+Average Factor of Safety: 1.00
 
 Analysis Priority Breakdown:
-  Low: 3 configurations (30.0%)
-  Critical: 3 configurations (30.0%)
-  High: 2 configurations (20.0%)
-  Medium: 2 configurations (20.0%)
+  High: 1 configurations (50.0%)
+  Critical: 1 configurations (50.0%)
 
 KEY RECOMMENDATIONS
 ----------------------------------------
-• IMMEDIATE ACTION: 3 configurations have critical slope stability issues
-• MONITORING REQUIRED: 7 configurations have Factor of Safety < 1.5
+• IMMEDIATE ACTION: 1 configurations have critical slope stability issues
+• MONITORING REQUIRED: 2 configurations have Factor of Safety < 1.5
 • Review all Critical and High priority configurations immediately
 • Consider design modifications for configurations exceeding allowable limits
 • Implement monitoring program for marginal configurations

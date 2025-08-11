@@ -133,6 +133,17 @@ class SlopeGeometryVisualizer:
         
         return points
     
+    def _calculate_slope_boundary_points(self, geometry: SlopeGeometry) -> List[Tuple[float, float]]:
+        """Calculate slope boundary points from the coordinate-based geometry system"""
+        # Extract the primary slope boundary points (first 7 points define the slope boundary)
+        boundary_points = []
+        
+        # Get the main slope defining points
+        for point in geometry.points[:7]:  # First 7 points define the slope boundary
+            boundary_points.append((point.x, point.y))
+        
+        return boundary_points
+    
     def _plot_soil_layers(self, ax, geometry: SlopeGeometry, soil_layers: List[SoilLayer], 
                          slope_points: List[Tuple[float, float]]):
         """Plot soil layers with different colors and patterns"""
@@ -411,9 +422,9 @@ class SlopeGeometryVisualizer:
                 'angle_degrees': geometry.slope_angle,
                 'height_ft': geometry.slope_height,
                 'horizontal_run_ft': slope_run,
-                'slope_length_ft': slope_length,
-                'bench_width_ft': geometry.bench_width,
-                'toe_distance_ft': geometry.toe_distance
+                'slope_length_ft': geometry.slope_length,
+                'bench_width_ft': 0,  # No benches in current coordinate system
+                'toe_distance_ft': 50  # Standard value
             },
             'soil_layers': [
                 {
@@ -571,12 +582,7 @@ def main():
     """Test function for slope geometry visualization"""
     
     # Create test configuration
-    test_geometry = SlopeGeometry(
-        slope_angle=30,
-        slope_height=60,
-        bench_width=0,
-        toe_distance=50
-    )
+    test_geometry = SlopeGeometry.create_standard_slope(30, 60)
     
     test_soil_layers = [
         SoilLayer("Weak Clay", 115, 100, 50, 15, 25),

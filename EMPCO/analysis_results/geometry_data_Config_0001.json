@@ -1,7 +1,7 @@
 {
   "configuration_id": "Config_0001",
   "slope_geometry": {
-    "angle_degrees": 15,
+    "angle_degrees": 14.999999999999998,
     "height_ft": 20,
     "horizontal_run_ft": 74.64101615137754,
     "slope_length_ft": 77.27406610312546,
@@ -37,41 +37,37 @@
   },
   "boundary_points": [
     [
-      -150,
-      -50
-    ],
-    [
-      -150,
-      40
-    ],
-    [
-      -20,
-      20
+      0,
+      0
     ],
     [
       74.64101615137754,
       20
     ],
     [
-      0,
+      254.64101615137753,
+      20
+    ],
+    [
+      -100,
       0
     ],
     [
-      150,
+      -100,
+      -100
+    ],
+    [
+      254.64101615137753,
+      -100
+    ],
+    [
+      254.64101615137753,
       0
-    ],
-    [
-      150,
-      -50
-    ],
-    [
-      -150,
-      -50
     ]
   ],
   "analysis_results": {
-    "total_stress_fos": 2.2,
-    "effective_stress_fos": 0.83,
+    "total_stress_fos": 0.82,
+    "effective_stress_fos": 1.91,
     "requires_detailed_analysis": true,
     "critical_slip_surface": {}
   }
