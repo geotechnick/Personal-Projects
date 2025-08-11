@@ -1,0 +1,78 @@
+{
+  "configuration_id": "Config_0004",
+  "slope_geometry": {
+    "angle_degrees": 15,
+    "height_ft": 20,
+    "horizontal_run_ft": 74.64101615137754,
+    "slope_length_ft": 77.27406610312546,
+    "bench_width_ft": 0,
+    "toe_distance_ft": 50
+  },
+  "soil_layers": [
+    {
+      "name": "Medium Clay",
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 200,
+      "cohesion_effective_psf": 100,
+      "friction_angle_degrees": 25,
+      "thickness_ft": 20
+    },
+    {
+      "name": "Dense Soil",
+      "unit_weight_pcf": 125,
+      "cohesion_total_psf": 400,
+      "cohesion_effective_psf": 200,
+      "friction_angle_degrees": 35,
+      "thickness_ft": 30
+    }
+  ],
+  "groundwater": {
+    "depth_below_surface_ft": 14.0
+  },
+  "pipeline": {
+    "diameter_in": 24.0,
+    "diameter_ft": 2.0,
+    "depth_of_cover_ft": 4.0,
+    "centerline_elevation_ft": -5.0
+  },
+  "boundary_points": [
+    [
+      -150,
+      -50
+    ],
+    [
+      -150,
+      40
+    ],
+    [
+      -20,
+      20
+    ],
+    [
+      74.64101615137754,
+      20
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      150,
+      0
+    ],
+    [
+      150,
+      -50
+    ],
+    [
+      -150,
+      -50
+    ]
+  ],
+  "analysis_results": {
+    "total_stress_fos": 1.11,
+    "effective_stress_fos": 0.9,
+    "requires_detailed_analysis": true,
+    "critical_slip_surface": {}
+  }
+}

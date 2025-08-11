@@ -1,0 +1,6 @@
+Config_ID,Total_Stress_FoS,Effective_Stress_FoS,Min_FoS,Requires_Detailed_Analysis,Analysis_Priority
+Config_0000,1.66,1.32,1.32,True,Medium
+Config_0001,2.29,0.71,0.71,True,Critical
+Config_0002,0.86,1.12,0.86,True,Critical
+Config_0003,1.7,0.96,0.96,True,Critical
+Config_0004,1.11,0.9,0.9,True,Critical

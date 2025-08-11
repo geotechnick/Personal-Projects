@@ -437,7 +437,7 @@ class ParameterInputManager:
                                             pipe_length_in_pgd=length,
                                             pipe_coating=coating,
                                             internal_pressure=pressure,
-                                            pgd_path=pgd_path
+                                            pgd_direction=pgd_path
                                         )
                                         
                                         configurations.append(config)
