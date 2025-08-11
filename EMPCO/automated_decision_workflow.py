@@ -17,6 +17,7 @@ from datetime import datetime
 
 from slope_stability_automation import SlopeStabilityAnalyzer, SlopeConfiguration
 from soil_springs_integration import IntegratedAnalysisEngine
+from slope_geometry_visualizer import SlopeGeometryVisualizer
 
 
 class AutomatedDecisionWorkflow:
@@ -31,6 +32,7 @@ class AutomatedDecisionWorkflow:
         # Initialize analyzers
         self.slope_analyzer = SlopeStabilityAnalyzer(template_path)
         self.integration_engine = IntegratedAnalysisEngine(excel_path)
+        self.geometry_visualizer = SlopeGeometryVisualizer(output_dir)
         
         # Setup logging
         self._setup_logging()
@@ -106,6 +108,10 @@ class AutomatedDecisionWorkflow:
             if generate_plots:
                 self.logger.info("Step 6: Generating analysis visualizations")
                 self._generate_analysis_plots(slope_decision_matrix, comprehensive_matrix)
+                
+                # Generate detailed slope geometry plots for critical configurations
+                self.logger.info("Step 6a: Generating detailed slope geometry visualizations")
+                self._generate_slope_geometry_plots(slope_configs, slope_results, comprehensive_matrix)
             
             # Step 7: Create executive summary
             self.logger.info("Step 7: Creating executive summary")
@@ -165,6 +171,10 @@ class AutomatedDecisionWorkflow:
             if generate_plots:
                 self.logger.info("Step 5: Generating analysis visualizations")
                 self._generate_analysis_plots(slope_decision_matrix, comprehensive_matrix)
+                
+                # Generate detailed slope geometry plots for critical configurations
+                self.logger.info("Step 5a: Generating detailed slope geometry visualizations") 
+                self._generate_slope_geometry_plots(slope_configurations, slope_results, comprehensive_matrix)
             
             # Step 6: Create executive summary
             self.logger.info("Step 6: Creating executive summary")
@@ -254,6 +264,116 @@ class AutomatedDecisionWorkflow:
         
         self.logger.info(f"Analysis plots saved to {self.output_dir}")
     
+    def _generate_slope_geometry_plots(self, slope_configurations: List, 
+                                     slope_results: List, 
+                                     comprehensive_matrix: pd.DataFrame):
+        """Generate detailed slope geometry visualizations"""
+        
+        try:
+            # Determine pipeline parameters for visualization
+            pipe_diameter_in = 24.0  # Default pipeline diameter
+            pipe_depth_ft = 4.0     # Default depth of cover
+            
+            # Extract pipeline parameters from comprehensive matrix if available
+            if not comprehensive_matrix.empty and 'Pipe_OD_in' in comprehensive_matrix.columns:
+                pipe_diameter_in = comprehensive_matrix['Pipe_OD_in'].iloc[0]
+            
+            # Identify critical configurations for detailed geometry plots
+            critical_configs = []
+            critical_results = []
+            
+            for config, result in zip(slope_configurations, slope_results):
+                # Include critical and high priority configurations
+                if (result.effective_stress_fos < 1.5 or 
+                    result.requires_detailed_analysis or
+                    result.total_stress_fos < 1.3):
+                    critical_configs.append(config)
+                    critical_results.append(result)
+            
+            # Limit to most critical configurations to avoid too many plots
+            max_geometry_plots = 10
+            if len(critical_configs) > max_geometry_plots:
+                # Sort by Factor of Safety (most critical first)
+                paired = list(zip(critical_configs, critical_results))
+                paired.sort(key=lambda x: x[1].effective_stress_fos)
+                critical_configs = [p[0] for p in paired[:max_geometry_plots]]
+                critical_results = [p[1] for p in paired[:max_geometry_plots]]
+            
+            if critical_configs:
+                self.logger.info(f"Generating geometry plots for {len(critical_configs)} critical configurations")
+                
+                # Generate individual slope geometry plots
+                geometry_plot_files = self.geometry_visualizer.create_multiple_slope_plots(
+                    critical_configs, critical_results, pipe_diameter_in, pipe_depth_ft
+                )
+                
+                # Generate slope comparison plot
+                comparison_file = self.geometry_visualizer.create_summary_slope_comparison(
+                    critical_configs, critical_results, max_plots=6
+                )
+                
+                self.logger.info(f"Created {len(geometry_plot_files)} individual geometry plots")
+                self.logger.info(f"Created slope comparison plot: {comparison_file}")
+                
+                # Create index file listing all geometry visualizations
+                self._create_geometry_plots_index(geometry_plot_files, comparison_file)
+                
+            else:
+                self.logger.info("No critical configurations identified for detailed geometry plots")
+                
+        except Exception as e:
+            self.logger.error(f"Error generating slope geometry plots: {e}")
+    
+    def _create_geometry_plots_index(self, individual_plots: List[str], comparison_plot: str):
+        """Create index file for geometry visualizations"""
+        
+        index_file = self.output_dir / "slope_geometry_plots_index.txt"
+        
+        with open(index_file, 'w') as f:
+            f.write("=" * 80 + "\n")
+            f.write("SLOPE GEOMETRY VISUALIZATION INDEX\n")
+            f.write("=" * 80 + "\n\n")
+            
+            f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Total individual plots: {len(individual_plots)}\n\n")
+            
+            f.write("SLOPE COMPARISON PLOT:\n")
+            f.write("-" * 30 + "\n")
+            f.write(f"• {Path(comparison_plot).name}\n")
+            f.write("  Summary comparison of critical slope configurations\n\n")
+            
+            f.write("INDIVIDUAL SLOPE GEOMETRY PLOTS:\n")
+            f.write("-" * 40 + "\n")
+            
+            for plot_file in individual_plots:
+                plot_name = Path(plot_file).name
+                config_id = plot_name.replace('slope_geometry_', '').replace('.png', '')
+                f.write(f"• {plot_name}\n")
+                f.write(f"  Configuration: {config_id}\n")
+                f.write(f"  Shows: Slope geometry, soil layers, failure surface, pipeline location\n\n")
+            
+            f.write("GEOMETRY DATA FILES:\n")
+            f.write("-" * 25 + "\n")
+            f.write("JSON files with detailed geometric parameters available:\n")
+            for plot_file in individual_plots:
+                config_id = Path(plot_file).stem.replace('slope_geometry_', '')
+                f.write(f"• geometry_data_{config_id}.json\n")
+            
+            f.write("\n" + "=" * 80 + "\n")
+            f.write("VISUALIZATION CONTENTS:\n")
+            f.write("=" * 80 + "\n")
+            f.write("Each slope geometry plot includes:\n")
+            f.write("• Slope profile with accurate geometry and dimensions\n")
+            f.write("• Soil layer stratification with engineering properties\n")
+            f.write("• Critical failure surface (when available from analysis)\n")
+            f.write("• Pipeline location and cross-section details\n")
+            f.write("• Groundwater table location\n")
+            f.write("• Engineering annotations and dimensions\n")
+            f.write("• Factor of Safety values and analysis results\n")
+            f.write("\n" + "=" * 80 + "\n")
+        
+        self.logger.info(f"Geometry plots index created: {index_file}")
+    
     def _create_executive_summary(self, slope_matrix: pd.DataFrame, 
                                 comprehensive_matrix: pd.DataFrame):
         """Create executive summary report"""
@@ -340,6 +460,15 @@ class AutomatedDecisionWorkflow:
             f.write("• Review all Critical and High priority configurations immediately\n")
             f.write("• Consider design modifications for configurations exceeding allowable limits\n")
             f.write("• Implement monitoring program for marginal configurations\n")
+            
+            f.write("\nVISUALIZATION FILES GENERATED\n")
+            f.write("-" * 40 + "\n")
+            f.write("• analysis_summary_plots.png: Statistical analysis plots\n")
+            f.write("• decision_matrix_heatmap.png: Priority heatmap (if applicable)\n")
+            f.write("• slope_configurations_comparison.png: Critical slopes comparison\n")
+            f.write("• Individual slope geometry plots: slope_geometry_*.png\n")
+            f.write("• Detailed geometry data files: geometry_data_*.json\n")
+            f.write("• slope_geometry_plots_index.txt: Complete visualization index\n")
             
             f.write("\n" + "=" * 80 + "\n")
             f.write("END OF EXECUTIVE SUMMARY\n")

@@ -13,6 +13,7 @@ This repository contains a **production-ready automated geotechnical engineering
 │   ├── slope_stability_automation.py        # Slope analysis engine with PyGeoStudio
 │   ├── pygeostudio_interface.py            # ⭐ PyGeoStudio integration
 │   ├── soil_springs_integration.py          # Excel integration with headless mode
+│   ├── slope_geometry_visualizer.py         # ⭐ Advanced slope geometry visualization system
 │   ├── headless_excel_analyzer.py          # Headless Excel processing alternatives
 │   ├── geostudio_cli_interface.py          # GeoStudio CLI fallback methods
 │   ├── parameter_input_system.py           # 📋 User parameter input system
@@ -79,9 +80,26 @@ This repository contains a **production-ready automated geotechnical engineering
   - Headless Excel integration for pipeline calculations
   - Automated decision matrix generation with engineering thresholds
   - Priority-based recommendations with timelines and costs
+  - Advanced slope geometry visualizations for critical configurations ⭐ **NEW**
   - Executive summary and visualization reports
 
-### 4. Headless Processing Systems
+### 4. Advanced Slope Geometry Visualization System ⭐ **NEW**
+- **Primary File**: `slope_geometry_visualizer.py`
+- **Purpose**: Generate detailed engineering visualizations of slope configurations, soil strata, failure surfaces, and pipeline locations
+- **Key Capabilities**:
+  - **Comprehensive Slope Plots**: Accurate geometry with dimensions and engineering annotations
+  - **Soil Layer Visualization**: Color-coded stratification with properties (γ, c, φ, thickness)
+  - **Failure Surface Rendering**: Critical slip surfaces with geometric parameters
+  - **Pipeline Integration**: Cross-sectional views with specifications and depth of cover
+  - **Groundwater Representation**: Water table visualization with saturated zone indication
+  - **Engineering Documentation**: Professional plots suitable for client presentations and technical reviews
+- **Output Formats**:
+  - Individual slope geometry plots (PNG, 300 DPI)
+  - Slope comparison plots for critical configurations
+  - Geometric data files (JSON format for CAD integration)
+  - Comprehensive visualization index and catalog
+
+### 5. Headless Processing Systems
 - **Files**: 
   - `headless_excel_analyzer.py`: Alternative Excel processing without visible interface
   - `geostudio_cli_interface.py`: GeoStudio command-line integration
@@ -93,7 +111,7 @@ This repository contains a **production-ready automated geotechnical engineering
   - GeoStudio CLI detection and execution
   - Automatic capability detection and graceful fallbacks
 
-### 5. Python Utilities and Templates
+### 6. Python Utilities and Templates
 - **Files**: 
   - `read_soil_springs.py`: Excel formula extraction utility
   - `Slope Template/SlopeTemplate.gsz`: Main GeoStudio template for PyGeoStudio
@@ -104,7 +122,7 @@ This repository contains a **production-ready automated geotechnical engineering
   - Effective Stress analysis  
 - **Usage**: Automated parameter modification and formula documentation
 
-### 6. Reference Documentation and Examples
+### 7. Reference Documentation and Examples
 - **`references/`**: Complete collection of technical manuals, procedures, and standards
   - Bank Stability Assessment Manual (Draft WCP)
   - VIV Evaluation Procedure  
@@ -153,10 +171,19 @@ The new automated system provides a comprehensive workflow:
    - Calculate pipeline stresses and allowable lengths
    - Identify configurations exceeding allowable limits
 
-5. **Results and Recommendations**: Generate comprehensive outputs:
+5. **Advanced Visualization Generation** ⭐ **NEW**: Create detailed engineering visualizations:
+   - Individual slope geometry plots for critical configurations
+   - Comprehensive slope profiles with soil layer stratification
+   - Critical failure surface visualization with geometric parameters
+   - Pipeline location and cross-section integration
+   - Groundwater table representation
+   - Engineering annotations and dimensions
+
+6. **Results and Recommendations**: Generate comprehensive outputs:
    - Priority-based decision matrix
    - Executive summary report
-   - Visualization plots and heatmaps
+   - Statistical visualization plots and heatmaps
+   - Detailed slope geometry visualizations ⭐ **NEW**
    - Specific recommendations with timelines and cost estimates
 
 ### Traditional Manual Workflow
@@ -250,12 +277,32 @@ python read_soil_springs.py
 
 ### Analysis Outputs
 After running the automated workflow, check the `analysis_results/` directory for:
+
+**📊 Analysis Results:**
 - **`slope_stability_decision_matrix.csv`**: Initial slope analysis results with FoS values
 - **`comprehensive_decision_matrix.csv`**: Integrated results with pipeline stress analysis
-- **`executive_summary.txt`**: Executive summary with key findings and recommendations  
-- **`analysis_summary_plots.png`**: Visualization plots showing distributions and priorities
 - **`configuration_recommendations.csv`**: Specific action items with timelines and cost estimates
 - **`critical_priority_configurations.csv`**: Filtered view of critical configurations
+
+**📈 Statistical Visualizations:**
+- **`analysis_summary_plots.png`**: Factor of Safety distributions and priority analysis
+- **`decision_matrix_heatmap.png`**: Priority heatmap for pipeline sizes vs slope conditions
+
+**🏔️ Slope Geometry Visualizations:** ⭐ **NEW**
+- **`slope_configurations_comparison.png`**: Side-by-side comparison of critical slopes
+- **`slope_geometry_*.png`**: Individual detailed plots for each critical configuration showing:
+  - Accurate slope profile with dimensions and angles
+  - Soil layer stratification with engineering properties (γ, c, φ, thickness)
+  - Critical failure surface visualization with geometric parameters
+  - Pipeline location and cross-section details
+  - Groundwater table representation
+  - Comprehensive engineering annotations
+- **`geometry_data_*.json`**: Complete geometric parameters and analysis data in JSON format
+- **`slope_geometry_plots_index.txt`**: Complete catalog of all generated visualizations
+
+**📋 Reports:**
+- **`executive_summary.txt`**: Executive summary with key findings and recommendations
+- **`workflow_YYYYMMDD_HHMMSS.log`**: Detailed execution log
 - **`system_config.json`**: System capabilities configuration
 
 ### Validation and Quality Assurance
@@ -291,6 +338,16 @@ After running the automated workflow, check the `analysis_results/` directory fo
   3. **Intelligent Simulation**: Engineering-based realistic calculations
 - **`GeoStudioXMLHandler`**: XML template manipulation for CLI methods
 - **`GeoStudioCLI` / `MockGeoStudioCLI`**: Command-line and simulation interfaces
+
+#### 🎨 Advanced Visualization Engine ⭐ **NEW**
+- **`SlopeGeometryVisualizer`**: Professional slope geometry visualization system
+- **Key Features**:
+  - **Comprehensive Slope Plots**: Accurate geometry with engineering annotations
+  - **Soil Stratification**: Color-coded layers with material properties
+  - **Failure Surface Rendering**: Critical slip surfaces with parameters
+  - **Pipeline Integration**: Cross-sectional views with specifications
+  - **Groundwater Visualization**: Water table and saturated zone representation
+  - **Multiple Output Formats**: Individual plots, comparisons, and data files
 
 #### 📊 Headless Processing Systems
 - **`SoilSpringsAnalyzer`**: Excel automation with `visible=False` mode
@@ -384,6 +441,8 @@ After running the automated workflow, check the `analysis_results/` directory fo
 - **Quick Setup**: `python setup_environment.py`
 - **Demo Analysis**: `python automated_decision_workflow.py --limit 10`
 - **Production Run**: `python automated_decision_workflow.py --limit 200`
+- **Custom Analysis**: `python automated_decision_workflow.py --config-json "project.json" --limit 50`
+- **Fast Processing**: `python automated_decision_workflow.py --no-plots --limit 100` (skips visualizations)
 - **Capability Check**: System automatically detects PyGeoStudio, Excel, GeoStudio CLI availability
 
 ### 🚀 **Production Readiness**
@@ -393,3 +452,5 @@ After running the automated workflow, check the `analysis_results/` directory fo
 - **Quality Validation**: Results align with manual engineering calculations and industry standards
 
 The system transforms traditional manual slope stability analysis into an automated, scalable, production-ready engineering tool while maintaining engineering accuracy and following industry standards.
+
+**🎨 Advanced Visualization Enhancement**: The addition of the slope geometry visualization system provides comprehensive engineering documentation with detailed slope profiles, soil stratification, failure surfaces, and pipeline integration - suitable for client presentations, technical reviews, and regulatory submissions.

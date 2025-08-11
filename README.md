@@ -23,6 +23,7 @@ The **EMPCO (Energy Management and Pipeline Consulting Operations)** project aut
 - **📈 Comprehensive Reporting**: Executive summaries, visualization plots, priority classifications with timelines and costs
 - **⚡ Scalable Workflow**: From small studies (10 configs) to large parametric analyses (1000+ configs)
 - **🔄 Intelligent Fallbacks**: Graceful degradation when software unavailable
+- **📊 Advanced Visualizations**: Detailed slope geometry plots with soil layers, failure surfaces, and pipeline locations
 
 ## Quick Start
 
@@ -88,7 +89,11 @@ python setup_environment.py
 ```
 
 **📊 View Results:**
-Results are automatically saved to `analysis_results/` directory with comprehensive CSV files, plots, and executive summary.
+Results are automatically saved to `analysis_results/` directory with:
+- **CSV files**: Comprehensive decision matrices and recommendations
+- **Statistical plots**: Factor of Safety distributions and priority analysis  
+- **Slope geometry plots**: Detailed visualizations showing slope profiles, soil layers, failure surfaces, and pipeline locations
+- **Executive summary**: Management report with key findings and action items
 
 ## 📋 Parameter Input Methods
 
@@ -171,11 +176,30 @@ The system automatically detects available capabilities:
 ## Understanding the Results
 
 ### Key Output Files:
+
+**📊 Analysis Results:**
 - **`slope_stability_decision_matrix.csv`**: Initial slope analysis showing which configurations need detailed review
 - **`comprehensive_decision_matrix.csv`**: Full analysis including pipeline stress calculations
-- **`executive_summary.txt`**: Executive summary with key findings and recommendations
-- **`analysis_summary_plots.png`**: Visualization plots showing Factor of Safety distributions and priorities
 - **`configuration_recommendations.csv`**: Specific action items with timelines and cost estimates
+
+**📈 Statistical Visualizations:**
+- **`analysis_summary_plots.png`**: Factor of Safety distributions and priority analysis
+- **`decision_matrix_heatmap.png`**: Priority heatmap for pipeline sizes vs slope conditions
+
+**🏔️ Slope Geometry Visualizations:**
+- **`slope_configurations_comparison.png`**: Side-by-side comparison of critical slopes
+- **`slope_geometry_*.png`**: Individual detailed plots for each critical configuration showing:
+  - Accurate slope profile with dimensions and angles
+  - Soil layer stratification with engineering properties
+  - Critical failure surface visualization
+  - Pipeline location and cross-section details
+  - Groundwater table representation
+  - Comprehensive engineering annotations
+- **`geometry_data_*.json`**: Complete geometric parameters and analysis data in JSON format
+- **`slope_geometry_plots_index.txt`**: Complete catalog of all generated visualizations
+
+**📋 Reports:**
+- **`executive_summary.txt`**: Executive summary with key findings and recommendations
 
 ### Priority Classifications:
 - **Critical (1)**: FoS < 1.0 or pipeline stress exceeds allowable - Immediate action (0-7 days)
@@ -187,15 +211,17 @@ The system automatically detects available capabilities:
 
 ### Core Components:
 1. **`slope_stability_automation.py`**: GeoStudio XML template manipulation and slope analysis
-2. **`soil_springs_integration.py`**: Integration with Excel-based soil springs calculations
+2. **`soil_springs_integration.py`**: Integration with Excel-based soil springs calculations  
 3. **`automated_decision_workflow.py`**: Complete workflow orchestrator with reporting
+4. **`slope_geometry_visualizer.py`**: Advanced slope geometry visualization system ⭐ **NEW**
 
 ### Analysis Workflow:
 1. **Configuration Generation**: Creates parametric matrix of slope configurations
 2. **Slope Stability Analysis**: Calculates Factor of Safety for each configuration
 3. **Decision Logic**: Determines which configurations require detailed analysis (FoS < 1.5)
 4. **Pipeline Integration**: For critical configurations, runs soil springs analysis with various pipeline sizes
-5. **Results Generation**: Creates comprehensive decision matrices and engineering recommendations
+5. **Visualization Generation**: Creates detailed slope geometry plots for critical configurations ⭐ **NEW**
+6. **Results Generation**: Creates comprehensive decision matrices and engineering recommendations
 
 ## Manual Validation
 
@@ -235,6 +261,7 @@ EMPCO/
 ├── soil_springs_integration.py       # Excel integration
 ├── headless_excel_analyzer.py        # Headless Excel processing
 ├── geostudio_cli_interface.py        # GeoStudio CLI fallback
+├── slope_geometry_visualizer.py      # ⭐ Advanced slope geometry visualization
 ├── parameter_input_system.py         # 📋 User parameter input system
 ├── setup_environment.py              # 🚀 Automatic setup utility
 ├── read_soil_springs.py             # Formula extraction utility
@@ -260,6 +287,7 @@ EMPCO/
 **✅ Fully Operational:**
 - **PyGeoStudio Integration**: Direct .gsz file manipulation (recommended approach)
 - **Excel Headless Processing**: Background Excel calculations with no GUI
+- **Advanced Visualizations**: Detailed slope geometry plots with failure surfaces and pipeline locations
 - **Intelligent Fallbacks**: Realistic simulations when software unavailable
 - **Scalable Analysis**: From 10 to 1000+ configurations
 
