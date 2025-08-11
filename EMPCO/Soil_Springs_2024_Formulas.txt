@@ -1,0 +1,406 @@
+Sheet: Input&Summary
+Cell $B$1: Formula: RIGHT BANK | Value: RIGHT BANK
+Cell $B$2: Formula: Pipe Properties | Value: Pipe Properties
+Cell $E$2: Formula: Soil Properties | Value: Soil Properties
+Cell $B$3: Formula: Pipe OD (in): | Value: Pipe OD (in):
+Cell $C$3: Formula: 16 | Value: 16.0
+Cell $E$3: Formula: Soil Friction Angle (φ degrees): | Value: Soil Friction Angle (φ degrees):
+Cell $F$3: Formula: 30 | Value: 30.0
+Cell $B$4: Formula: Pipe wt (in): | Value: Pipe wt (in):
+Cell $C$4: Formula: 0.375 | Value: 0.375
+Cell $E$4: Formula: Soil Cohesion (c, psf): | Value: Soil Cohesion (c, psf):
+Cell $F$4: Formula: 100 | Value: 100.0
+Cell $B$5: Formula: Pipe SMYS (psi): | Value: Pipe SMYS (psi):
+Cell $C$5: Formula: X-52 | Value: X-52
+Cell $E$5: Formula: Soil Effective Unit Weight (γ', psf): | Value: Soil Effective Unit Weight (γ', psf):
+Cell $F$5: Formula: 125 | Value: 125.0
+Cell $B$6: Formula: Pipe DOC (ft): | Value: Pipe DOC (ft):
+Cell $C$6: Formula: 11.2 | Value: 11.2
+Cell $E$6: Formula: PGD Path (perpendicular/parallel to pipe): | Value: PGD Path (perpendicular/parallel to pipe):
+Cell $F$6: Formula: Parallel | Value: Parallel
+Cell $B$7: Formula: Length of Pipe in PGD (ft): | Value: Length of Pipe in PGD (ft):
+Cell $C$7: Formula: 7 | Value: 7.0
+Cell $B$8: Formula: Pipe Coating | Value: Pipe Coating
+Cell $C$8: Formula: Polyethylene | Value: Polyethylene
+Cell $B$9: Formula: Internal Pressure (psi): | Value: Internal Pressure (psi):
+Cell $C$9: Formula: 1440 | Value: 1440.0
+Cell $B$10: Formula: API 5L X52, 16" OD, Std Wt (.375") | Value: API 5L X52, 16" OD, Std Wt (.375")
+Cell $B$11: Formula: DOC = Depth of Cover | Value: DOC = Depth of Cover
+Cell $B$12: Formula: Summary Output | Value: Summary Output
+Cell $B$13: Formula: =IF($F$6="Parallel","Longitudinal Force (lb/ft)","Transverse Force (lb/ft)") | Value: Longitudinal Force (lb/ft)
+Cell $C$13: Formula: =IF($F$6="Parallel",Calcs!D67,Calcs!D90) | Value: 1942.925871157033
+Cell $B$14: Formula: =IF($F$6="Parallel","Axial Stress (psi)","Bending Stress (psi)") | Value: Axial Stress (psi)
+Cell $C$14: Formula: =IF($F$6="Parallel",Calcs!D73,Calcs!D94) | Value: 360.76396586506354
+Cell $B$15: Formula: Remaining Allowable Stress (psi) | Value: Remaining Allowable Stress (psi)
+Cell $C$15: Formula: =Calcs!D80 | Value: 12720.000000000004
+Cell $B$16: Formula: Allowable Pipe Length in PGD (ft): | Value: Allowable Pipe Length in PGD (ft):
+Cell $C$16: Formula: =IF($F$6="Parallel",Calcs!D82,Calcs!D103) | Value: 246.8095719773289
+Cell $B$17: Formula: Exceeds Allowable: | Value: Exceeds Allowable:
+Cell $C$17: Formula: =IF(ISERROR(C14),"",IF(C14>C15,"Exceeds","Does Not Exceed")) | Value: Does Not Exceed
+Cell $B$18: Formula: PGD=Permanent Ground Deformation | Value: PGD=Permanent Ground Deformation
+Cell $B$19: Formula: Pipeline Length: FOS <1.5 | Value: Pipeline Length: FOS <1.5
+Cell $C$19: Formula: Orange Area | Value: Orange Area
+Cell $B$20: Formula: 7 | Value: 7.0
+Cell $C$20: Formula: ft | Value: ft
+---
+Sheet: Calcs
+Cell $A$2: Formula: Axial Forces | Value: Axial Forces
+Cell $B$3: Formula: Pipe outside diameter | Value: Pipe outside diameter
+Cell $C$3: Formula: OD | Value: OD
+Cell $D$3: Formula: ='Input&Summary'!C3 | Value: 16.0
+Cell $E$3: Formula: inches | Value: inches
+Cell $G$3: Formula: Coating dependent factor | Value: Coating dependent factor
+Cell $B$4: Formula: Pipe Coating Dependent Factor (f) | Value: Pipe Coating Dependent Factor (f)
+Cell $C$4: Formula: ='Input&Summary'!C8 | Value: Polyethylene
+Cell $D$4: Formula: =VLOOKUP(C4,G4:H9,2,FALSE) | Value: 0.6
+Cell $G$4: Formula: Concrete | Value: Concrete
+Cell $H$4: Formula: 1 | Value: 1.0
+Cell $B$5: Formula: Depth of cover | Value: Depth of cover
+Cell $C$5: Formula: DOC | Value: DOC
+Cell $D$5: Formula: ='Input&Summary'!C6 | Value: 11.2
+Cell $E$5: Formula: ft | Value: ft
+Cell $G$5: Formula: Coal Tar | Value: Coal Tar
+Cell $H$5: Formula: 0.9 | Value: 0.9
+Cell $B$6: Formula: Depth to pipe centerline | Value: Depth to pipe centerline
+Cell $C$6: Formula: H | Value: H
+Cell $D$6: Formula: =D5+D3/2/12 | Value: 11.866666666666665
+Cell $E$6: Formula: ft | Value: ft
+Cell $G$6: Formula: Rough Steel | Value: Rough Steel
+Cell $H$6: Formula: 0.8 | Value: 0.8
+Cell $B$7: Formula: Soil cohesion | Value: Soil cohesion
+Cell $C$7: Formula: c | Value: c
+Cell $D$7: Formula: ='Input&Summary'!F4 | Value: 100.0
+Cell $E$7: Formula: psf | Value: psf
+Cell $G$7: Formula: Smooth steel | Value: Smooth steel
+Cell $H$7: Formula: 0.7 | Value: 0.7
+Cell $B$8: Formula: Internal friction angle for soil | Value: Internal friction angle for soil
+Cell $C$8: Formula: φ | Value: φ
+Cell $D$8: Formula: ='Input&Summary'!F3 | Value: 30.0
+Cell $E$8: Formula: degrees | Value: degrees
+Cell $G$8: Formula: Fusion Bonded Epoxy | Value: Fusion Bonded Epoxy
+Cell $H$8: Formula: 0.6 | Value: 0.6
+Cell $B$9: Formula: Effective unit weight of soil | Value: Effective unit weight of soil
+Cell $C$9: Formula: γ | Value: γ
+Cell $D$9: Formula: ='Input&Summary'!F5 | Value: 125.0
+Cell $E$9: Formula: lb/ft3 | Value: lb/ft3
+Cell $G$9: Formula: Polyethylene | Value: Polyethylene
+Cell $H$9: Formula: 0.6 | Value: 0.6
+Cell $B$10: Formula: Coefficient of pressure at rest | Value: Coefficient of pressure at rest
+Cell $C$10: Formula: Ko | Value: Ko
+Cell $D$10: Formula: =1-SIN(RADIANS(D8)) | Value: 0.5
+Cell $B$11: Formula: Adhesion factor | Value: Adhesion factor
+Cell $C$11: Formula: α | Value: α
+Cell $D$11: Formula: =0.608-0.123*(D7/20.89/100)-0.274/((D7/20.89/100)^2+1)+0.695/((D7/20.89/100)^3+1) | Value: 1.0236622262454493
+Cell $B$12: Formula: Interface angle for pipe-soil | Value: Interface angle for pipe-soil
+Cell $C$12: Formula: δ | Value: δ
+Cell $D$12: Formula: =D4*D8 | Value: 18.0
+Cell $E$12: Formula: degrees | Value: degrees
+Cell $B$13: Formula: Tan of interface angle | Value: Tan of interface angle
+Cell $C$13: Formula: tanδ | Value: tanδ
+Cell $D$13: Formula: =TAN(RADIANS(D12)) | Value: 0.3249196962329063
+Cell $B$15: Formula: Axial soil force | Value: Axial soil force
+Cell $C$15: Formula: Tu | Value: Tu
+Cell $D$15: Formula: =PI()*D3/12*(D7*D11+D6*D9*(1+D10)*0.5*D13) | Value: 1942.925871157033
+Cell $E$15: Formula: lbs/ft | Value: lbs/ft
+Cell $D$16: Formula: =D15/1000 | Value: 1.942925871157033
+Cell $E$16: Formula: kips/ft | Value: kips/ft
+Cell $A$18: Formula: Lateral Forces | Value: Lateral Forces
+Cell $B$19: Formula: Pipe outside diameter | Value: Pipe outside diameter
+Cell $C$19: Formula: OD | Value: OD
+Cell $D$19: Formula: ='Input&Summary'!C3 | Value: 16.0
+Cell $E$19: Formula: inches | Value: inches
+Cell $B$20: Formula: Depth of cover | Value: Depth of cover
+Cell $C$20: Formula: DOC | Value: DOC
+Cell $D$20: Formula: ='Input&Summary'!C6 | Value: 11.2
+Cell $E$20: Formula: ft | Value: ft
+Cell $G$20: Formula: Lateral Bearing Capacity Factor of Soil | Value: Lateral Bearing Capacity Factor of Soil
+Cell $B$21: Formula: Depth to pipe centerline | Value: Depth to pipe centerline
+Cell $C$21: Formula: H | Value: H
+Cell $D$21: Formula: =D20+D19/2/12 | Value: 11.866666666666665
+Cell $E$21: Formula: ft | Value: ft
+Cell $B$22: Formula: Effective unit weight of soil | Value: Effective unit weight of soil
+Cell $C$22: Formula: γ | Value: γ
+Cell $D$22: Formula: ='Input&Summary'!F5 | Value: 125.0
+Cell $E$22: Formula: lb/ft3 | Value: lb/ft3
+Cell $H$22: Formula: φ (degrees) | Value: φ (degrees)
+Cell $I$22: Formula: a | Value: a
+Cell $J$22: Formula: b | Value: b
+Cell $K$22: Formula: c | Value: c
+Cell $L$22: Formula: d | Value: d
+Cell $M$22: Formula: e | Value: e
+Cell $B$23: Formula: Soil cohesion | Value: Soil cohesion
+Cell $C$23: Formula: c | Value: c
+Cell $D$23: Formula: ='Input&Summary'!F4 | Value: 100.0
+Cell $E$23: Formula: psf | Value: psf
+Cell $G$23: Formula: Nch | Value: Nch
+Cell $H$23: Formula: 0 | Value: 0.0
+Cell $I$23: Formula: 6.752 | Value: 6.752
+Cell $J$23: Formula: 0.065 | Value: 0.065
+Cell $K$23: Formula: -11.063 | Value: -11.063
+Cell $L$23: Formula: 7.119 | Value: 7.119
+Cell $B$24: Formula: Internal friction angle for soil | Value: Internal friction angle for soil
+Cell $C$24: Formula: φ | Value: φ
+Cell $D$24: Formula: ='Input&Summary'!F3 | Value: 30.0
+Cell $E$24: Formula: degrees | Value: degrees
+Cell $G$24: Formula: Nqh | Value: Nqh
+Cell $H$24: Formula: 20 | Value: 20.0
+Cell $I$24: Formula: 2.399 | Value: 2.399
+Cell $J$24: Formula: 0.439 | Value: 0.439
+Cell $K$24: Formula: -0.03 | Value: -0.03
+Cell $L$24: Formula: 0.001059 | Value: 0.001059
+Cell $M$24: Formula: -0.00001754 | Value: -1.754e-05
+Cell $B$25: Formula: Horizontal bearing capacity factor for clay | Value: Horizontal bearing capacity factor for clay
+Cell $C$25: Formula: Nch | Value: Nch
+Cell $D$25: Formula: =IF(D27+D28*D32+D29/(D32+1)^2+D30/(D32+1)^3>9,9,D27+D28*D32+D29/(D32+1)^2+D30/(D32+1)^3) | Value: 4.565898621629299
+Cell $H$25: Formula: 25 | Value: 25.0
+Cell $I$25: Formula: 3.332 | Value: 3.332
+Cell $J$25: Formula: 0.839 | Value: 0.839
+Cell $K$25: Formula: -0.09 | Value: -0.09
+Cell $L$25: Formula: 0.005606 | Value: 0.005606
+Cell $M$25: Formula: -0.0001319 | Value: -0.0001319
+Cell $B$26: Formula: Horizontal bearing capacity factor for sand | Value: Horizontal bearing capacity factor for sand
+Cell $C$26: Formula: Nqh | Value: Nqh
+Cell $D$26: Formula: =D27+D28*D32+D29*D32^2+D30*D32^3+D31*D32^4 | Value: 4.640929090039266
+Cell $H$26: Formula: 30 | Value: 30.0
+Cell $I$26: Formula: 4.565 | Value: 4.565
+Cell $J$26: Formula: 1.234 | Value: 1.234
+Cell $K$26: Formula: -0.089 | Value: -0.089
+Cell $L$26: Formula: 0.004275 | Value: 0.004275
+Cell $M$26: Formula: -0.00009159 | Value: -9.159e-05
+Cell $B$27: Formula: a | Value: a
+Cell $D$27: Formula: =IF($D$24>=45,$I$29,(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,2)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),2))/(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,1)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))*($D$24-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))+INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),2)) | Value: 4.565
+Cell $H$27: Formula: 35 | Value: 35.0
+Cell $I$27: Formula: 6.816 | Value: 6.816
+Cell $J$27: Formula: 2.019 | Value: 2.019
+Cell $K$27: Formula: -0.146 | Value: -0.146
+Cell $L$27: Formula: 0.007651 | Value: 0.007651
+Cell $M$27: Formula: -0.0001683 | Value: -0.0001683
+Cell $B$28: Formula: b | Value: b
+Cell $D$28: Formula: =IF($D$24>=45,$J$29,(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,3)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),3))/(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,1)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))*($D$24-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))+INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),3)) | Value: 1.234
+Cell $H$28: Formula: 40 | Value: 40.0
+Cell $I$28: Formula: 10.959 | Value: 10.959
+Cell $J$28: Formula: 1.783 | Value: 1.783
+Cell $K$28: Formula: 0.045 | Value: 0.045
+Cell $L$28: Formula: -0.005425 | Value: -0.005425
+Cell $M$28: Formula: -0.0001153 | Value: -0.0001153
+Cell $B$29: Formula: c | Value: c
+Cell $D$29: Formula: =IF($D$24>=45,$K$29,(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,4)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),4))/(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,1)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))*($D$24-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))+INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),4)) | Value: -0.089
+Cell $H$29: Formula: 45 | Value: 45.0
+Cell $I$29: Formula: 17.658 | Value: 17.658
+Cell $J$29: Formula: 3.309 | Value: 3.309
+Cell $K$29: Formula: 0.048 | Value: 0.048
+Cell $L$29: Formula: -0.006443 | Value: -0.006443
+Cell $M$29: Formula: -0.0001299 | Value: -0.0001299
+Cell $B$30: Formula: d | Value: d
+Cell $D$30: Formula: =IF($D$24>=45,$L$29,(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,5)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),5))/(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,1)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))*($D$24-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))+INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),5)) | Value: 0.004275
+Cell $B$31: Formula: e | Value: e
+Cell $D$31: Formula: =IF($D$24>=45,$M$29,(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,6)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),6))/(INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1)+1,1)-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))*($D$24-INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),1))+INDEX($H$23:$M$29,MATCH($D$24,$H$23:$H$29,1),6)) | Value: -9.159e-05
+Cell $B$32: Formula: H/D | Value: H/D
+Cell $D$32: Formula: =D21/D19/12 | Value: 0.06180555555555555
+Cell $B$34: Formula: Lateral soil force | Value: Lateral soil force
+Cell $C$34: Formula: Pu | Value: Pu
+Cell $D$34: Formula: =D25*D23*D19/12+D26*D22*D21*D19/12 | Value: 9787.512905406009
+Cell $E$34: Formula: lbs/ft | Value: lbs/ft
+Cell $D$35: Formula: =D34/1000 | Value: 9.78751290540601
+Cell $E$35: Formula: kips/ft | Value: kips/ft
+Cell $A$38: Formula: Vertical Forces | Value: Vertical Forces
+Cell $B$39: Formula: Pipe outside diameter | Value: Pipe outside diameter
+Cell $C$39: Formula: OD | Value: OD
+Cell $D$39: Formula: ='Input&Summary'!C3 | Value: 16.0
+Cell $E$39: Formula: inches | Value: inches
+Cell $G$39: Formula:  Bearing Capacity Factor of Soil | Value:  Bearing Capacity Factor of Soil
+Cell $B$40: Formula: Depth of cover | Value: Depth of cover
+Cell $C$40: Formula: DOC | Value: DOC
+Cell $D$40: Formula: ='Input&Summary'!C6 | Value: 11.2
+Cell $E$40: Formula: ft | Value: ft
+Cell $B$41: Formula: Depth to pipe centerline | Value: Depth to pipe centerline
+Cell $C$41: Formula: H | Value: H
+Cell $D$41: Formula: =D40+D39/2/12 | Value: 11.866666666666665
+Cell $E$41: Formula: ft | Value: ft
+Cell $B$42: Formula: Effective unit weight of soil | Value: Effective unit weight of soil
+Cell $C$42: Formula: γ | Value: γ
+Cell $D$42: Formula: ='Input&Summary'!F5 | Value: 125.0
+Cell $E$42: Formula: lb/ft3 | Value: lb/ft3
+Cell $B$43: Formula: Total unit weight of soil | Value: Total unit weight of soil
+Cell $C$43: Formula: γ | Value: γ
+Cell $D$43: Formula: =D42 | Value: 125.0
+Cell $B$44: Formula: Soil cohesion | Value: Soil cohesion
+Cell $C$44: Formula: c | Value: c
+Cell $D$44: Formula: ='Input&Summary'!F4 | Value: 100.0
+Cell $E$44: Formula: psf | Value: psf
+Cell $B$45: Formula: Internal friction angle for soil | Value: Internal friction angle for soil
+Cell $C$45: Formula: φ | Value: φ
+Cell $D$45: Formula: ='Input&Summary'!F3 | Value: 30.0
+Cell $E$45: Formula: degrees | Value: degrees
+Cell $B$47: Formula: Vertical bearing capacity factor  | Value: Vertical bearing capacity factor 
+Cell $C$47: Formula: Nc | Value: Nc
+Cell $D$47: Formula: =COT(RADIANS(D45+0.001))*(EXP(PI()*TAN(RADIANS(D45+0.001)))*TAN(RADIANS(45+(D45+0.001)/2))^2-1) | Value: 30.142027811094692
+Cell $B$48: Formula: Vertical bearing capacity factor  | Value: Vertical bearing capacity factor 
+Cell $C$48: Formula: Nq | Value: Nq
+Cell $D$48: Formula: =EXP(PI()*TAN(RADIANS(D45)))*TAN(RADIANS(45+D45/2))^2 | Value: 18.401122218708668
+Cell $B$49: Formula: Vertical bearing capacity factor  | Value: Vertical bearing capacity factor 
+Cell $C$49: Formula: Nγ | Value: Nγ
+Cell $D$49: Formula: =EXP(0.18*D45-2.5) | Value: 18.17414536944305
+Cell $B$51: Formula: Vertical Bearing Soil Force | Value: Vertical Bearing Soil Force
+Cell $C$51: Formula: Qd | Value: Qd
+Cell $D$51: Formula: =D47*D44*D39/12+D48*D42*D41*D39/12+D49*D43*0.5*(D39/12)^2 | Value: 42431.61713730788
+Cell $E$51: Formula: lbs/ft | Value: lbs/ft
+Cell $D$52: Formula: =D51/1000 | Value: 42.43161713730788
+Cell $E$52: Formula: kips/ft | Value: kips/ft
+Cell $B$54: Formula: Vertical bearing capacity factor  | Value: Vertical bearing capacity factor 
+Cell $C$54: Formula: Ncv | Value: Ncv
+Cell $D$54: Formula: =IF(2*(D41/D39/12)>10,10,2*(D41/D39/12)) | Value: 0.1236111111111111
+Cell $E$54: Formula: =IF(D54<10,"<10 ok","error") | Value: <10 ok
+Cell $B$55: Formula: Vertical bearing capacity factor  | Value: Vertical bearing capacity factor 
+Cell $C$55: Formula: Nqv | Value: Nqv
+Cell $D$55: Formula: =IF(D45*D41/(44*(D39/12))>D48,D48,D45*D41/(44*(D39/12))) | Value: 6.0681818181818175
+Cell $E$55: Formula: =IF(D55<D48,"<Nq ok","error") | Value: <Nq ok
+Cell $B$57: Formula: Vertical Uplift Soil Force | Value: Vertical Uplift Soil Force
+Cell $C$57: Formula: Qu | Value: Qu
+Cell $D$57: Formula: =D54*D44*D39/12+D55*D42*D41*D39/12 | Value: 12017.996632996628
+Cell $E$57: Formula: lbs/ft | Value: lbs/ft
+Cell $D$58: Formula: =D57/1000 | Value: 12.017996632996628
+Cell $E$58: Formula: kips/ft | Value: kips/ft
+Cell $A$61: Formula: Longitudinal PGD Stress | Value: Longitudinal PGD Stress
+Cell $B$62: Formula: Pipe outside diameter | Value: Pipe outside diameter
+Cell $C$62: Formula: OD | Value: OD
+Cell $D$62: Formula: ='Input&Summary'!C3 | Value: 16.0
+Cell $E$62: Formula: inches | Value: inches
+Cell $G$62: Formula: Pipeline crossing permanent ground deformation zone in the direction of ground movement. | Value: Pipeline crossing permanent ground deformation zone in the direction of ground movement.
+Cell $M$62: Formula: Pipe Grade | Value: Pipe Grade
+Cell $N$62: Formula: Yield stress (psi) | Value: Yield stress (psi)
+Cell $O$62: Formula: n | Value: n
+Cell $P$62: Formula: r | Value: r
+Cell $B$63: Formula: Wall thickness of pipe | Value: Wall thickness of pipe
+Cell $C$63: Formula: t | Value: t
+Cell $D$63: Formula: ='Input&Summary'!C4 | Value: 0.375
+Cell $E$63: Formula: inches | Value: inches
+Cell $M$63: Formula: Grade B | Value: Grade B
+Cell $N$63: Formula: 35000 | Value: 35000.0
+Cell $O$63: Formula: 10 | Value: 10.0
+Cell $P$63: Formula: 100 | Value: 100.0
+Cell $B$64: Formula: Pipe Grade / SMYS | Value: Pipe Grade / SMYS
+Cell $C$64: Formula: ='Input&Summary'!C5 | Value: X-52
+Cell $D$64: Formula: =VLOOKUP(C64,M63:N67,2) | Value: 52000.0
+Cell $E$64: Formula: psi | Value: psi
+Cell $F$64: Formula: =1.76*D63/D62 | Value: 0.04125
+Cell $M$64: Formula: X-42 | Value: X-42
+Cell $N$64: Formula: 42000 | Value: 42000.0
+Cell $O$64: Formula: 15 | Value: 15.0
+Cell $P$64: Formula: 32 | Value: 32.0
+Cell $B$65: Formula: Modulus of elasticity | Value: Modulus of elasticity
+Cell $C$65: Formula: E | Value: E
+Cell $D$65: Formula: 29000000 | Value: 29000000.0
+Cell $E$65: Formula: psi | Value: psi
+Cell $M$65: Formula: X-52 | Value: X-52
+Cell $N$65: Formula: 52000 | Value: 52000.0
+Cell $O$65: Formula: 9 | Value: 9.0
+Cell $P$65: Formula: 10 | Value: 10.0
+Cell $B$66: Formula: Length of PGD zone/Length of pipe in slide | Value: Length of PGD zone/Length of pipe in slide
+Cell $C$66: Formula: L | Value: L
+Cell $D$66: Formula: ='Input&Summary'!C7 | Value: 7.0
+Cell $E$66: Formula: ft | Value: ft
+Cell $M$66: Formula: X-60 | Value: X-60
+Cell $N$66: Formula: 60000 | Value: 60000.0
+Cell $O$66: Formula: 10 | Value: 10.0
+Cell $P$66: Formula: 12 | Value: 12.0
+Cell $B$67: Formula: Axial soil force | Value: Axial soil force
+Cell $C$67: Formula: Tu | Value: Tu
+Cell $D$67: Formula: =Calcs!D15 | Value: 1942.925871157033
+Cell $E$67: Formula: lbs/ft | Value: lbs/ft
+Cell $M$67: Formula: X-70 | Value: X-70
+Cell $N$67: Formula: 70000 | Value: 70000.0
+Cell $O$67: Formula: 5.5 | Value: 5.5
+Cell $P$67: Formula: 16.6 | Value: 16.6
+Cell $B$69: Formula: Elastic strain | Value: Elastic strain
+Cell $C$69: Formula: εel | Value: εel
+Cell $D$69: Formula: =D67*D66/(2*PI()*D62*D63*D65) | Value: 1.244013675396771e-05
+Cell $O$69: Formula: =LOOKUP(C64,M63:M67,O63:O67) | Value: 9.0
+Cell $P$69: Formula: =LOOKUP(C64,M63:M67,P63:P67) | Value: 10.0
+Cell $B$70: Formula: Plastic strain | Value: Plastic strain
+Cell $C$70: Formula: εpl | Value: εpl
+Cell $D$70: Formula: =D67*D66/(2*PI()*D62*D63)/D65*(O69/(1+P69))*(D67*D66/(2*PI()*D62*D63)/D64)^P69 | Value: 2.6294993459850124e-27
+Cell $B$71: Formula: Total strain | Value: Total strain
+Cell $C$71: Formula: ε tot | Value: ε tot
+Cell $D$71: Formula: =D69+D70 | Value: 1.244013675396771e-05
+Cell $B$73: Formula: Bending Stress on pipe | Value: Bending Stress on pipe
+Cell $C$73: Formula: σaxial | Value: σaxial
+Cell $D$73: Formula: =D69*D65 | Value: 360.76396586506354
+Cell $E$73: Formula: psi | Value: psi
+Cell $F$73: Formula: =IF(D73>D80, "FAIL","PASS") | Value: PASS
+Cell $B$75: Formula: Design Factor | Value: Design Factor
+Cell $D$75: Formula: 0.54 | Value: 0.54
+Cell $B$76: Formula: Pipe Internal Diameter | Value: Pipe Internal Diameter
+Cell $C$76: Formula: ID | Value: ID
+Cell $D$76: Formula: =D62-2*D63 | Value: 15.25
+Cell $E$76: Formula: in. | Value: in.
+Cell $B$77: Formula: Maximum Operating Pressure | Value: Maximum Operating Pressure
+Cell $C$77: Formula: MOP | Value: MOP
+Cell $D$77: Formula: ='Input&Summary'!C9 | Value: 1440.0
+Cell $E$77: Formula: psi | Value: psi
+Cell $B$78: Formula: Allowable Stress  | Value: Allowable Stress 
+Cell $D$78: Formula: =D75*D64 | Value: 28080.000000000004
+Cell $E$78: Formula: psi | Value: psi
+Cell $B$79: Formula: Internal pressure stress | Value: Internal pressure stress
+Cell $D$79: Formula: =D77*D62/(4*D63) | Value: 15360.0
+Cell $E$79: Formula: psi | Value: psi
+Cell $B$80: Formula: Remaining Stress Available | Value: Remaining Stress Available
+Cell $D$80: Formula: =D78-D79 | Value: 12720.000000000004
+Cell $E$80: Formula: psi | Value: psi
+Cell $B$82: Formula: Allowable length of Longitudinal PGD | Value: Allowable length of Longitudinal PGD
+Cell $D$82: Formula: =(D80/D65)*(2*PI()*D62*D63*D65)/D67 | Value: 246.8095719773289
+Cell $E$82: Formula: ft | Value: ft
+Cell $A$84: Formula: Transverse PGD Stress | Value: Transverse PGD Stress
+Cell $B$85: Formula: Pipe outside diameter | Value: Pipe outside diameter
+Cell $C$85: Formula: OD | Value: OD
+Cell $D$85: Formula: ='Input&Summary'!C3 | Value: 16.0
+Cell $E$85: Formula: inches | Value: inches
+Cell $G$85: Formula: Pipeline crossing permanent ground deformation zone transverse to the direction of ground movement. | Value: Pipeline crossing permanent ground deformation zone transverse to the direction of ground movement.
+Cell $B$86: Formula: Wall thickness of pipe | Value: Wall thickness of pipe
+Cell $C$86: Formula: t | Value: t
+Cell $D$86: Formula: ='Input&Summary'!C4 | Value: 0.375
+Cell $E$86: Formula: inches | Value: inches
+Cell $B$87: Formula: Pipe Grade | Value: Pipe Grade
+Cell $C$87: Formula: ='Input&Summary'!C5 | Value: X-52
+Cell $D$87: Formula: =VLOOKUP(C87,M63:N67,2) | Value: 52000.0
+Cell $E$87: Formula: psi | Value: psi
+Cell $B$88: Formula: Modulus of elasticity | Value: Modulus of elasticity
+Cell $C$88: Formula: E | Value: E
+Cell $D$88: Formula: 29000000 | Value: 29000000.0
+Cell $E$88: Formula: psi | Value: psi
+Cell $B$89: Formula: Width of PGD zone/Length of pipe in slide | Value: Width of PGD zone/Length of pipe in slide
+Cell $C$89: Formula: L | Value: L
+Cell $D$89: Formula: ='Input&Summary'!C7 | Value: 7.0
+Cell $E$89: Formula: ft | Value: ft
+Cell $B$90: Formula: Lateral soil force | Value: Lateral soil force
+Cell $C$90: Formula: Pu | Value: Pu
+Cell $D$90: Formula: =D34 | Value: 9787.512905406009
+Cell $E$90: Formula: lbs/ft | Value: lbs/ft
+Cell $B$92: Formula: Elastic strain | Value: Elastic strain
+Cell $C$92: Formula: εel | Value: εel
+Cell $D$92: Formula: =D90*D89^2/(3*PI()*D88*144*D86/12*(D85/12)^2) | Value: 0.00021933569515541137
+Cell $B$94: Formula: Bending stress on pipe | Value: Bending stress on pipe
+Cell $C$94: Formula: σaxial | Value: σaxial
+Cell $D$94: Formula: =D92*D88 | Value: 6360.735159506929
+Cell $E$94: Formula: psi | Value: psi
+Cell $F$94: Formula: =IF(D94>D101, "FAIL","PASS") | Value: PASS
+Cell $B$96: Formula: Design Factor | Value: Design Factor
+Cell $D$96: Formula: 0.54 | Value: 0.54
+Cell $B$97: Formula: Pipe Internal Diameter | Value: Pipe Internal Diameter
+Cell $C$97: Formula: ID | Value: ID
+Cell $D$97: Formula: =D85-2*D86 | Value: 15.25
+Cell $E$97: Formula: in. | Value: in.
+Cell $B$98: Formula: Maximum Operating Pressure | Value: Maximum Operating Pressure
+Cell $C$98: Formula: MOP | Value: MOP
+Cell $D$98: Formula: 711 | Value: 711.0
+Cell $E$98: Formula: psi | Value: psi
+Cell $B$99: Formula: Allowable Stress  | Value: Allowable Stress 
+Cell $D$99: Formula: =D96*D87 | Value: 28080.000000000004
+Cell $E$99: Formula: psi | Value: psi
+Cell $B$100: Formula: Internal pressure stress | Value: Internal pressure stress
+Cell $D$100: Formula: =D98*D85/(4*D86) | Value: 7584.0
+Cell $E$100: Formula: psi | Value: psi
+Cell $B$101: Formula: Remaining Stress Available | Value: Remaining Stress Available
+Cell $D$101: Formula: =D99-D100 | Value: 20496.000000000004
+Cell $E$101: Formula: psi | Value: psi
+---

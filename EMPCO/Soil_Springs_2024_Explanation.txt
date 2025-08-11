@@ -1,0 +1,30 @@
+Soil Springs_2024.xlsx Analysis
+
+Sheet Names:
+- Input&Summary
+- Calcs
+
+Sheet: Input&Summary
+- Appears to contain summary information and input parameters for soil spring calculations.
+- First visible entries: None, RIGHT BANK (likely a header or section marker).
+- The sheet likely includes tables for user input (e.g., soil properties, geometry, bank type) and summary results.
+
+Sheet: Calcs
+- Appears to contain calculation details, starting with: None, Axial Forces (likely a header or section marker).
+- This sheet likely includes tables for calculated forces, spring constants, and other engineering outputs.
+- Formulas in this sheet would typically reference input values from 'Input&Summary' and perform engineering calculations (e.g., axial force, spring rate, displacement).
+
+How the Excel Works:
+1. User enters site-specific data and soil parameters in 'Input&Summary'.
+2. The sheet summarizes key input values and may provide a quick overview of the bank type (e.g., RIGHT BANK).
+3. 'Calcs' uses these inputs to compute soil spring properties, axial forces, and other relevant engineering metrics using embedded formulas.
+4. Results are presented in tables for review and further analysis.
+
+To extract formulas:
+- Use Excel's formula view (Ctrl+` in Excel) or inspect individual cells for formulas.
+- Formulas will typically use references like =A2*B2, =SUM(...), or more complex engineering equations.
+
+To extract tables:
+- Copy and paste table ranges from Excel to a text file, or use Python (e.g., xlwings, pandas) to export ranges as CSV or TXT.
+
+Note: This summary is based on the sheet structure and typical engineering workflow. For a full list of formulas and table contents, open the file in Excel and inspect each sheet, or use Python to programmatically extract cell formulas and values.

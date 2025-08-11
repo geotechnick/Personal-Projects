@@ -1,0 +1,1393 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GSIData Version="11.05" AppVersion="23.1.2.11">
+  <FileInfo FileVersion="11.05" AppVersion="23.01" FileBuildNumber="11" Author="Miller, Nicholas" LastAuthor="Miller, Nicholas" RevNumber="3" Date="08/08/2025" Time="03:47:24 PM" />
+  <Analyses Len="2">
+    <Analysis>
+      <ID>1</ID>
+      <Name>Total Stress</Name>
+      <Kind>SLOPE/W</Kind>
+      <Method>Spencer</Method>
+      <GeometryId>1</GeometryId>
+      <TimeIncrements>
+        <Duration Missing="true" />
+        <TimeSteps Len="1">
+          <TimeStep Save="true" />
+        </TimeSteps>
+      </TimeIncrements>
+      <IterationControls Len="1">
+        <IterationControl>
+          <Key>SlopeStability</Key>
+          <Entry MaxIterations="100" MaxReviewIterations="10" />
+        </IterationControl>
+      </IterationControls>
+      <ComputedPhysics SlopeStability="true" />
+    </Analysis>
+    <Analysis>
+      <ID>2</ID>
+      <Name>Effective Stress</Name>
+      <Kind>SLOPE/W</Kind>
+      <Method>Spencer</Method>
+      <GeometryId>1</GeometryId>
+      <TimeIncrements>
+        <Duration Missing="true" />
+        <TimeSteps Len="1">
+          <TimeStep Save="true" />
+        </TimeSteps>
+      </TimeIncrements>
+      <IterationControls Len="1">
+        <IterationControl>
+          <Key>SlopeStability</Key>
+          <Entry MaxIterations="100" MaxReviewIterations="10" />
+        </IterationControl>
+      </IterationControls>
+      <ComputedPhysics SlopeStability="true" />
+    </Analysis>
+  </Analyses>
+  <BCs Len="8">
+    <BC ID="1" Name="Fixed X" Color="RGB=(192,0,0)" XDisp="DispDisplacementX(Variability=Constant,Value=0)" YDisp="ForceDispUndefined()" />
+    <BC ID="2" Name="Fixed Y" Color="RGB=(192,0,0)" XDisp="ForceDispUndefined()" YDisp="DispDisplacementY(Variability=Constant,Value=0)" />
+    <BC ID="3" Name="Fixed X/Y" Color="RGB=(192,0,0)" XDisp="DispDisplacementX(Variability=Constant,Value=0)" YDisp="DispDisplacementY(Variability=Constant,Value=0)" />
+    <BC ID="4" Name="Zero Pressure" Color="RGB=(192,0,0)" Hydraulic="HydPressureHead(Variability=Constant,Value=0)" />
+    <BC ID="5" Name="Drainage" Color="RGB=(128,0,128)" Hydraulic="HydTotalFlux(Variability=Constant,Value=0,Review=true)" />
+    <BC ID="6" Name="Unit Concentration" Color="RGB=(192,0,0)" Contaminant="ContamConcentrationVsTime(Variability=Constant,Value=0.03108095457528532)" />
+    <BC ID="7" Name="Zero Rotation" Color="RGB=(192,0,0)" Rotation="ZeroRotation()" />
+    <BC ID="8" Name="Atmospheric - Zero" Color="RGB=(192,0,0)" Air="AirPressure(Variability=Constant,Value=0)" />
+  </BCs>
+  <Contexts Len="2">
+    <Context>
+      <AnalysisID>1</AnalysisID>
+      <GeometryUsesMaterials Len="6">
+        <GeometryUsesMaterial ID="Regions-1" Entry="11" />
+        <GeometryUsesMaterial ID="Regions-2" Entry="1" />
+        <GeometryUsesMaterial ID="Regions-3" Entry="3" />
+        <GeometryUsesMaterial ID="Regions-4" Entry="5" />
+        <GeometryUsesMaterial ID="Regions-5" Entry="7" />
+        <GeometryUsesMaterial ID="Regions-6" Entry="9" />
+      </GeometryUsesMaterials>
+      <IsDefined>true</IsDefined>
+    </Context>
+    <Context>
+      <AnalysisID>2</AnalysisID>
+      <GeometryUsesMaterials Len="6">
+        <GeometryUsesMaterial ID="Regions-1" Entry="12" />
+        <GeometryUsesMaterial ID="Regions-2" Entry="2" />
+        <GeometryUsesMaterial ID="Regions-3" Entry="4" />
+        <GeometryUsesMaterial ID="Regions-4" Entry="6" />
+        <GeometryUsesMaterial ID="Regions-5" Entry="8" />
+        <GeometryUsesMaterial ID="Regions-6" Entry="10" />
+      </GeometryUsesMaterials>
+      <IsDefined>true</IsDefined>
+    </Context>
+  </Contexts>
+  <Coordinates>
+    <EngCoords HorzScale="200" XPageLeft="-100" YPageBottom="-100" XPageRight="309" YPageTop="213" XPageOrg="100" YPageOrg="100" MaxSnapDist="20" UnitSystem="Imperial" LockScales="false" VertScale="200" />
+    <PageCoords Units="in" PageWidth="24.54" PageHeight="18.78" PageXOrg="6" PageYOrg="6" />
+  </Coordinates>
+  <Geometries Len="1">
+    <Geometry>
+      <Name>2D Geometry</Name>
+      <Points Len="15">
+        <Point ID="1" X="0" Y="0" Pinned="true" />
+        <Point ID="2" X="20" Y="20" Pinned="true" />
+        <Point ID="3" X="200" Y="20" Pinned="true" />
+        <Point ID="4" X="-100" Y="0" Pinned="true" />
+        <Point ID="5" X="-100" Y="-100" Pinned="true" />
+        <Point ID="6" X="200" Y="-100" Pinned="true" />
+        <Point ID="7" X="200" Y="0" />
+        <Point ID="8" X="-100" Y="-20" />
+        <Point ID="9" X="200" Y="-20" />
+        <Point ID="10" X="-100" Y="-40" />
+        <Point ID="11" X="200" Y="-40" />
+        <Point ID="12" X="-100" Y="-60" />
+        <Point ID="13" X="200" Y="-60" />
+        <Point ID="14" X="-100" Y="-80" />
+        <Point ID="15" X="200" Y="-80" />
+      </Points>
+      <Lines Len="20">
+        <Line>
+          <ID>1</ID>
+          <PointID1>4</PointID1>
+          <PointID2>1</PointID2>
+        </Line>
+        <Line>
+          <ID>2</ID>
+          <PointID1>2</PointID1>
+          <PointID2>3</PointID2>
+        </Line>
+        <Line>
+          <ID>3</ID>
+          <PointID1>6</PointID1>
+          <PointID2>5</PointID2>
+        </Line>
+        <Line>
+          <ID>4</ID>
+          <PointID1>3</PointID1>
+          <PointID2>7</PointID2>
+        </Line>
+        <Line>
+          <ID>5</ID>
+          <PointID1>1</PointID1>
+          <PointID2>7</PointID2>
+        </Line>
+        <Line>
+          <ID>6</ID>
+          <PointID1>8</PointID1>
+          <PointID2>9</PointID2>
+        </Line>
+        <Line>
+          <ID>7</ID>
+          <PointID1>9</PointID1>
+          <PointID2>7</PointID2>
+        </Line>
+        <Line>
+          <ID>8</ID>
+          <PointID1>4</PointID1>
+          <PointID2>8</PointID2>
+        </Line>
+        <Line>
+          <ID>9</ID>
+          <PointID1>1</PointID1>
+          <PointID2>2</PointID2>
+        </Line>
+        <Line>
+          <ID>10</ID>
+          <PointID1>10</PointID1>
+          <PointID2>8</PointID2>
+        </Line>
+        <Line>
+          <ID>11</ID>
+          <PointID1>9</PointID1>
+          <PointID2>11</PointID2>
+        </Line>
+        <Line>
+          <ID>12</ID>
+          <PointID1>10</PointID1>
+          <PointID2>11</PointID2>
+        </Line>
+        <Line>
+          <ID>13</ID>
+          <PointID1>12</PointID1>
+          <PointID2>10</PointID2>
+        </Line>
+        <Line>
+          <ID>14</ID>
+          <PointID1>11</PointID1>
+          <PointID2>13</PointID2>
+        </Line>
+        <Line>
+          <ID>15</ID>
+          <PointID1>12</PointID1>
+          <PointID2>13</PointID2>
+        </Line>
+        <Line>
+          <ID>16</ID>
+          <PointID1>5</PointID1>
+          <PointID2>14</PointID2>
+        </Line>
+        <Line>
+          <ID>17</ID>
+          <PointID1>14</PointID1>
+          <PointID2>12</PointID2>
+        </Line>
+        <Line>
+          <ID>18</ID>
+          <PointID1>13</PointID1>
+          <PointID2>15</PointID2>
+        </Line>
+        <Line>
+          <ID>19</ID>
+          <PointID1>15</PointID1>
+          <PointID2>6</PointID2>
+        </Line>
+        <Line>
+          <ID>20</ID>
+          <PointID1>14</PointID1>
+          <PointID2>15</PointID2>
+        </Line>
+      </Lines>
+      <Regions Len="6">
+        <Region>
+          <ID>1</ID>
+          <PointIDs>5,14,15,6</PointIDs>
+        </Region>
+        <Region>
+          <ID>2</ID>
+          <PointIDs>2,3,7,1</PointIDs>
+        </Region>
+        <Region>
+          <ID>3</ID>
+          <PointIDs>8,9,7,1,4</PointIDs>
+        </Region>
+        <Region>
+          <ID>4</ID>
+          <PointIDs>8,9,11,10</PointIDs>
+        </Region>
+        <Region>
+          <ID>5</ID>
+          <PointIDs>10,11,13,12</PointIDs>
+        </Region>
+        <Region>
+          <ID>6</ID>
+          <PointIDs>12,13,15,14</PointIDs>
+        </Region>
+      </Regions>
+      <ResultGraphs Len="16">
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Factor of Safety vs. Lambda</Name>
+          <SourceType>SlopeConvergence</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>ViewSlipFOS</Y>
+          <X>Lambda</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Factor of Safety vs. Time</Name>
+          <SourceType>SlopeSlipSurface</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>ViewSlipFOS</Y>
+          <X>Time</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Velocity vs. Time</Name>
+          <SourceType>SlopeSlipSurface</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>Velocity</Y>
+          <X>Time</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Deformation vs. Time</Name>
+          <SourceType>SlopeSlipSurface</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>Deformation</Y>
+          <X>Time</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Average Acceleration vs. Time</Name>
+          <SourceType>SlopeSlipSurface</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>AverageAcceleration</Y>
+          <X>Time</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Factor of Safety vs. Average Acceleration</Name>
+          <SourceType>SlopeSlipSurface</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>ViewSlipFOS</Y>
+          <X>AverageAcceleration</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>X-Conductivity vs. Matric Suction</Name>
+          <SourceType>ConvergenceStep</SourceType>
+          <TimeSelection>Last</TimeSelection>
+          <Y>WaterConductivityX</Y>
+          <X>MatricSuction</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <YLog>gsw::eFALSE</YLog>
+            <Rotate90>gsw::eFALSE</Rotate90>
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Displacement Error vs. Iteration</Name>
+          <SourceType>ConvergenceIteration</SourceType>
+          <TimeSelection>Last</TimeSelection>
+          <Y>RelativeDisplacementError</Y>
+          <X>Iteration</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <YLog>gsw::eFALSE</YLog>
+            <Rotate90>gsw::eFALSE</Rotate90>
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Residual Force Error vs. Iteration</Name>
+          <SourceType>ConvergenceIteration</SourceType>
+          <TimeSelection>Last</TimeSelection>
+          <Y>RelativeResidualForceError</Y>
+          <X>Iteration</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <YLog>gsw::eFALSE</YLog>
+            <Rotate90>gsw::eFALSE</Rotate90>
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Unbalanced Energy Error vs. Iteration</Name>
+          <SourceType>ConvergenceIteration</SourceType>
+          <TimeSelection>Last</TimeSelection>
+          <Y>RelativeUnbalancedEnergyError</Y>
+          <X>Iteration</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Displacement Error vs. Strength Reduction Factor</Name>
+          <SourceType>ConvergencePartialMaterialFactor</SourceType>
+          <Y>RelativeDisplacementError</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Residual Force Error vs. Strength Reduction Factor</Name>
+          <SourceType>ConvergencePartialMaterialFactor</SourceType>
+          <Y>RelativeResidualForceError</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Relative Unbalanced Energy Error vs. Strength Reduction Factor</Name>
+          <SourceType>ConvergencePartialMaterialFactor</SourceType>
+          <Y>RelativeUnbalancedEnergyError</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>||U|| vs. Strength Reduction Factor</Name>
+          <SourceType>StressRedistribution</SourceType>
+          <TimeSelection>All</TimeSelection>
+          <Y>VectorNormDisplacements</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Residual Error vs. Strength Reduction Factor</Name>
+          <SourceType>StressRedistribution</SourceType>
+          <Y>RelativeResidualForceError</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+        <ResultGraph>
+          <GraphOptions>
+            <Font Height="-12" OutPrecision="1" ClipPrecision="2" Quality="1" PitchAndFamily="26" FaceName="Arial" />
+            <Symbols>true</Symbols>
+          </GraphOptions>
+          <Name>Stress Iteration Count vs. Strength Reduction Factor</Name>
+          <SourceType>ConvergencePartialMaterialFactor</SourceType>
+          <Y>StressIterationCount</Y>
+          <X>PartialMaterialFactor</X>
+          <IndepUnit Missing="true" />
+        </ResultGraph>
+      </ResultGraphs>
+      <SketchItems>
+        <Images Len="1">
+          <Image>
+            <FileName>OBJECT</FileName>
+          </Image>
+        </Images>
+        <AxisOptions BottomAxisTitle="Distance" LeftAxisTitle="Elevation" TopAxisTitle="Distance" RightAxisTitle="Elevation" />
+      </SketchItems>
+      <PointLabel Len="15">
+        <Point ID="1" Value="1" />
+        <Point ID="2" Value="1" />
+        <Point ID="3" Value="1" />
+        <Point ID="4" Value="1" />
+        <Point ID="5" Value="1" />
+        <Point ID="6" Value="1" />
+        <Point ID="7" Value="1" />
+        <Point ID="8" Value="1" />
+        <Point ID="9" Value="1" />
+        <Point ID="10" Value="1" />
+        <Point ID="11" Value="1" />
+        <Point ID="12" Value="1" />
+        <Point ID="13" Value="1" />
+        <Point ID="14" Value="1" />
+        <Point ID="15" Value="1" />
+      </PointLabel>
+      <Precision>5,5,7</Precision>
+    </Geometry>
+  </Geometries>
+  <Materials Len="12">
+    <Material>
+      <ID>1</ID>
+      <Color>RGB=(255,255,128)</Color>
+      <Name>Layer 1 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>120</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>100</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>2</ID>
+      <Color>RGB=(191,255,128)</Color>
+      <Name>Layer 1 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>120</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>30</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>3</ID>
+      <Color>RGB=(128,255,128)</Color>
+      <Name>Layer 2 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>119</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>99</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>4</ID>
+      <Color>RGB=(128,255,191)</Color>
+      <Name>Layer 2 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>119</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>29</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>5</ID>
+      <Color>RGB=(128,255,255)</Color>
+      <Name>Layer 3 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>118</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>98</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>6</ID>
+      <Color>RGB=(128,191,255)</Color>
+      <Name>Layer 3 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>118</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>28</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>7</ID>
+      <Color>RGB=(191,128,255)</Color>
+      <Name>Layer 4 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>117</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>97</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>8</ID>
+      <Color>RGB=(255,128,191)</Color>
+      <Name>Layer 4 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>117</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>17</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>9</ID>
+      <Color>RGB=(255,128,128)</Color>
+      <Name>Layer 5 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>116</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>96</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>10</ID>
+      <Color>RGB=(255,191,128)</Color>
+      <Name>Layer 5 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>116</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>26</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>11</ID>
+      <Color>RGB=(255,255,128)</Color>
+      <Name>Layer 6 (Total)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>115</UnitWeight>
+        <Cohesion Missing="true" />
+        <CohesionPrime>95</CohesionPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+    <Material>
+      <ID>12</ID>
+      <Color>RGB=(191,255,128)</Color>
+      <Name>Layer 6 (Effective)</Name>
+      <SlopeModel>MohrCoulomb</SlopeModel>
+      <StressStrain>
+        <JointEffectiveCohesion Missing="true" />
+        <IntactRockParam Missing="true" />
+        <GeologicalStrengthIndex Missing="true" />
+        <DisturbanceFactor Missing="true" />
+        <UnitWeight>115</UnitWeight>
+        <Cohesion Missing="true" />
+        <PhiPrime>25</PhiPrime>
+        <YoungsPrimeModulus Missing="true" />
+        <EffectivePoissonsRatio Missing="true" />
+        <EPrimeModulusXPrime Missing="true" />
+        <EffectivePoissonsRatioXPrime Missing="true" />
+        <EPrimeModulusYPrime Missing="true" />
+        <EffectivePoissonsRatioYPrime Missing="true" />
+        <ShearModulusXYPrime Missing="true" />
+      </StressStrain>
+    </Material>
+  </Materials>
+  <StabilityItems Len="2">
+    <StabilityItem>
+      <AnalysisID>1</AnalysisID>
+      <Entry>
+        <DataPoints Len="2">
+          <DataPoint Number="1" X="-100" Y="0" />
+          <DataPoint Number="2" X="200" Y="0" />
+        </DataPoints>
+        <SlipSurface>
+          <Grid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" />
+          <Radius NumInc="10" />
+          <EntryExit>
+            <LeftSideLeftPt X="-99" Y="0" />
+            <LeftSideRightPt X="3.19017" Y="3.19017" />
+            <LeftInc>10</LeftInc>
+            <RightSideLeftPt X="17.0686" Y="17.0686" />
+            <RightSideRightPt X="198" Y="20" />
+            <RightInc>10</RightInc>
+          </EntryExit>
+          <EntryExit3D>
+            <Entry>
+              <Points Len="3">
+                <Point Z="" />
+                <Point Z="" />
+                <Point Z="" />
+              </Points>
+              <NumIncrements Len="2">
+                <Inc>4</Inc>
+                <Inc>4</Inc>
+              </NumIncrements>
+            </Entry>
+            <Exit>
+              <Points Len="3">
+                <Point Z="" />
+                <Point Z="" />
+                <Point Z="" />
+              </Points>
+              <NumIncrements Len="2">
+                <Inc>4</Inc>
+                <Inc>4</Inc>
+              </NumIncrements>
+            </Exit>
+            <RadiusInfo>
+              <AspectRatios Len="1">
+                <AspectRatio>1</AspectRatio>
+              </AspectRatios>
+              <NExponents Len="1">
+                <NExponent>2</NExponent>
+              </NExponents>
+            </RadiusInfo>
+          </EntryExit3D>
+          <Block>
+            <LeftGrid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" ArrowCorner="Undefined" />
+            <RightGrid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" ArrowCorner="Undefined" />
+          </Block>
+          <Ellipsoid>
+            <Center Z="" />
+            <RadiusX Missing="true" />
+            <RadiusY Missing="true" />
+            <RadiusZ Missing="true" />
+          </Ellipsoid>
+          <Limit XLeft="-100" XRight="200" YRight="20" />
+          <DirectionOfSlip>RightToLeft</DirectionOfSlip>
+          <IsOptimizationOn>true</IsOptimizationOn>
+          <MinimumDepth>2</MinimumDepth>
+          <MinimumVolume>35.31466672148856</MinimumVolume>
+        </SlipSurface>
+        <LambdaSettings>
+          <LambdaValues Len="11">
+            <LambdaValues_>-1</LambdaValues_>
+            <LambdaValues_>-0.8</LambdaValues_>
+            <LambdaValues_>-0.6</LambdaValues_>
+            <LambdaValues_>-0.4</LambdaValues_>
+            <LambdaValues_>-0.2</LambdaValues_>
+            <LambdaValues_ />
+            <LambdaValues_>0.2</LambdaValues_>
+            <LambdaValues_>0.4</LambdaValues_>
+            <LambdaValues_>0.6</LambdaValues_>
+            <LambdaValues_>0.8</LambdaValues_>
+            <LambdaValues_>1</LambdaValues_>
+          </LambdaValues>
+        </LambdaSettings>
+        <Control>
+          <IsPiezPhreatic>true</IsPiezPhreatic>
+        </Control>
+        <Seismic Horizontal="" Vertical="" />
+        <TensionCrack>
+          <UnitWaterWeight>62.43018856775041</UnitWaterWeight>
+        </TensionCrack>
+        <PiezometricSurfaces Len="1">
+          <PiezometricSurface>
+            <ID>1</ID>
+            <DataPoints Len="2">
+              <DataPoint>1</DataPoint>
+              <DataPoint>2</DataPoint>
+            </DataPoints>
+            <CapSuction>false</CapSuction>
+            <MaxSuction>0</MaxSuction>
+          </PiezometricSurface>
+        </PiezometricSurfaces>
+        <MaterialUsesPiezs Len="12">
+          <MaterialUsesPiez ID="1" UsesID="1" />
+          <MaterialUsesPiez ID="2" UsesID="1" />
+          <MaterialUsesPiez ID="3" UsesID="1" />
+          <MaterialUsesPiez ID="4" UsesID="1" />
+          <MaterialUsesPiez ID="5" UsesID="1" />
+          <MaterialUsesPiez ID="6" UsesID="1" />
+          <MaterialUsesPiez ID="7" UsesID="1" />
+          <MaterialUsesPiez ID="8" UsesID="1" />
+          <MaterialUsesPiez ID="9" UsesID="1" />
+          <MaterialUsesPiez ID="10" UsesID="1" />
+          <MaterialUsesPiez ID="11" UsesID="1" />
+          <MaterialUsesPiez ID="12" UsesID="1" />
+        </MaterialUsesPiezs>
+      </Entry>
+    </StabilityItem>
+    <StabilityItem>
+      <AnalysisID>2</AnalysisID>
+      <Entry>
+        <DataPoints Len="2">
+          <DataPoint Number="1" X="-100" Y="0" />
+          <DataPoint Number="2" X="200" Y="0" />
+        </DataPoints>
+        <SlipSurface>
+          <Grid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" />
+          <Radius NumInc="10" />
+          <EntryExit>
+            <LeftSideLeftPt X="-99" Y="0" />
+            <LeftSideRightPt X="4.16983" Y="4.16983" />
+            <LeftInc>10</LeftInc>
+            <RightSideLeftPt X="14" Y="14" />
+            <RightSideRightPt X="199.77398" Y="20" />
+            <RightInc>10</RightInc>
+          </EntryExit>
+          <EntryExit3D>
+            <Entry>
+              <Points Len="3">
+                <Point Z="" />
+                <Point Z="" />
+                <Point Z="" />
+              </Points>
+              <NumIncrements Len="2">
+                <Inc>4</Inc>
+                <Inc>4</Inc>
+              </NumIncrements>
+            </Entry>
+            <Exit>
+              <Points Len="3">
+                <Point Z="" />
+                <Point Z="" />
+                <Point Z="" />
+              </Points>
+              <NumIncrements Len="2">
+                <Inc>4</Inc>
+                <Inc>4</Inc>
+              </NumIncrements>
+            </Exit>
+            <RadiusInfo>
+              <AspectRatios Len="1">
+                <AspectRatio>1</AspectRatio>
+              </AspectRatios>
+              <NExponents Len="1">
+                <NExponent>2</NExponent>
+              </NExponents>
+            </RadiusInfo>
+          </EntryExit3D>
+          <Block>
+            <LeftGrid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" ArrowCorner="Undefined" />
+            <RightGrid NumXInc="4" NumYInc="4" Angle1="" Angle2="" NumAngleDiv="2" ArrowCorner="Undefined" />
+          </Block>
+          <Ellipsoid>
+            <Center Z="" />
+            <RadiusX Missing="true" />
+            <RadiusY Missing="true" />
+            <RadiusZ Missing="true" />
+          </Ellipsoid>
+          <Limit XLeft="-100" XRight="200" YRight="20" />
+          <DirectionOfSlip>RightToLeft</DirectionOfSlip>
+          <IsOptimizationOn>true</IsOptimizationOn>
+          <MinimumDepth>2</MinimumDepth>
+          <MinimumVolume>35.31466672148856</MinimumVolume>
+        </SlipSurface>
+        <LambdaSettings>
+          <LambdaValues Len="11">
+            <LambdaValues_>-1</LambdaValues_>
+            <LambdaValues_>-0.8</LambdaValues_>
+            <LambdaValues_>-0.6</LambdaValues_>
+            <LambdaValues_>-0.4</LambdaValues_>
+            <LambdaValues_>-0.2</LambdaValues_>
+            <LambdaValues_ />
+            <LambdaValues_>0.2</LambdaValues_>
+            <LambdaValues_>0.4</LambdaValues_>
+            <LambdaValues_>0.6</LambdaValues_>
+            <LambdaValues_>0.8</LambdaValues_>
+            <LambdaValues_>1</LambdaValues_>
+          </LambdaValues>
+        </LambdaSettings>
+        <Control>
+          <IsPiezPhreatic>true</IsPiezPhreatic>
+        </Control>
+        <Seismic Horizontal="" Vertical="" />
+        <TensionCrack>
+          <UnitWaterWeight>62.43018856775041</UnitWaterWeight>
+        </TensionCrack>
+        <PiezometricSurfaces Len="1">
+          <PiezometricSurface>
+            <ID>1</ID>
+            <DataPoints Len="2">
+              <DataPoint>1</DataPoint>
+              <DataPoint>2</DataPoint>
+            </DataPoints>
+            <CapSuction>false</CapSuction>
+            <MaxSuction>0</MaxSuction>
+          </PiezometricSurface>
+        </PiezometricSurfaces>
+        <MaterialUsesPiezs Len="12">
+          <MaterialUsesPiez ID="1" UsesID="1" />
+          <MaterialUsesPiez ID="2" UsesID="1" />
+          <MaterialUsesPiez ID="3" UsesID="1" />
+          <MaterialUsesPiez ID="4" UsesID="1" />
+          <MaterialUsesPiez ID="5" UsesID="1" />
+          <MaterialUsesPiez ID="6" UsesID="1" />
+          <MaterialUsesPiez ID="7" UsesID="1" />
+          <MaterialUsesPiez ID="8" UsesID="1" />
+          <MaterialUsesPiez ID="9" UsesID="1" />
+          <MaterialUsesPiez ID="10" UsesID="1" />
+          <MaterialUsesPiez ID="11" UsesID="1" />
+          <MaterialUsesPiez ID="12" UsesID="1" />
+        </MaterialUsesPiezs>
+      </Entry>
+    </StabilityItem>
+  </StabilityItems>
+  <View>
+    <PreferencesTable Len="3">
+      <Preferences>
+        <XGridSpacing>1</XGridSpacing>
+        <YGridSpacing>1</YGridSpacing>
+        <ShowGrid>true</ShowGrid>
+        <SnapToGrid>true</SnapToGrid>
+        <RightRuler>true</RightRuler>
+        <TopRuler>true</TopRuler>
+        <Layers>3</Layers>
+        <Points>true</Points>
+        <Regions>true</Regions>
+        <PointNumbers>true</PointNumbers>
+        <RegionNumbers>true</RegionNumbers>
+        <RegionLabelOption>Number</RegionLabelOption>
+        <GroundSurfaceLine>true</GroundSurfaceLine>
+        <Mesh>false</Mesh>
+        <MaterialColor>true</MaterialColor>
+        <MaterialBoundary>false</MaterialBoundary>
+        <MeshLabels>false</MeshLabels>
+        <NodeConvergence>false</NodeConvergence>
+        <ReviewNodesFlipped>false</ReviewNodesFlipped>
+        <SketchItems>true</SketchItems>
+        <Pictures>true</Pictures>
+        <Axis>true</Axis>
+        <CtranBC>Contamination</CtranBC>
+        <QuakeBC>Displacement</QuakeBC>
+        <SeepBC>Hydraulic</SeepBC>
+        <SigmaBC>Displacement</SigmaBC>
+        <SlopeBC Missing="true" />
+        <TempBC>Thermal</TempBC>
+        <PWP>true</PWP>
+        <SlipSurfaces>true</SlipSurfaces>
+        <LineLoads>true</LineLoads>
+        <Reinforcement>true</Reinforcement>
+        <PressureLines>true</PressureLines>
+        <PressureLineShading>true</PressureLineShading>
+        <TensionCrackLine>true</TensionCrackLine>
+        <TensionCrackShading>true</TensionCrackShading>
+        <SlipSurfaceShading>true</SlipSurfaceShading>
+        <SlipSurfaceSlices>true</SlipSurfaceSlices>
+        <SlipSurfaceColor>RGB=(0,0,0)</SlipSurfaceColor>
+        <SlipSurfaceLineThickness>1</SlipSurfaceLineThickness>
+        <MultipleSlipSurfaces>false</MultipleSlipSurfaces>
+        <SigFiguresFofS>4</SigFiguresFofS>
+        <AllFofSValues>false</AllFofSValues>
+        <SafetyMap>false</SafetyMap>
+        <FOSContours>true</FOSContours>
+        <FOSContourShading>true</FOSContourShading>
+        <ViewPondingArrows>true</ViewPondingArrows>
+        <PWPLineThickness>Thin</PWPLineThickness>
+        <PartialFactorsOption>OverdesignFactor</PartialFactorsOption>
+        <Particles>true</Particles>
+        <InitialConditions>true</InitialConditions>
+        <BoundaryConditions>true</BoundaryConditions>
+        <InitialWaterTable>true</InitialWaterTable>
+        <CoverDetail>true</CoverDetail>
+        <ViewImperviousBarriers>true</ViewImperviousBarriers>
+        <BodyLoad>true</BodyLoad>
+        <StructuralElements>true</StructuralElements>
+        <TrussElements>true</TrussElements>
+        <HistoryPoints>true</HistoryPoints>
+        <Vectors>true</Vectors>
+        <Contours>true</Contours>
+        <ContourShading>false</ContourShading>
+        <TransientContours>true</TransientContours>
+        <TransientContourType>PoreWaterPressure</TransientContourType>
+        <FlowPath>true</FlowPath>
+        <Deformation>true</Deformation>
+        <DeformationShading>false</DeformationShading>
+        <LiquefactionConditions>false</LiquefactionConditions>
+        <LiquefiedElementColor>RGB=(255,255,0)</LiquefiedElementColor>
+        <ISOLineMode>false</ISOLineMode>
+      </Preferences>
+      <Preferences>
+        <UserSelection>
+          <CurrentSlip>1332</CurrentSlip>
+        </UserSelection>
+        <XGridSpacing>1</XGridSpacing>
+        <YGridSpacing>1</YGridSpacing>
+        <ShowGrid>false</ShowGrid>
+        <SnapToGrid>false</SnapToGrid>
+        <RightRuler>true</RightRuler>
+        <TopRuler>true</TopRuler>
+        <Layers>3</Layers>
+        <Points>false</Points>
+        <Regions>false</Regions>
+        <PointNumbers>false</PointNumbers>
+        <RegionNumbers>false</RegionNumbers>
+        <RegionLabelOption>Number</RegionLabelOption>
+        <GroundSurfaceLine>false</GroundSurfaceLine>
+        <Mesh>false</Mesh>
+        <MaterialColor>true</MaterialColor>
+        <MaterialBoundary>true</MaterialBoundary>
+        <MeshLabels>false</MeshLabels>
+        <NodeConvergence>false</NodeConvergence>
+        <ReviewNodesFlipped>false</ReviewNodesFlipped>
+        <SketchItems>true</SketchItems>
+        <Pictures>true</Pictures>
+        <Axis>true</Axis>
+        <CtranBC>Contamination</CtranBC>
+        <QuakeBC>Displacement</QuakeBC>
+        <SeepBC>Hydraulic</SeepBC>
+        <SigmaBC>Displacement</SigmaBC>
+        <SlopeBC Missing="true" />
+        <TempBC>Thermal</TempBC>
+        <PWP>true</PWP>
+        <SlipSurfaces>true</SlipSurfaces>
+        <LineLoads>true</LineLoads>
+        <Reinforcement>true</Reinforcement>
+        <PressureLines>true</PressureLines>
+        <PressureLineShading>true</PressureLineShading>
+        <TensionCrackLine>true</TensionCrackLine>
+        <TensionCrackShading>true</TensionCrackShading>
+        <SlipSurfaceShading>true</SlipSurfaceShading>
+        <SlipSurfaceSlices>true</SlipSurfaceSlices>
+        <SlipSurfaceColor>RGB=(0,255,0)</SlipSurfaceColor>
+        <SlipSurfaceLineThickness>1</SlipSurfaceLineThickness>
+        <MultipleSlipSurfaces>false</MultipleSlipSurfaces>
+        <SigFiguresFofS>4</SigFiguresFofS>
+        <AllFofSValues>false</AllFofSValues>
+        <SafetyMap>false</SafetyMap>
+        <FOSContours>true</FOSContours>
+        <FOSContourShading>true</FOSContourShading>
+        <ViewPondingArrows>true</ViewPondingArrows>
+        <PWPLineThickness>Thin</PWPLineThickness>
+        <PartialFactorsOption>OverdesignFactor</PartialFactorsOption>
+        <Particles>true</Particles>
+        <InitialConditions>false</InitialConditions>
+        <BoundaryConditions>true</BoundaryConditions>
+        <InitialWaterTable>false</InitialWaterTable>
+        <CoverDetail>false</CoverDetail>
+        <ViewImperviousBarriers>true</ViewImperviousBarriers>
+        <BodyLoad>false</BodyLoad>
+        <StructuralElements>true</StructuralElements>
+        <TrussElements>true</TrussElements>
+        <HistoryPoints>true</HistoryPoints>
+        <Vectors>true</Vectors>
+        <Contours>true</Contours>
+        <ContourShading>false</ContourShading>
+        <TransientContours>true</TransientContours>
+        <TransientContourType>PoreWaterPressure</TransientContourType>
+        <FlowPath>false</FlowPath>
+        <Deformation>true</Deformation>
+        <DeformationShading>false</DeformationShading>
+        <LiquefactionConditions>false</LiquefactionConditions>
+        <LiquefiedElementColor>RGB=(255,255,0)</LiquefiedElementColor>
+        <ISOLineMode>false</ISOLineMode>
+      </Preferences>
+      <Preferences>
+        <XGridSpacing>1</XGridSpacing>
+        <YGridSpacing>1</YGridSpacing>
+        <ShowGrid>true</ShowGrid>
+        <SnapToGrid>true</SnapToGrid>
+        <RightRuler>true</RightRuler>
+        <TopRuler>true</TopRuler>
+        <Layers>3</Layers>
+        <Points>true</Points>
+        <Regions>true</Regions>
+        <PointNumbers>true</PointNumbers>
+        <RegionNumbers>true</RegionNumbers>
+        <RegionLabelOption>Material</RegionLabelOption>
+        <GroundSurfaceLine>false</GroundSurfaceLine>
+        <Mesh>false</Mesh>
+        <MaterialColor>true</MaterialColor>
+        <MaterialBoundary>true</MaterialBoundary>
+        <MeshLabels>false</MeshLabels>
+        <NodeConvergence>true</NodeConvergence>
+        <ReviewNodesFlipped>false</ReviewNodesFlipped>
+        <SketchItems>false</SketchItems>
+        <Pictures>false</Pictures>
+        <Axis>false</Axis>
+        <SlopeBC Missing="true" />
+        <PWP>false</PWP>
+        <SlipSurfaces>false</SlipSurfaces>
+        <CurrentSlipSurface>false</CurrentSlipSurface>
+        <LineLoads>false</LineLoads>
+        <Reinforcement>false</Reinforcement>
+        <PressureLines>false</PressureLines>
+        <PressureLineShading>false</PressureLineShading>
+        <TensionCrackLine>false</TensionCrackLine>
+        <TensionCrackShading>false</TensionCrackShading>
+        <SlipSurfaceShading>false</SlipSurfaceShading>
+        <SlipSurfaceSlices>false</SlipSurfaceSlices>
+        <SlipSurfaceColor>RGB=(0,255,0)</SlipSurfaceColor>
+        <SlipSurfaceLineThickness>1</SlipSurfaceLineThickness>
+        <MultipleSlipSurfaces>false</MultipleSlipSurfaces>
+        <SigFiguresFofS>4</SigFiguresFofS>
+        <AllFofSValues>false</AllFofSValues>
+        <SafetyMap>false</SafetyMap>
+        <CriticalSlipLine>false</CriticalSlipLine>
+        <FOSContours>false</FOSContours>
+        <FOSContourShading>false</FOSContourShading>
+        <ViewPondingArrows>false</ViewPondingArrows>
+        <PWPLineThickness>Thin</PWPLineThickness>
+        <PartialFactorsOption>OverdesignFactor</PartialFactorsOption>
+        <Particles>false</Particles>
+        <InitialConditions>false</InitialConditions>
+        <BoundaryConditions>false</BoundaryConditions>
+        <InitialWaterTable>false</InitialWaterTable>
+        <CoverDetail>false</CoverDetail>
+        <ViewImperviousBarriers>false</ViewImperviousBarriers>
+        <BodyLoad>false</BodyLoad>
+        <StructuralElements>false</StructuralElements>
+        <TrussElements>false</TrussElements>
+        <HistoryPoints>false</HistoryPoints>
+        <Vectors>false</Vectors>
+        <Contours>false</Contours>
+        <ContourShading>false</ContourShading>
+        <TransientContours>false</TransientContours>
+        <TransientContourType>PoreWaterPressure</TransientContourType>
+        <FlowPath>false</FlowPath>
+        <Deformation>false</Deformation>
+        <DeformationShading>false</DeformationShading>
+        <LiquefactionConditions>false</LiquefactionConditions>
+        <LiquefiedElementColor>RGB=(255,255,0)</LiquefiedElementColor>
+        <ISOLineMode>false</ISOLineMode>
+      </Preferences>
+    </PreferencesTable>
+    <TransientContours Len="1">
+      <TransientContour>
+        <Name>New Isoline</Name>
+      </TransientContour>
+    </TransientContours>
+    <Contours Len="11">
+      <Contour>
+        <Name>Y-Total Stress</Name>
+        <Type>YTotalStress</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Water Total Head</Name>
+        <Type>TotalHead</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Phi</Name>
+        <Type>PhiPrime</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Cohesion</Name>
+        <Type>CohesionPrime</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Unit Weight</Name>
+        <Type>UnitWeight</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Pore-Water Pressure</Name>
+        <Type>PoreWaterPressure</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Pressure Head</Name>
+        <Type>PressureHead</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Temperature</Name>
+        <Type>Temperature</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Concentration</Name>
+        <Type>Concentration</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Gas Concentration</Name>
+        <Type>GasConcentration</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+      <Contour>
+        <Name>Air Pressure</Name>
+        <Type>AirPressure</Type>
+        <MinLevel Missing="true" />
+        <LevelIncrement Missing="true" />
+        <NumOfLines Missing="true" />
+        <StartColor>RGB=(128,192,255)</StartColor>
+        <EndColor>RGB=(255,128,128)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <AutoContour>true</AutoContour>
+      </Contour>
+    </Contours>
+    <SlipContours Len="1">
+      <SlipContour>
+        <Type>ViewSlipFOS</Type>
+        <MinLevel>1</MinLevel>
+        <LevelIncrement>0.1</LevelIncrement>
+        <NumOfLines>11</NumOfLines>
+        <StartColor>RGB=(255,0,0)</StartColor>
+        <EndColor>RGB=(0,0,255)</EndColor>
+        <ShadingMethod>WideRainbow</ShadingMethod>
+        <ShadesPerInterval>1</ShadesPerInterval>
+        <ExtendColors>true</ExtendColors>
+        <MinValueOption>UseMin</MinValueOption>
+      </SlipContour>
+    </SlipContours>
+    <Window>
+      <Base X="416" Y="-1667" />
+      <Zoom>0.4018775720164611</Zoom>
+    </Window>
+    <VisibleUnitSets>
+      <VisibleUnitsByUnitKind Len="1">
+        <VisibleUnitsByUnitKind_>
+          <UnitKind>Time</UnitKind>
+          <Units Time="Days" />
+        </VisibleUnitsByUnitKind_>
+      </VisibleUnitsByUnitKind>
+      <VisibleBaseUnits Energy="BTU" Mass="lbm" />
+    </VisibleUnitSets>
+    <Font>
+      <FontInfo FaceName="Arial" />
+      <NodeNumberSize>6</NodeNumberSize>
+      <ElementNumberSize>6</ElementNumberSize>
+      <AxisSize>10</AxisSize>
+      <PointNumberSize>10</PointNumberSize>
+      <RegionNumberSize>12</RegionNumberSize>
+    </Font>
+    <GlobalUserOptions PondingColor="RGB=(200,240,255)" />
+    <Legends>
+      <ContourLegendDef>
+        <FontSize>10</FontSize>
+        <TitleFontSize>10</TitleFontSize>
+      </ContourLegendDef>
+      <FOSContourLegendDef>
+        <FontSize>10</FontSize>
+        <TitleFontSize>10</TitleFontSize>
+      </FOSContourLegendDef>
+      <MaterialLegendDef>
+        <FontSize>10</FontSize>
+        <TitleFontSize>10</TitleFontSize>
+      </MaterialLegendDef>
+      <ColumnContourLegendDef>
+        <FontSize>10</FontSize>
+        <TitleFontSize>10</TitleFontSize>
+      </ColumnContourLegendDef>
+    </Legends>
+    <ContourTime Analysis="Total Stress" Step="1" ElapsedTime="0" />
+    <AnalysisLastViewed>Total Stress</AnalysisLastViewed>
+    <ViewMode>Define</ViewMode>
+  </View>
+  <WaterItems Len="2">
+    <WaterItem>
+      <AnalysisID>1</AnalysisID>
+      <Entry>
+        <ResultInputInfo>
+          <Option>PiezoSurface</Option>
+        </ResultInputInfo>
+        <UnitWaterWeight>62.43018856775041</UnitWaterWeight>
+        <WaterBulkMod>43511321.20308414</WaterBulkMod>
+      </Entry>
+    </WaterItem>
+    <WaterItem>
+      <AnalysisID>2</AnalysisID>
+      <Entry>
+        <ResultInputInfo>
+          <Option>PiezoSurface</Option>
+        </ResultInputInfo>
+        <UnitWaterWeight>62.43018856775041</UnitWaterWeight>
+        <WaterBulkMod>43511321.20308414</WaterBulkMod>
+      </Entry>
+    </WaterItem>
+  </WaterItems>
+</GSIData>
