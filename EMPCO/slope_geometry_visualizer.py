@@ -264,7 +264,7 @@ class SlopeGeometryVisualizer:
             ax.plot(x, gw_elevation, 'o', color=self.groundwater_color, markersize=4, alpha=0.7)
     
     def _plot_failure_surface(self, ax, slip_surface: Dict[str, Any], slope_points: List[Tuple[float, float]]):
-        """Plot critical failure surface clipped to slope boundary"""
+        """Plot critical failure surface with enhanced visibility"""
         
         if not slip_surface:
             return
@@ -278,63 +278,95 @@ class SlopeGeometryVisualizer:
             radius = slip_surface.get('radius', 50)
             
             # Calculate circular arc points for better control
-            theta = np.linspace(0, 2*np.pi, 100)
+            theta = np.linspace(0, 2*np.pi, 200)  # More points for smoother curve
             circle_x = center_x + radius * np.cos(theta)
             circle_y = center_y + radius * np.sin(theta)
             
-            # Clip the circle to only show portions within reasonable bounds
-            # (above deepest soil layer and within slope boundaries)
+            # Enhanced clipping - show failure surface above ground level and within domain
             x_coords = [p[0] for p in slope_points]
             y_coords = [p[1] for p in slope_points]
             x_min, x_max = min(x_coords), max(x_coords)
             y_min = min(y_coords)
             
-            # Filter circle points to show only relevant portion
+            # Filter circle points to show only relevant portion (above y = -50 for visibility)
             valid_indices = []
             for i, (x, y) in enumerate(zip(circle_x, circle_y)):
-                if x_min <= x <= x_max and y >= y_min and y <= center_y + radius:
+                if x_min-20 <= x <= x_max+20 and y >= -50:  # Extended bounds for better visibility
                     valid_indices.append(i)
             
             if valid_indices:
-                # Plot only the valid portion of the circle
+                # Plot the failure surface with enhanced styling
                 valid_x = [circle_x[i] for i in valid_indices]
                 valid_y = [circle_y[i] for i in valid_indices]
                 
+                # Draw failure surface with multiple visual elements
+                # 1. Main failure surface line
                 ax.plot(valid_x, valid_y, color=self.slip_surface_color, 
-                       linewidth=3, linestyle='-', alpha=0.9,
-                       label='Critical Failure Surface')
+                       linewidth=5, linestyle='-', alpha=1.0,
+                       label='Critical Failure Surface', zorder=15)
                 
-                # Add center point
+                # 2. Add a subtle shadow/glow effect
+                ax.plot(valid_x, valid_y, color=self.slip_surface_color, 
+                       linewidth=8, linestyle='-', alpha=0.3, zorder=14)
+                
+                # 3. Center point with enhanced visibility
+                ax.plot(center_x, center_y, 'o', color='white', 
+                       markersize=12, markeredgewidth=3, 
+                       markeredgecolor=self.slip_surface_color, zorder=16)
                 ax.plot(center_x, center_y, 'x', color=self.slip_surface_color, 
-                       markersize=8, markeredgewidth=2, label='Slip Center')
+                       markersize=10, markeredgewidth=3, zorder=17)
                 
-                # Add radius dimension line and text
-                # Find a good point on the visible arc for annotation
+                # 4. Enhanced radius annotation
+                # Find best point on arc for radius annotation
                 mid_idx = len(valid_indices) // 2
                 if mid_idx < len(valid_indices):
                     annotation_x = valid_x[mid_idx]
                     annotation_y = valid_y[mid_idx]
                     
-                    # Draw radius line
+                    # Draw radius line with enhanced styling
                     ax.plot([center_x, annotation_x], [center_y, annotation_y], 
-                           color=self.slip_surface_color, linestyle=':', alpha=0.6, linewidth=1)
+                           color=self.slip_surface_color, linestyle='--', 
+                           alpha=0.8, linewidth=2, zorder=16)
                     
-                    # Add radius text
-                    ax.annotate(f'R = {radius:.1f} ft', 
-                               xy=(annotation_x, annotation_y),
-                               xytext=(annotation_x + 10, annotation_y + 5),
-                               fontsize=9, color=self.slip_surface_color, fontweight='bold',
-                               bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8),
-                               arrowprops=dict(arrowstyle='->', color=self.slip_surface_color, lw=1))
+                    # Add radius text with better positioning
+                    radius_mid_x = (center_x + annotation_x) / 2
+                    radius_mid_y = (center_y + annotation_y) / 2
+                    
+                    ax.annotate(f'R = {radius:.0f} ft', 
+                               xy=(radius_mid_x, radius_mid_y),
+                               xytext=(radius_mid_x + 15, radius_mid_y + 10),
+                               fontsize=11, color=self.slip_surface_color, fontweight='bold',
+                               bbox=dict(boxstyle="round,pad=0.4", facecolor='yellow', 
+                                        edgecolor=self.slip_surface_color, alpha=0.9),
+                               arrowprops=dict(arrowstyle='->', color=self.slip_surface_color, lw=2),
+                               zorder=18)
+                
+                # 5. Add "CRITICAL SLIP SURFACE" label
+                # Position label at top of arc if possible
+                if valid_y:
+                    max_y_idx = np.argmax(valid_y)
+                    label_x = valid_x[max_y_idx]
+                    label_y = valid_y[max_y_idx]
+                    
+                    ax.text(label_x, label_y + 8, 'CRITICAL SLIP SURFACE', 
+                           ha='center', va='bottom', fontsize=10, fontweight='bold',
+                           color=self.slip_surface_color,
+                           bbox=dict(boxstyle="round,pad=0.4", facecolor='white', 
+                                    edgecolor=self.slip_surface_color, alpha=0.95),
+                           zorder=18)
         
         elif surface_type == 'coordinates' and slip_surface.get('coordinates'):
-            # Plot failure surface from coordinates
+            # Plot failure surface from coordinates with enhanced styling
             coords = slip_surface['coordinates']
             if len(coords) > 1:
                 x_coords = [c[0] for c in coords]
                 y_coords = [c[1] for c in coords]
+                
+                # Enhanced coordinate-based failure surface
                 ax.plot(x_coords, y_coords, color=self.slip_surface_color, 
-                       linewidth=3, label='Critical Failure Surface', alpha=0.9)
+                       linewidth=5, label='Critical Failure Surface', alpha=1.0, zorder=15)
+                ax.plot(x_coords, y_coords, color=self.slip_surface_color, 
+                       linewidth=8, alpha=0.3, zorder=14)  # Shadow effect
     
     def _plot_pipeline(self, ax, slope_points: List[Tuple[float, float]], 
                       pipe_diameter_in: float, pipe_depth_ft: float):
@@ -412,40 +444,97 @@ class SlopeGeometryVisualizer:
     
     def _format_plot(self, ax, config: SlopeConfiguration, 
                     analysis_result: Optional[SlopeAnalysisResult]):
-        """Format the plot with labels, title, and legend"""
+        """Format the plot with labels, title, legend and prominent Factor of Safety display"""
         
         # Set labels and title
         ax.set_xlabel('Distance (ft)', fontsize=12, fontweight='bold')
         ax.set_ylabel('Elevation (ft)', fontsize=12, fontweight='bold')
         
-        title = f'Slope Geometry Analysis - Configuration {config.config_id}\n'
-        title += f'Slope: {config.geometry.slope_angle}° × {config.geometry.slope_height} ft'
+        title = f'Slope Stability Analysis - Configuration {config.config_id}\n'
+        title += f'Slope: {config.geometry.slope_angle:.0f}° × {config.geometry.slope_height:.0f} ft'
         
+        ax.set_title(title, fontsize=16, fontweight='bold', pad=30)
+        
+        # Add prominent Factor of Safety display
         if analysis_result:
-            title += f' | FoS = {analysis_result.effective_stress_fos:.2f}'
+            # Determine FoS status and color
+            fos_eff = analysis_result.effective_stress_fos
+            fos_total = analysis_result.total_stress_fos
             
-        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+            if fos_eff < 1.0:
+                fos_color = 'red'
+                fos_status = 'UNSTABLE'
+            elif fos_eff < 1.5:
+                fos_color = 'orange'
+                fos_status = 'CRITICAL'
+            elif fos_eff < 2.0:
+                fos_color = 'gold'
+                fos_status = 'MARGINAL'
+            else:
+                fos_color = 'green'
+                fos_status = 'STABLE'
+            
+            # Get plot boundaries for positioning
+            slope_points = self._calculate_slope_boundary_points(config.geometry)
+            x_coords = [p[0] for p in slope_points]
+            y_coords = [p[1] for p in slope_points]
+            x_min, x_max = min(x_coords), max(x_coords)
+            y_min, y_max = min(y_coords), max(y_coords)
+            
+            # Position Factor of Safety display in upper right
+            fos_x = x_max - (x_max - x_min) * 0.25
+            fos_y = y_max - (y_max - y_min) * 0.15
+            
+            # Create prominent FoS display box
+            fos_text = f'FACTOR OF SAFETY\n'
+            fos_text += f'Effective Stress: {fos_eff:.2f}\n'
+            fos_text += f'Total Stress: {fos_total:.2f}\n'
+            fos_text += f'Status: {fos_status}'
+            
+            ax.text(fos_x, fos_y, fos_text, 
+                   ha='center', va='center', fontsize=12, fontweight='bold',
+                   bbox=dict(boxstyle="round,pad=0.6", facecolor='white', 
+                            edgecolor=fos_color, linewidth=3, alpha=0.95),
+                   color=fos_color, zorder=20)
+            
+            # Add large FoS value overlay for quick reference
+            main_fos_text = f'FoS = {fos_eff:.2f}'
+            ax.text(fos_x, fos_y - (y_max - y_min) * 0.25, main_fos_text,
+                   ha='center', va='center', fontsize=18, fontweight='bold',
+                   bbox=dict(boxstyle="round,pad=0.4", facecolor=fos_color, 
+                            edgecolor='black', linewidth=2, alpha=0.9),
+                   color='white' if fos_color != 'gold' else 'black', zorder=20)
         
         # Set equal aspect ratio for accurate geometry representation
         ax.set_aspect('equal', adjustable='box')
         
-        # Add grid
-        ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5)
+        # Add enhanced grid
+        ax.grid(True, alpha=0.4, linestyle='-', linewidth=0.5)
         ax.set_axisbelow(True)
         
-        # Add legend
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
+        # Add legend with better positioning
+        legend = ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', 
+                          borderaxespad=0, fontsize=10)
+        legend.get_frame().set_alpha(0.9)
         
-        # Set reasonable axis limits
+        # Set reasonable axis limits with proper margins
         slope_points = self._calculate_slope_boundary_points(config.geometry)
         x_coords = [p[0] for p in slope_points]
         y_coords = [p[1] for p in slope_points]
         
-        x_margin = (max(x_coords) - min(x_coords)) * 0.1
-        y_margin = (max(y_coords) - min(y_coords)) * 0.15
+        x_margin = (max(x_coords) - min(x_coords)) * 0.15
+        y_margin = (max(y_coords) - min(y_coords)) * 0.2
         
         ax.set_xlim(min(x_coords) - x_margin, max(x_coords) + x_margin)
         ax.set_ylim(min(y_coords) - y_margin, max(y_coords) + y_margin)
+        
+        # Add engineering standards annotation
+        if analysis_result and analysis_result.requires_detailed_analysis:
+            standards_text = 'Requires Detailed Analysis\n(FoS < 1.5)'
+            ax.text(min(x_coords) + x_margin, max(y_coords) - y_margin,
+                   standards_text, ha='left', va='top', fontsize=10,
+                   bbox=dict(boxstyle="round,pad=0.3", facecolor='yellow', alpha=0.8),
+                   color='red', fontweight='bold', zorder=19)
     
     def _create_geometry_data_file(self, config: SlopeConfiguration, 
                                  analysis_result: Optional[SlopeAnalysisResult],
