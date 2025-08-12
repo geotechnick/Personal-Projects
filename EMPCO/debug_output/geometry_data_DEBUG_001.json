@@ -1,5 +1,5 @@
 {
-  "configuration_id": "TEST_001",
+  "configuration_id": "DEBUG_001",
   "slope_geometry": {
     "angle_degrees": 29.999999999999996,
     "height_ft": 60,
@@ -10,24 +10,24 @@
   },
   "soil_layers": [
     {
-      "name": "Weak Clay",
-      "unit_weight_pcf": 115,
-      "cohesion_total_psf": 100,
-      "cohesion_effective_psf": 50,
-      "friction_angle_degrees": 15,
-      "thickness_ft": 25
+      "name": "Slope Material",
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 300,
+      "cohesion_effective_psf": 150,
+      "friction_angle_degrees": 25,
+      "thickness_ft": 30
     },
     {
-      "name": "Dense Soil",
+      "name": "Foundation",
       "unit_weight_pcf": 125,
-      "cohesion_total_psf": 400,
-      "cohesion_effective_psf": 200,
-      "friction_angle_degrees": 35,
+      "cohesion_total_psf": 500,
+      "cohesion_effective_psf": 250,
+      "friction_angle_degrees": 32,
       "thickness_ft": 35
     }
   ],
   "groundwater": {
-    "depth_below_surface_ft": 15
+    "depth_below_surface_ft": 25
   },
   "pipeline": {
     "diameter_in": 30,
@@ -63,9 +63,9 @@
     "requires_detailed_analysis": true,
     "critical_slip_surface": {
       "surface_type": "circular",
-      "center_x": 50,
-      "center_y": 70,
-      "radius": 55
+      "center_x": 51.96152422706632,
+      "center_y": 80,
+      "radius": 60
     }
   }
 }

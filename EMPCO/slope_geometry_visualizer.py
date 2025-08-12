@@ -282,17 +282,22 @@ class SlopeGeometryVisualizer:
             circle_x = center_x + radius * np.cos(theta)
             circle_y = center_y + radius * np.sin(theta)
             
-            # Enhanced clipping - show failure surface above ground level and within domain
+            # Simplified clipping - show entire failure surface for maximum visibility
             x_coords = [p[0] for p in slope_points]
             y_coords = [p[1] for p in slope_points]
             x_min, x_max = min(x_coords), max(x_coords)
-            y_min = min(y_coords)
+            y_min, y_max = min(y_coords), max(y_coords)
             
-            # Filter circle points to show only relevant portion (above y = -50 for visibility)
+            # Show failure surface with generous bounds - prioritize visibility over precise clipping
             valid_indices = []
             for i, (x, y) in enumerate(zip(circle_x, circle_y)):
-                if x_min-20 <= x <= x_max+20 and y >= -50:  # Extended bounds for better visibility
+                # Very generous bounds to ensure failure surface is always visible
+                if x_min-100 <= x <= x_max+100 and y >= y_min-50 and y <= y_max+100:
                     valid_indices.append(i)
+            
+            # If no points pass the filter, show the entire circle
+            if not valid_indices:
+                valid_indices = list(range(len(circle_x)))
             
             if valid_indices:
                 # Plot the failure surface with enhanced styling
@@ -728,12 +733,12 @@ def main():
         groundwater_depth=15
     )
     
-    # Create test analysis result with failure surface
+    # Create test analysis result with failure surface positioned to intersect slope
     test_slip_surface = {
         'surface_type': 'circular',
-        'center_x': 20,
-        'center_y': 40,
-        'radius': 45
+        'center_x': 50,  # Position to intersect slope
+        'center_y': 70,  # Above slope for typical failure surface
+        'radius': 55     # Large enough to create visible arc through slope
     }
     
     test_result = SlopeAnalysisResult(
