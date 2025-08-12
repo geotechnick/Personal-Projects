@@ -104,43 +104,55 @@ class SlopeGeometryVisualizer:
         return str(filepath)
     
     def _calculate_slope_boundary_points(self, geometry: SlopeGeometry) -> List[Tuple[float, float]]:
-        """Calculate slope boundary points"""
-        
-        slope_rad = np.radians(geometry.slope_angle)
-        slope_rise = geometry.slope_height
-        slope_run = slope_rise / np.tan(slope_rad)
-        
-        # Define slope profile points
-        points = [
-            # Left boundary (upstream)
-            (-150, -50),
-            (-150, slope_rise + 20),
-            
-            # Slope crest area
-            (-20, slope_rise),
-            (slope_run, slope_rise),
-            
-            # Slope face
-            (0, 0),  # Toe
-            
-            # Right boundary (downstream)  
-            (geometry.toe_distance + 100, 0),
-            (geometry.toe_distance + 100, -50),
-            
-            # Bottom boundary
-            (-150, -50)
-        ]
-        
-        return points
-    
-    def _calculate_slope_boundary_points(self, geometry: SlopeGeometry) -> List[Tuple[float, float]]:
         """Calculate slope boundary points from the coordinate-based geometry system"""
-        # Extract the primary slope boundary points (first 7 points define the slope boundary)
+        # Extract key points from geometry and create a proper boundary
+        
+        # Find key points
+        toe_point = None
+        crest_point = None
+        plateau_end = None
+        left_boundary = None
+        right_boundary = None
+        
+        for point in geometry.points:
+            if point.id == 1:  # Toe
+                toe_point = (point.x, point.y)
+            elif point.id == 2:  # Crest  
+                crest_point = (point.x, point.y)
+            elif point.id == 3:  # Plateau end
+                plateau_end = (point.x, point.y)
+            elif point.id == 4:  # Left boundary at toe level
+                left_boundary = (point.x, point.y)
+            elif point.id == 7:  # Right boundary at toe level
+                right_boundary = (point.x, point.y)
+        
+        # Create proper boundary polygon (non-intersecting)
         boundary_points = []
         
-        # Get the main slope defining points
-        for point in geometry.points[:7]:  # First 7 points define the slope boundary
-            boundary_points.append((point.x, point.y))
+        if all(p is not None for p in [toe_point, crest_point, plateau_end, left_boundary, right_boundary]):
+            # Create boundary starting from bottom-left, going clockwise
+            boundary_points = [
+                # Bottom boundary
+                (left_boundary[0], left_boundary[1] - 50),  # Bottom left
+                (right_boundary[0], right_boundary[1] - 50),  # Bottom right
+                
+                # Right boundary
+                (right_boundary[0], right_boundary[1]),  # Right at toe level
+                (plateau_end[0], plateau_end[1]),  # Plateau end
+                
+                # Top boundary (plateau)
+                (crest_point[0], crest_point[1]),  # Slope crest
+                
+                # Slope face (from crest to toe)
+                (toe_point[0], toe_point[1]),  # Slope toe
+                
+                # Left boundary
+                (left_boundary[0], left_boundary[1]),  # Left at toe level
+                (left_boundary[0], left_boundary[1] + crest_point[1] + 10),  # Left boundary top
+                
+                # Close polygon by connecting to first point
+                (left_boundary[0], left_boundary[1] - 50)
+            ]
         
         return boundary_points
     
@@ -255,7 +267,7 @@ class SlopeGeometryVisualizer:
             ax.plot(x, gw_elevation, 'o', color=self.groundwater_color, markersize=4, alpha=0.7)
     
     def _plot_failure_surface(self, ax, slip_surface: Dict[str, Any], slope_points: List[Tuple[float, float]]):
-        """Plot critical failure surface"""
+        """Plot critical failure surface clipped to slope boundary"""
         
         if not slip_surface:
             return
@@ -268,21 +280,55 @@ class SlopeGeometryVisualizer:
             center_y = slip_surface.get('center_y', 0)
             radius = slip_surface.get('radius', 50)
             
-            # Create circular arc for failure surface
-            circle = Circle((center_x, center_y), radius, 
-                          fill=False, color=self.slip_surface_color, 
-                          linewidth=3, linestyle='-', alpha=0.8,
-                          label='Critical Failure Surface')
-            ax.add_patch(circle)
+            # Calculate circular arc points for better control
+            theta = np.linspace(0, 2*np.pi, 100)
+            circle_x = center_x + radius * np.cos(theta)
+            circle_y = center_y + radius * np.sin(theta)
             
-            # Add center point
-            ax.plot(center_x, center_y, 'x', color=self.slip_surface_color, 
-                   markersize=8, markeredgewidth=2)
+            # Clip the circle to only show portions within reasonable bounds
+            # (above deepest soil layer and within slope boundaries)
+            x_coords = [p[0] for p in slope_points]
+            y_coords = [p[1] for p in slope_points]
+            x_min, x_max = min(x_coords), max(x_coords)
+            y_min = min(y_coords)
             
-            # Add radius dimension
-            ax.annotate(f'R = {radius:.1f} ft', 
-                       xy=(center_x + radius*0.7, center_y + radius*0.7),
-                       fontsize=9, color=self.slip_surface_color, fontweight='bold')
+            # Filter circle points to show only relevant portion
+            valid_indices = []
+            for i, (x, y) in enumerate(zip(circle_x, circle_y)):
+                if x_min <= x <= x_max and y >= y_min and y <= center_y + radius:
+                    valid_indices.append(i)
+            
+            if valid_indices:
+                # Plot only the valid portion of the circle
+                valid_x = [circle_x[i] for i in valid_indices]
+                valid_y = [circle_y[i] for i in valid_indices]
+                
+                ax.plot(valid_x, valid_y, color=self.slip_surface_color, 
+                       linewidth=3, linestyle='-', alpha=0.9,
+                       label='Critical Failure Surface')
+                
+                # Add center point
+                ax.plot(center_x, center_y, 'x', color=self.slip_surface_color, 
+                       markersize=8, markeredgewidth=2, label='Slip Center')
+                
+                # Add radius dimension line and text
+                # Find a good point on the visible arc for annotation
+                mid_idx = len(valid_indices) // 2
+                if mid_idx < len(valid_indices):
+                    annotation_x = valid_x[mid_idx]
+                    annotation_y = valid_y[mid_idx]
+                    
+                    # Draw radius line
+                    ax.plot([center_x, annotation_x], [center_y, annotation_y], 
+                           color=self.slip_surface_color, linestyle=':', alpha=0.6, linewidth=1)
+                    
+                    # Add radius text
+                    ax.annotate(f'R = {radius:.1f} ft', 
+                               xy=(annotation_x, annotation_y),
+                               xytext=(annotation_x + 10, annotation_y + 5),
+                               fontsize=9, color=self.slip_surface_color, fontweight='bold',
+                               bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8),
+                               arrowprops=dict(arrowstyle='->', color=self.slip_surface_color, lw=1))
         
         elif surface_type == 'coordinates' and slip_surface.get('coordinates'):
             # Plot failure surface from coordinates
@@ -291,7 +337,7 @@ class SlopeGeometryVisualizer:
                 x_coords = [c[0] for c in coords]
                 y_coords = [c[1] for c in coords]
                 ax.plot(x_coords, y_coords, color=self.slip_surface_color, 
-                       linewidth=3, label='Critical Failure Surface', alpha=0.8)
+                       linewidth=3, label='Critical Failure Surface', alpha=0.9)
     
     def _plot_pipeline(self, ax, slope_points: List[Tuple[float, float]], 
                       pipe_diameter_in: float, pipe_depth_ft: float):
