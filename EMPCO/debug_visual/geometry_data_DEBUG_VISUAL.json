@@ -1,0 +1,63 @@
+{
+  "configuration_id": "DEBUG_VISUAL",
+  "slope_geometry": {
+    "angle_degrees": 29.999999999999996,
+    "height_ft": 60,
+    "horizontal_run_ft": 103.92304845413264,
+    "slope_length_ft": 120.0,
+    "bench_width_ft": 0,
+    "toe_distance_ft": 50
+  },
+  "soil_layers": [
+    {
+      "name": "Test Material",
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 300,
+      "cohesion_effective_psf": 150,
+      "friction_angle_degrees": 25,
+      "thickness_ft": 30
+    }
+  ],
+  "groundwater": {
+    "depth_below_surface_ft": 25
+  },
+  "pipeline": {
+    "diameter_in": 30,
+    "diameter_ft": 2.5,
+    "depth_of_cover_ft": 5,
+    "centerline_elevation_ft": -6.25
+  },
+  "boundary_points": [
+    [
+      -100,
+      -100
+    ],
+    [
+      283.92304845413264,
+      -100
+    ],
+    [
+      283.92304845413264,
+      60
+    ],
+    [
+      -100,
+      60
+    ],
+    [
+      -100,
+      -100
+    ]
+  ],
+  "analysis_results": {
+    "total_stress_fos": 1.25,
+    "effective_stress_fos": 1.1,
+    "requires_detailed_analysis": true,
+    "critical_slip_surface": {
+      "surface_type": "circular",
+      "center_x": 50,
+      "center_y": 30,
+      "radius": 40
+    }
+  }
+}

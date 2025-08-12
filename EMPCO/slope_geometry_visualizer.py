@@ -304,22 +304,26 @@ class SlopeGeometryVisualizer:
                 valid_x = [circle_x[i] for i in valid_indices]
                 valid_y = [circle_y[i] for i in valid_indices]
                 
-                # Draw failure surface with multiple visual elements
-                # 1. Main failure surface line
-                ax.plot(valid_x, valid_y, color=self.slip_surface_color, 
-                       linewidth=5, linestyle='-', alpha=1.0,
-                       label='Critical Failure Surface', zorder=15)
+                # Draw failure surface with MAXIMUM visibility
+                # 1. Very thick bright red line that can't be missed
+                ax.plot(valid_x, valid_y, color='red', 
+                       linewidth=10, linestyle='-', alpha=1.0,
+                       label='Critical Failure Surface', zorder=20)
                 
-                # 2. Add a subtle shadow/glow effect
-                ax.plot(valid_x, valid_y, color=self.slip_surface_color, 
-                       linewidth=8, linestyle='-', alpha=0.3, zorder=14)
+                # 2. Add yellow glow/shadow for extreme visibility
+                ax.plot(valid_x, valid_y, color='yellow', 
+                       linewidth=15, linestyle='-', alpha=0.4, zorder=19)
                 
-                # 3. Center point with enhanced visibility
-                ax.plot(center_x, center_y, 'o', color='white', 
-                       markersize=12, markeredgewidth=3, 
-                       markeredgecolor=self.slip_surface_color, zorder=16)
-                ax.plot(center_x, center_y, 'x', color=self.slip_surface_color, 
-                       markersize=10, markeredgewidth=3, zorder=17)
+                # 3. Add white background for contrast
+                ax.plot(valid_x, valid_y, color='white', 
+                       linewidth=20, linestyle='-', alpha=0.6, zorder=18)
+                
+                # 4. VERY PROMINENT center point
+                ax.plot(center_x, center_y, 'o', color='yellow', 
+                       markersize=20, markeredgewidth=4, 
+                       markeredgecolor='red', zorder=22)
+                ax.plot(center_x, center_y, 'x', color='red', 
+                       markersize=15, markeredgewidth=4, zorder=23)
                 
                 # 4. Enhanced radius annotation
                 # Find best point on arc for radius annotation
@@ -346,19 +350,27 @@ class SlopeGeometryVisualizer:
                                arrowprops=dict(arrowstyle='->', color=self.slip_surface_color, lw=2),
                                zorder=18)
                 
-                # 5. Add "CRITICAL SLIP SURFACE" label
+                # 6. Add VERY PROMINENT "FAILURE SURFACE" label
                 # Position label at top of arc if possible
                 if valid_y:
                     max_y_idx = np.argmax(valid_y)
                     label_x = valid_x[max_y_idx]
                     label_y = valid_y[max_y_idx]
                     
-                    ax.text(label_x, label_y + 8, 'CRITICAL SLIP SURFACE', 
-                           ha='center', va='bottom', fontsize=10, fontweight='bold',
-                           color=self.slip_surface_color,
-                           bbox=dict(boxstyle="round,pad=0.4", facecolor='white', 
-                                    edgecolor=self.slip_surface_color, alpha=0.95),
-                           zorder=18)
+                    ax.text(label_x, label_y + 15, '⚠ CRITICAL FAILURE SURFACE ⚠', 
+                           ha='center', va='bottom', fontsize=14, fontweight='bold',
+                           color='red',
+                           bbox=dict(boxstyle="round,pad=0.6", facecolor='yellow', 
+                                    edgecolor='red', linewidth=3, alpha=1.0),
+                           zorder=25)
+                    
+                    # Add additional label with FoS if available
+                    ax.text(label_x, label_y + 30, 'SLOPE FAILURE ZONE', 
+                           ha='center', va='bottom', fontsize=12, fontweight='bold',
+                           color='white',
+                           bbox=dict(boxstyle="round,pad=0.4", facecolor='red', 
+                                    edgecolor='black', linewidth=2, alpha=0.9),
+                           zorder=24)
         
         elif surface_type == 'coordinates' and slip_surface.get('coordinates'):
             # Plot failure surface from coordinates with enhanced styling
