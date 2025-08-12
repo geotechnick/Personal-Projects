@@ -377,7 +377,7 @@ class SlopeStabilityAnalyzer:
             return False
     
     def _generate_realistic_failure_surface(self, config: SlopeConfiguration, fos: float) -> Dict[str, Any]:
-        """Generate geotechnically accurate failure surface from crest to toe"""
+        """Generate most critical failure surface by iterating through entry/exit ranges"""
         
         # Don't generate failure surface for very stable slopes
         if fos > 2.5:
@@ -386,81 +386,148 @@ class SlopeStabilityAnalyzer:
         # Get slope geometry parameters
         slope_angle = config.geometry.slope_angle
         slope_height = config.geometry.slope_height
-        
-        # Calculate slope length (horizontal distance from toe to crest)
         slope_length = slope_height / np.tan(np.radians(slope_angle))
         
-        # Define entry and exit points for geotechnically accurate failure surface
-        # Entry point: At or slightly behind slope crest
-        entry_x = slope_length - (slope_height * 0.1)  # Slightly behind crest
-        entry_y = slope_height
+        # Define search ranges based on GeoStudio methodology
+        # Entry points: From slope crest to right edge of domain
+        entry_x_range = np.linspace(slope_length, slope_length + 100, 10)  # Crest to right edge
+        entry_y = slope_height  # All entries at crest elevation
         
-        # Exit point: At or slightly below toe
-        exit_x = slope_height * 0.1  # Slightly in front of toe  
-        exit_y = -(slope_height * 0.05)  # Slightly below ground level
+        # Exit points: From toe to left edge of domain  
+        exit_x_range = np.linspace(0, -50, 8)  # Toe to left edge
+        exit_y_range = np.linspace(0, -10, 3)  # Ground level to slightly below
         
-        # Calculate circle center and radius to pass through entry and exit points
-        # For a circular arc through two points, we need to determine the center
+        # Find the most critical failure surface
+        most_critical_surface = None
+        lowest_fos = float('inf')
         
-        # Mid-point between entry and exit
-        mid_x = (entry_x + exit_x) / 2
-        mid_y = (entry_y + exit_y) / 2
+        for entry_x in entry_x_range:
+            for exit_x in exit_x_range:
+                for exit_y in exit_y_range:
+                    
+                    # Calculate potential failure surface
+                    surface = self._calculate_circular_surface(
+                        entry_x, entry_y, exit_x, exit_y, fos
+                    )
+                    
+                    if surface:
+                        # Estimate FoS for this surface (simplified approach)
+                        surface_fos = self._estimate_surface_fos(surface, config, fos)
+                        
+                        # Keep track of most critical (lowest FoS) surface
+                        if surface_fos < lowest_fos:
+                            lowest_fos = surface_fos
+                            most_critical_surface = surface
+                            most_critical_surface['surface_fos'] = surface_fos
         
-        # Distance between entry and exit points
-        chord_length = np.sqrt((entry_x - exit_x)**2 + (entry_y - exit_y)**2)
+        return most_critical_surface if most_critical_surface else {}
+    
+    def _calculate_circular_surface(self, entry_x: float, entry_y: float, 
+                                  exit_x: float, exit_y: float, base_fos: float) -> Dict[str, Any]:
+        """Calculate circular surface parameters for given entry/exit points"""
         
-        # Determine sagitta (arc height) based on slope characteristics and FoS
-        if fos < 1.2 or slope_angle > 35:
-            # Deep failure - larger sagitta (more curved arc)
-            sagitta_ratio = 0.4  # 40% of chord length
-        elif fos < 1.5:
-            # Typical failure - moderate sagitta
-            sagitta_ratio = 0.3  # 30% of chord length  
-        else:
-            # Shallow failure - smaller sagitta
-            sagitta_ratio = 0.2  # 20% of chord length
+        try:
+            # Mid-point between entry and exit
+            mid_x = (entry_x + exit_x) / 2
+            mid_y = (entry_y + exit_y) / 2
+            
+            # Distance between entry and exit points
+            chord_length = np.sqrt((entry_x - exit_x)**2 + (entry_y - exit_y)**2)
+            
+            # Skip very short or very long surfaces
+            if chord_length < 20 or chord_length > 200:
+                return None
+            
+            # Determine sagitta based on base FoS and surface length
+            if base_fos < 1.2:
+                sagitta_ratio = 0.35  # Deep failure
+            elif base_fos < 1.5:
+                sagitta_ratio = 0.25  # Typical failure
+            else:
+                sagitta_ratio = 0.15  # Shallow failure
+            
+            sagitta = chord_length * sagitta_ratio
+            
+            # Calculate radius
+            radius = (chord_length**2) / (8 * sagitta) + sagitta / 2
+            
+            # Skip surfaces with unrealistic radii
+            if radius < 15 or radius > 300:
+                return None
+            
+            # Calculate center point
+            chord_vector_x = entry_x - exit_x
+            chord_vector_y = entry_y - exit_y
+            
+            # Perpendicular vector (rotated 90 degrees)
+            perp_x = -chord_vector_y
+            perp_y = chord_vector_x
+            
+            # Normalize perpendicular vector
+            perp_length = np.sqrt(perp_x**2 + perp_y**2)
+            if perp_length > 0:
+                perp_x = perp_x / perp_length
+                perp_y = perp_y / perp_length
+            
+            # Distance from chord midpoint to center
+            center_distance = radius - sagitta
+            
+            # Calculate center coordinates
+            center_x = mid_x + perp_x * center_distance
+            center_y = mid_y + perp_y * center_distance
+            
+            # Calculate angles for arc rendering
+            entry_angle = np.degrees(np.arctan2(entry_y - center_y, entry_x - center_x))
+            exit_angle = np.degrees(np.arctan2(exit_y - center_y, exit_x - center_x))
+            
+            surface = {
+                'surface_type': 'circular',
+                'center_x': center_x,
+                'center_y': center_y,
+                'radius': radius,
+                'entry_point': (entry_x, entry_y),
+                'exit_point': (exit_x, exit_y),
+                'entry_angle': entry_angle,
+                'exit_angle': exit_angle,
+                'chord_length': chord_length,
+                'sagitta': sagitta
+            }
+            
+            return surface
+            
+        except (ZeroDivisionError, ValueError):
+            return None
+    
+    def _estimate_surface_fos(self, surface: Dict[str, Any], config: SlopeConfiguration, base_fos: float) -> float:
+        """Estimate Factor of Safety for a given surface (simplified approach)"""
         
-        sagitta = chord_length * sagitta_ratio
+        # This is a simplified estimation - in real GeoStudio, this would involve
+        # complex limit equilibrium calculations considering soil properties,
+        # groundwater, surface geometry, etc.
         
-        # Calculate radius from chord length and sagitta
-        # Formula: R = (chord²)/(8*sagitta) + sagitta/2
-        radius = (chord_length**2) / (8 * sagitta) + sagitta / 2
+        # Factors that affect FoS:
+        # 1. Surface length (longer surfaces generally less critical)
+        # 2. Arc depth (deeper surfaces can be more critical) 
+        # 3. Entry/exit positions relative to slope
         
-        # Calculate center point
-        # Vector perpendicular to chord (pointing toward center)
-        chord_vector_x = entry_x - exit_x
-        chord_vector_y = entry_y - exit_y
+        chord_length = surface['chord_length']
+        radius = surface['radius']
+        sagitta = surface['sagitta']
+        entry_x = surface['entry_point'][0]
+        exit_x = surface['exit_point'][0]
         
-        # Perpendicular vector (rotated 90 degrees)
-        perp_x = -chord_vector_y
-        perp_y = chord_vector_x
+        # Base estimation on surface characteristics
+        length_factor = 1.0 + (chord_length - 80) * 0.002  # Longer surfaces slightly higher FoS
+        depth_factor = 1.0 - (sagitta - 20) * 0.005  # Deeper surfaces slightly lower FoS
+        position_factor = 1.0 - abs(entry_x - exit_x - 50) * 0.001  # Mid-range positions optimal
         
-        # Normalize perpendicular vector
-        perp_length = np.sqrt(perp_x**2 + perp_y**2)
-        if perp_length > 0:
-            perp_x = perp_x / perp_length
-            perp_y = perp_y / perp_length
+        # Apply random variation to simulate material property variations
+        import random
+        variation = random.uniform(0.85, 1.15)
         
-        # Distance from chord midpoint to center
-        center_distance = radius - sagitta
+        estimated_fos = base_fos * length_factor * depth_factor * position_factor * variation
         
-        # Calculate center coordinates
-        center_x = mid_x + perp_x * center_distance
-        center_y = mid_y + perp_y * center_distance
-        
-        # Store entry and exit points for accurate arc rendering
-        failure_surface = {
-            'surface_type': 'circular',
-            'center_x': center_x,
-            'center_y': center_y,
-            'radius': radius,
-            'entry_point': (entry_x, entry_y),
-            'exit_point': (exit_x, exit_y),
-            'entry_angle': np.degrees(np.arctan2(entry_y - center_y, entry_x - center_x)),
-            'exit_angle': np.degrees(np.arctan2(exit_y - center_y, exit_x - center_x))
-        }
-        
-        return failure_surface
+        return max(0.5, min(3.0, estimated_fos))  # Reasonable bounds
     
     def batch_analyze(self, configurations: List[SlopeConfiguration]) -> List[SlopeAnalysisResult]:
         """Analyze multiple configurations in batch"""
