@@ -1,10 +1,10 @@
 {
   "configuration_id": "TEST_001",
   "slope_geometry": {
-    "angle_degrees": 29.999999999999996,
-    "height_ft": 60,
-    "horizontal_run_ft": 103.92304845413264,
-    "slope_length_ft": 120.0,
+    "angle_degrees": 45.0,
+    "height_ft": 20,
+    "horizontal_run_ft": 20.000000000000004,
+    "slope_length_ft": 28.284271247461902,
     "bench_width_ft": 0,
     "toe_distance_ft": 50
   },
@@ -38,39 +38,23 @@
   "boundary_points": [
     [
       -100,
-      -50
+      -100
     ],
     [
-      283.92304845413264,
-      -50
+      200,
+      -100
     ],
     [
-      283.92304845413264,
-      0
-    ],
-    [
-      283.92304845413264,
-      60
-    ],
-    [
-      103.92304845413264,
-      60
-    ],
-    [
-      0,
-      0
+      200,
+      20
     ],
     [
       -100,
-      0
+      20
     ],
     [
       -100,
-      70
-    ],
-    [
-      -100,
-      -50
+      -100
     ]
   ],
   "analysis_results": {

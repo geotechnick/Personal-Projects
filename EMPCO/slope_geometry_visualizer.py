@@ -67,11 +67,11 @@ class SlopeGeometryVisualizer:
         # Calculate slope geometry points
         slope_points = self._calculate_slope_boundary_points(config.geometry)
         
-        # Plot soil layers
-        self._plot_soil_layers(ax, config.geometry, config.soil_layers, slope_points)
+        # Plot material regions
+        self._plot_material_regions(ax, config.geometry, config.soil_layers)
         
         # Plot slope boundary
-        self._plot_slope_boundary(ax, slope_points)
+        self._plot_slope_boundary(ax, config.geometry)
         
         # Plot groundwater table
         if config.groundwater_depth > 0:
@@ -103,151 +103,148 @@ class SlopeGeometryVisualizer:
         
         return str(filepath)
     
+    def _get_template_regions(self, geometry: SlopeGeometry) -> Dict[int, List[Tuple[float, float]]]:
+        """Get material regions from GeoStudio template structure"""
+        
+        # Create point lookup from geometry
+        points_dict = {point.id: (point.x, point.y) for point in geometry.points}
+        
+        # Define regions based on GeoStudio template structure
+        # Region definitions from template XML
+        template_regions = {
+            1: [5, 14, 15, 6],    # Foundation layer (deepest)
+            2: [2, 3, 7, 1],     # Slope material region  
+            3: [8, 9, 7, 1, 4],  # Foundation around toe
+            4: [8, 9, 11, 10],   # Soil layer 1
+            5: [10, 11, 13, 12], # Soil layer 2  
+            6: [12, 13, 15, 14]  # Soil layer 3
+        }
+        
+        # Convert point IDs to coordinates
+        regions = {}
+        for region_id, point_ids in template_regions.items():
+            region_coords = []
+            for pt_id in point_ids:
+                if pt_id in points_dict:
+                    region_coords.append(points_dict[pt_id])
+            if len(region_coords) >= 3:  # Need at least 3 points for a polygon
+                regions[region_id] = region_coords
+                
+        return regions
+    
     def _calculate_slope_boundary_points(self, geometry: SlopeGeometry) -> List[Tuple[float, float]]:
-        """Calculate slope boundary points from the coordinate-based geometry system"""
-        # Extract key points from geometry and create a proper boundary
+        """Calculate overall domain boundary from template geometry"""
+        # Get all points and create overall boundary
+        all_x = [point.x for point in geometry.points]
+        all_y = [point.y for point in geometry.points]
         
-        # Find key points
-        toe_point = None
-        crest_point = None
-        plateau_end = None
-        left_boundary = None
-        right_boundary = None
+        x_min, x_max = min(all_x), max(all_x)
+        y_min, y_max = min(all_y), max(all_y)
         
-        for point in geometry.points:
-            if point.id == 1:  # Toe
-                toe_point = (point.x, point.y)
-            elif point.id == 2:  # Crest  
-                crest_point = (point.x, point.y)
-            elif point.id == 3:  # Plateau end
-                plateau_end = (point.x, point.y)
-            elif point.id == 4:  # Left boundary at toe level
-                left_boundary = (point.x, point.y)
-            elif point.id == 7:  # Right boundary at toe level
-                right_boundary = (point.x, point.y)
-        
-        # Create proper boundary polygon (non-intersecting)
-        boundary_points = []
-        
-        if all(p is not None for p in [toe_point, crest_point, plateau_end, left_boundary, right_boundary]):
-            # Create boundary starting from bottom-left, going clockwise
-            boundary_points = [
-                # Bottom boundary
-                (left_boundary[0], left_boundary[1] - 50),  # Bottom left
-                (right_boundary[0], right_boundary[1] - 50),  # Bottom right
-                
-                # Right boundary
-                (right_boundary[0], right_boundary[1]),  # Right at toe level
-                (plateau_end[0], plateau_end[1]),  # Plateau end
-                
-                # Top boundary (plateau)
-                (crest_point[0], crest_point[1]),  # Slope crest
-                
-                # Slope face (from crest to toe)
-                (toe_point[0], toe_point[1]),  # Slope toe
-                
-                # Left boundary
-                (left_boundary[0], left_boundary[1]),  # Left at toe level
-                (left_boundary[0], left_boundary[1] + crest_point[1] + 10),  # Left boundary top
-                
-                # Close polygon by connecting to first point
-                (left_boundary[0], left_boundary[1] - 50)
-            ]
+        # Create overall domain boundary (for reference)
+        boundary_points = [
+            (x_min, y_min),  # Bottom left
+            (x_max, y_min),  # Bottom right
+            (x_max, y_max),  # Top right
+            (x_min, y_max),  # Top left
+            (x_min, y_min)   # Close polygon
+        ]
         
         return boundary_points
     
-    def _plot_soil_layers(self, ax, geometry: SlopeGeometry, soil_layers: List[SoilLayer], 
-                         slope_points: List[Tuple[float, float]]):
-        """Plot soil layers with different colors and patterns"""
+    def _plot_material_regions(self, ax, geometry: SlopeGeometry, soil_layers: List[SoilLayer]):
+        """Plot material regions matching GeoStudio template structure"""
         
-        # Extract boundary coordinates
-        x_coords = [p[0] for p in slope_points]
-        y_coords = [p[1] for p in slope_points]
+        # Get template regions
+        regions = self._get_template_regions(geometry)
         
-        x_min, x_max = min(x_coords), max(x_coords)
-        y_min = min(y_coords)
+        # Define region materials and colors based on template
+        region_materials = {
+            1: {'name': 'Foundation Layer', 'color': '#8B4513', 'layer_idx': 1},  # Deep foundation
+            2: {'name': 'Slope Material', 'color': '#D2691E', 'layer_idx': 0},   # Slope face material
+            3: {'name': 'Foundation Material', 'color': '#CD853F', 'layer_idx': 0}, # Around toe
+            4: {'name': 'Soil Layer 1', 'color': '#DEB887', 'layer_idx': 0},     # Upper soil
+            5: {'name': 'Soil Layer 2', 'color': '#BC8F8F', 'layer_idx': 1},     # Middle soil  
+            6: {'name': 'Soil Layer 3', 'color': '#A0522D', 'layer_idx': 1}      # Lower soil
+        }
         
-        # Calculate layer elevations
-        current_depth = 0
-        layer_elevations = []
-        
-        for layer in soil_layers:
-            top_elevation = -current_depth
-            bottom_elevation = -(current_depth + layer.thickness)
-            layer_elevations.append((top_elevation, bottom_elevation))
-            current_depth += layer.thickness
-        
-        # Plot each soil layer
-        for i, (layer, (top_elev, bottom_elev)) in enumerate(zip(soil_layers, layer_elevations)):
-            
-            # Get color for this soil layer
-            color = self.soil_colors.get(layer.name, self.default_soil_colors[i % len(self.default_soil_colors)])
-            
-            # Create layer polygon
-            layer_points = [
-                (x_min, top_elev),
-                (x_max, top_elev),
-                (x_max, bottom_elev),
-                (x_min, bottom_elev)
-            ]
-            
-            layer_polygon = patches.Polygon(layer_points, closed=True, 
-                                          facecolor=color, alpha=0.7, 
-                                          edgecolor='black', linewidth=0.5,
-                                          label=f'{layer.name} (γ={layer.unit_weight} pcf)')
-            ax.add_patch(layer_polygon)
-            
-            # Add layer thickness annotation
-            mid_x = (x_min + x_max) / 2 + 20 * i  # Offset for readability
-            mid_y = (top_elev + bottom_elev) / 2
-            
-            ax.annotate(f'{layer.name}\nt = {layer.thickness}\'\nγ = {layer.unit_weight} pcf\nc = {layer.cohesion_total} psf\nφ = {layer.friction_angle}°',
-                       xy=(mid_x, mid_y), xytext=(x_max + 20, mid_y),
-                       fontsize=8, ha='left', va='center',
-                       bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3),
-                       arrowprops=dict(arrowstyle='->', lw=0.5))
+        # Plot each region
+        for region_id, coords in regions.items():
+            if region_id in region_materials:
+                material_info = region_materials[region_id]
+                layer_idx = material_info['layer_idx']
+                
+                # Get soil properties if available
+                if layer_idx < len(soil_layers):
+                    layer = soil_layers[layer_idx]
+                    label = f"{material_info['name']}\nγ={layer.unit_weight} pcf\nc={layer.cohesion_total} psf\nφ={layer.friction_angle}°"
+                else:
+                    label = material_info['name']
+                
+                # Create region polygon
+                region_polygon = patches.Polygon(coords, closed=True,
+                                                facecolor=material_info['color'], alpha=0.8,
+                                                edgecolor='black', linewidth=1.5,
+                                                label=material_info['name'])
+                ax.add_patch(region_polygon)
+                
+                # Add region label at centroid
+                if len(coords) >= 3:
+                    centroid_x = sum(p[0] for p in coords) / len(coords)
+                    centroid_y = sum(p[1] for p in coords) / len(coords)
+                    
+                    # Only add detailed labels for key regions
+                    if region_id in [2, 3]:  # Slope and foundation materials
+                        ax.text(centroid_x, centroid_y, material_info['name'],
+                               ha='center', va='center', fontsize=8, fontweight='bold',
+                               bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8))
     
-    def _plot_slope_boundary(self, ax, slope_points: List[Tuple[float, float]]):
-        """Plot slope boundary"""
+    def _plot_slope_boundary(self, ax, geometry: SlopeGeometry):
+        """Plot slope boundary lines from template geometry"""
         
-        # Extract slope face coordinates
-        slope_rad = None
-        slope_face_points = []
+        # Get key points from geometry
+        points_dict = {point.id: (point.x, point.y) for point in geometry.points}
         
-        # Find slope toe and crest points
-        toe_point = next((p for p in slope_points if p[1] == 0 and p[0] >= 0), (0, 0))
-        crest_points = [p for p in slope_points if p[1] > 0]
-        
-        if crest_points:
-            crest_point = min(crest_points, key=lambda p: p[0])
+        # Draw main slope face (points 1 to 2)
+        if 1 in points_dict and 2 in points_dict:
+            toe = points_dict[1]
+            crest = points_dict[2]
             
-            # Create slope face line
-            slope_face_points = [toe_point, crest_point]
-            
-            # Plot slope face
-            slope_x = [p[0] for p in slope_face_points]
-            slope_y = [p[1] for p in slope_face_points]
-            ax.plot(slope_x, slope_y, 'k-', linewidth=3, label='Slope Face')
+            ax.plot([toe[0], crest[0]], [toe[1], crest[1]], 
+                   'k-', linewidth=4, label='Slope Face', zorder=10)
             
             # Calculate and display slope angle
-            rise = crest_point[1] - toe_point[1]
-            run = crest_point[0] - toe_point[0]
+            rise = crest[1] - toe[1]
+            run = crest[0] - toe[0]
             slope_angle = np.degrees(np.arctan(rise / run)) if run != 0 else 90
             
             # Add slope angle annotation
-            mid_x = (toe_point[0] + crest_point[0]) / 2
-            mid_y = (toe_point[1] + crest_point[1]) / 2
+            mid_x = (toe[0] + crest[0]) / 2
+            mid_y = (toe[1] + crest[1]) / 2
             ax.annotate(f'{slope_angle:.1f}°', 
                        xy=(mid_x, mid_y), xytext=(mid_x - 15, mid_y + 10),
-                       fontsize=10, fontweight='bold', color='red',
-                       arrowprops=dict(arrowstyle='->', color='red'))
+                       fontsize=12, fontweight='bold', color='red',
+                       bbox=dict(boxstyle="round,pad=0.3", facecolor='yellow', alpha=0.8),
+                       arrowprops=dict(arrowstyle='->', color='red', lw=2))
         
-        # Plot ground surface
-        ground_points = [(p[0], max(0, p[1])) for p in slope_points if p[1] >= -1]
-        if len(ground_points) > 1:
+        # Draw plateau (points 2 to 3)  
+        if 2 in points_dict and 3 in points_dict:
+            crest = points_dict[2]
+            plateau_end = points_dict[3]
+            
+            ax.plot([crest[0], plateau_end[0]], [crest[1], plateau_end[1]], 
+                   'k-', linewidth=3, label='Plateau', zorder=10)
+        
+        # Draw ground surface at toe level (points 4 to 1 to 7)
+        ground_points = []
+        for pt_id in [4, 1, 7]:
+            if pt_id in points_dict:
+                ground_points.append(points_dict[pt_id])
+        
+        if len(ground_points) >= 2:
             ground_x = [p[0] for p in ground_points]
-            ground_y = [p[1] for p in ground_points]
-            ax.plot(ground_x, ground_y, 'k-', linewidth=2, alpha=0.8, label='Ground Surface')
+            ground_y = [p[1] for p in ground_points] 
+            ax.plot(ground_x, ground_y, 'k-', linewidth=2, alpha=0.8, label='Ground Surface', zorder=10)
     
     def _plot_groundwater_table(self, ax, slope_points: List[Tuple[float, float]], gw_depth: float):
         """Plot groundwater table"""
@@ -584,11 +581,11 @@ class SlopeGeometryVisualizer:
             # Calculate and plot slope profile  
             slope_points = self._calculate_slope_boundary_points(config.geometry)
             
-            # Plot soil layers (simplified)
-            self._plot_soil_layers(ax, config.geometry, config.soil_layers, slope_points)
+            # Plot material regions (simplified)
+            self._plot_material_regions(ax, config.geometry, config.soil_layers)
             
             # Plot slope boundary
-            self._plot_slope_boundary(ax, slope_points)
+            self._plot_slope_boundary(ax, config.geometry)
             
             # Plot failure surface if available
             if result and result.critical_slip_surface:
@@ -627,8 +624,8 @@ class SlopeGeometryVisualizer:
 def main():
     """Test function for slope geometry visualization"""
     
-    # Create test configuration
-    test_geometry = SlopeGeometry.create_standard_slope(30, 60)
+    # Create test configuration using template geometry
+    test_geometry = SlopeGeometry.create_specified_slope()
     
     test_soil_layers = [
         SoilLayer("Weak Clay", 115, 100, 50, 15, 25),
