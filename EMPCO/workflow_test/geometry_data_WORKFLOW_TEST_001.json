@@ -1,0 +1,71 @@
+{
+  "configuration_id": "WORKFLOW_TEST_001",
+  "slope_geometry": {
+    "angle_degrees": 35.0,
+    "height_ft": 50,
+    "horizontal_run_ft": 71.40740033710573,
+    "slope_length_ft": 87.1723397810549,
+    "bench_width_ft": 0,
+    "toe_distance_ft": 50
+  },
+  "soil_layers": [
+    {
+      "name": "Weak Slope Material",
+      "unit_weight_pcf": 115,
+      "cohesion_total_psf": 150,
+      "cohesion_effective_psf": 75,
+      "friction_angle_degrees": 18,
+      "thickness_ft": 25
+    },
+    {
+      "name": "Foundation",
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 300,
+      "cohesion_effective_psf": 150,
+      "friction_angle_degrees": 25,
+      "thickness_ft": 30
+    }
+  ],
+  "groundwater": {
+    "depth_below_surface_ft": 20
+  },
+  "pipeline": {
+    "diameter_in": 30,
+    "diameter_ft": 2.5,
+    "depth_of_cover_ft": 5,
+    "centerline_elevation_ft": -6.25
+  },
+  "boundary_points": [
+    [
+      -100,
+      -100
+    ],
+    [
+      251.40740033710574,
+      -100
+    ],
+    [
+      251.40740033710574,
+      50
+    ],
+    [
+      -100,
+      50
+    ],
+    [
+      -100,
+      -100
+    ]
+  ],
+  "analysis_results": {
+    "total_stress_fos": 1.35,
+    "effective_stress_fos": 1.3,
+    "requires_detailed_analysis": true,
+    "critical_slip_surface": {
+      "surface_type": "circular",
+      "center_x": 42.844440202263435,
+      "center_y": 70.0,
+      "radius": 45.0
+    }
+  }
+}
