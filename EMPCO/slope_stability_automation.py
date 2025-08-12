@@ -62,18 +62,30 @@ class SlopeGeometry:
     
     @classmethod
     def create_standard_slope(cls, slope_angle: float, slope_height: float) -> 'SlopeGeometry':
-        """Create standard slope geometry from angle and height (for backward compatibility)"""
+        """Create standard slope geometry from angle and height with full template structure"""
         # Calculate slope length based on angle and height
         slope_length = slope_height / np.tan(np.radians(slope_angle))
         
+        # Create all 15 points needed for proper material regions (based on template structure)
         points = [
-            GeometryPoint(1, 0, 0, "Point+Number", True),  # Toe
-            GeometryPoint(2, slope_length, slope_height, "Point+Number", True),  # Crest
-            GeometryPoint(3, slope_length + 180, slope_height, "Point+Number", True),  # Plateau
-            GeometryPoint(4, -100, 0, "Point+Number", True),  # Left boundary at toe level
-            GeometryPoint(5, -100, -100, "Point+Number", True),  # Bottom left
-            GeometryPoint(6, slope_length + 180, -100, "Point+Number", True),  # Bottom right
-            GeometryPoint(7, slope_length + 180, 0, "Point+Number", False),  # Right boundary at toe level
+            # Main slope geometry points (1-7)
+            GeometryPoint(1, 0, 0, "Point+Number", True),                        # Toe of slope
+            GeometryPoint(2, slope_length, slope_height, "Point+Number", True),   # Top of slope face  
+            GeometryPoint(3, slope_length + 180, slope_height, "Point+Number", True), # Top of slope plateau
+            GeometryPoint(4, -100, 0, "Point+Number", True),                     # Left boundary
+            GeometryPoint(5, -100, -100, "Point+Number", True),                  # Bottom left
+            GeometryPoint(6, slope_length + 180, -100, "Point+Number", True),    # Bottom right
+            GeometryPoint(7, slope_length + 180, 0, "Point+Number", False),      # Right boundary (not pinned)
+            
+            # Additional points for soil layer boundaries (8-15) - needed for proper regions
+            GeometryPoint(8, -100, -20, "Point+Number", True),                   # Left at -20 ft
+            GeometryPoint(9, slope_length + 180, -20, "Point+Number", True),     # Right at -20 ft
+            GeometryPoint(10, -100, -40, "Point+Number", True),                  # Left at -40 ft
+            GeometryPoint(11, slope_length + 180, -40, "Point+Number", True),    # Right at -40 ft
+            GeometryPoint(12, -100, -60, "Point+Number", True),                  # Left at -60 ft
+            GeometryPoint(13, slope_length + 180, -60, "Point+Number", True),    # Right at -60 ft
+            GeometryPoint(14, -100, -80, "Point+Number", True),                  # Left at -80 ft
+            GeometryPoint(15, slope_length + 180, -80, "Point+Number", True),    # Right at -80 ft
         ]
         
         return cls(points=points)

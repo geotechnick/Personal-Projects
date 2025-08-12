@@ -624,8 +624,8 @@ class SlopeGeometryVisualizer:
 def main():
     """Test function for slope geometry visualization"""
     
-    # Create test configuration using template geometry
-    test_geometry = SlopeGeometry.create_specified_slope()
+    # Create test configuration using standard slope method (now with proper regions)
+    test_geometry = SlopeGeometry.create_standard_slope(30, 60)
     
     test_soil_layers = [
         SoilLayer("Weak Clay", 115, 100, 50, 15, 25),
