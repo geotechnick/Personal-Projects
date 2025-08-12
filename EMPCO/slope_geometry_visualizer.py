@@ -272,32 +272,49 @@ class SlopeGeometryVisualizer:
         surface_type = slip_surface.get('surface_type', 'circular')
         
         if surface_type == 'circular':
-            # Plot circular failure surface
+            # Plot circular failure surface - only the arc from entry to exit point
             center_x = slip_surface.get('center_x', 0)
             center_y = slip_surface.get('center_y', 0)
             radius = slip_surface.get('radius', 50)
             
-            # Calculate circular arc points for better control
-            theta = np.linspace(0, 2*np.pi, 200)  # More points for smoother curve
-            circle_x = center_x + radius * np.cos(theta)
-            circle_y = center_y + radius * np.sin(theta)
-            
-            # Simplified clipping - show entire failure surface for maximum visibility
-            x_coords = [p[0] for p in slope_points]
-            y_coords = [p[1] for p in slope_points]
-            x_min, x_max = min(x_coords), max(x_coords)
-            y_min, y_max = min(y_coords), max(y_coords)
-            
-            # Show failure surface with generous bounds - prioritize visibility over precise clipping
-            valid_indices = []
-            for i, (x, y) in enumerate(zip(circle_x, circle_y)):
-                # Very generous bounds to ensure failure surface is always visible
-                if x_min-100 <= x <= x_max+100 and y >= y_min-50 and y <= y_max+100:
-                    valid_indices.append(i)
-            
-            # If no points pass the filter, show the entire circle
-            if not valid_indices:
+            # Check if we have entry/exit points for proper geotechnical arc
+            if 'entry_point' in slip_surface and 'exit_point' in slip_surface:
+                # Draw only the geotechnically accurate arc from entry to exit
+                entry_angle = slip_surface.get('entry_angle', 0)
+                exit_angle = slip_surface.get('exit_angle', 180)
+                
+                # Ensure we draw the arc in the right direction (through the slope)
+                # Calculate angle range to draw the failure surface arc
+                if exit_angle < entry_angle:
+                    exit_angle += 360  # Handle angle wraparound
+                
+                # Create arc points from entry to exit angle
+                theta = np.linspace(np.radians(entry_angle), np.radians(exit_angle), 100)
+                circle_x = center_x + radius * np.cos(theta)
+                circle_y = center_y + radius * np.sin(theta)
+                
+                # Use all arc points (no clipping needed for geotechnically accurate arc)
                 valid_indices = list(range(len(circle_x)))
+                
+            else:
+                # Fallback to full circle for backward compatibility
+                theta = np.linspace(0, 2*np.pi, 200)
+                circle_x = center_x + radius * np.cos(theta)
+                circle_y = center_y + radius * np.sin(theta)
+                
+                # Apply clipping for full circle
+                x_coords = [p[0] for p in slope_points]
+                y_coords = [p[1] for p in slope_points]
+                x_min, x_max = min(x_coords), max(x_coords)
+                y_min, y_max = min(y_coords), max(y_coords)
+                
+                valid_indices = []
+                for i, (x, y) in enumerate(zip(circle_x, circle_y)):
+                    if x_min-100 <= x <= x_max+100 and y >= y_min-50 and y <= y_max+100:
+                        valid_indices.append(i)
+                
+                if not valid_indices:
+                    valid_indices = list(range(len(circle_x)))
             
             if valid_indices:
                 # Plot the failure surface with enhanced styling
@@ -324,6 +341,31 @@ class SlopeGeometryVisualizer:
                        markeredgecolor='red', zorder=22)
                 ax.plot(center_x, center_y, 'x', color='red', 
                        markersize=15, markeredgewidth=4, zorder=23)
+                
+                # 5. Mark entry and exit points if available
+                if 'entry_point' in slip_surface and 'exit_point' in slip_surface:
+                    entry_pt = slip_surface['entry_point']
+                    exit_pt = slip_surface['exit_point']
+                    
+                    # Entry point (at crest) - green marker
+                    ax.plot(entry_pt[0], entry_pt[1], 'o', color='lightgreen', 
+                           markersize=12, markeredgewidth=3, 
+                           markeredgecolor='darkgreen', zorder=24)
+                    ax.text(entry_pt[0], entry_pt[1] + 8, 'ENTRY\n(Crest)', 
+                           ha='center', va='bottom', fontsize=9, fontweight='bold',
+                           color='darkgreen', 
+                           bbox=dict(boxstyle="round,pad=0.3", facecolor='lightgreen', alpha=0.8),
+                           zorder=25)
+                    
+                    # Exit point (at toe) - orange marker
+                    ax.plot(exit_pt[0], exit_pt[1], 'o', color='lightsalmon', 
+                           markersize=12, markeredgewidth=3, 
+                           markeredgecolor='darkorange', zorder=24)
+                    ax.text(exit_pt[0], exit_pt[1] - 8, 'EXIT\n(Toe)', 
+                           ha='center', va='top', fontsize=9, fontweight='bold',
+                           color='darkorange',
+                           bbox=dict(boxstyle="round,pad=0.3", facecolor='lightsalmon', alpha=0.8),
+                           zorder=25)
                 
                 # 4. Enhanced radius annotation
                 # Find best point on arc for radius annotation

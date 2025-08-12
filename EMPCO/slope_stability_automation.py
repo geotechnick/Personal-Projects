@@ -377,7 +377,7 @@ class SlopeStabilityAnalyzer:
             return False
     
     def _generate_realistic_failure_surface(self, config: SlopeConfiguration, fos: float) -> Dict[str, Any]:
-        """Generate realistic failure surface data for visualization"""
+        """Generate geotechnically accurate failure surface from crest to toe"""
         
         # Don't generate failure surface for very stable slopes
         if fos > 2.5:
@@ -387,39 +387,77 @@ class SlopeStabilityAnalyzer:
         slope_angle = config.geometry.slope_angle
         slope_height = config.geometry.slope_height
         
-        # Calculate slope length for positioning
+        # Calculate slope length (horizontal distance from toe to crest)
         slope_length = slope_height / np.tan(np.radians(slope_angle))
         
-        # Generate failure surface based on typical geotechnical failure patterns
-        # Position failure surface to intersect slope realistically
+        # Define entry and exit points for geotechnically accurate failure surface
+        # Entry point: At or slightly behind slope crest
+        entry_x = slope_length - (slope_height * 0.1)  # Slightly behind crest
+        entry_y = slope_height
         
-        # For steeper slopes or lower FoS, position failure surface closer to slope face
+        # Exit point: At or slightly below toe
+        exit_x = slope_height * 0.1  # Slightly in front of toe  
+        exit_y = -(slope_height * 0.05)  # Slightly below ground level
+        
+        # Calculate circle center and radius to pass through entry and exit points
+        # For a circular arc through two points, we need to determine the center
+        
+        # Mid-point between entry and exit
+        mid_x = (entry_x + exit_x) / 2
+        mid_y = (entry_y + exit_y) / 2
+        
+        # Distance between entry and exit points
+        chord_length = np.sqrt((entry_x - exit_x)**2 + (entry_y - exit_y)**2)
+        
+        # Determine sagitta (arc height) based on slope characteristics and FoS
         if fos < 1.2 or slope_angle > 35:
-            # Deep-seated failure - center above and behind slope crest
-            center_x = slope_length * 0.4  # 40% along slope length
-            center_y = slope_height + (slope_height * 0.6)  # 60% above crest
-            radius = slope_height * 1.2  # Larger radius for deep failure
-            
-        elif fos < 1.5 or slope_angle > 25:
-            # Typical circular failure through slope face
-            center_x = slope_length * 0.6  # 60% along slope length  
-            center_y = slope_height + (slope_height * 0.4)  # 40% above crest
-            radius = slope_height * 0.9  # Medium radius
-            
+            # Deep failure - larger sagitta (more curved arc)
+            sagitta_ratio = 0.4  # 40% of chord length
+        elif fos < 1.5:
+            # Typical failure - moderate sagitta
+            sagitta_ratio = 0.3  # 30% of chord length  
         else:
-            # Shallow failure for marginally stable slopes
-            center_x = slope_length * 0.8  # 80% along slope length
-            center_y = slope_height + (slope_height * 0.3)  # 30% above crest
-            radius = slope_height * 0.7  # Smaller radius
+            # Shallow failure - smaller sagitta
+            sagitta_ratio = 0.2  # 20% of chord length
         
-        # Ensure minimum radius for visibility
-        radius = max(radius, 25)
+        sagitta = chord_length * sagitta_ratio
         
+        # Calculate radius from chord length and sagitta
+        # Formula: R = (chord²)/(8*sagitta) + sagitta/2
+        radius = (chord_length**2) / (8 * sagitta) + sagitta / 2
+        
+        # Calculate center point
+        # Vector perpendicular to chord (pointing toward center)
+        chord_vector_x = entry_x - exit_x
+        chord_vector_y = entry_y - exit_y
+        
+        # Perpendicular vector (rotated 90 degrees)
+        perp_x = -chord_vector_y
+        perp_y = chord_vector_x
+        
+        # Normalize perpendicular vector
+        perp_length = np.sqrt(perp_x**2 + perp_y**2)
+        if perp_length > 0:
+            perp_x = perp_x / perp_length
+            perp_y = perp_y / perp_length
+        
+        # Distance from chord midpoint to center
+        center_distance = radius - sagitta
+        
+        # Calculate center coordinates
+        center_x = mid_x + perp_x * center_distance
+        center_y = mid_y + perp_y * center_distance
+        
+        # Store entry and exit points for accurate arc rendering
         failure_surface = {
             'surface_type': 'circular',
             'center_x': center_x,
             'center_y': center_y,
-            'radius': radius
+            'radius': radius,
+            'entry_point': (entry_x, entry_y),
+            'exit_point': (exit_x, exit_y),
+            'entry_angle': np.degrees(np.arctan2(entry_y - center_y, entry_x - center_x)),
+            'exit_angle': np.degrees(np.arctan2(exit_y - center_y, exit_x - center_x))
         }
         
         return failure_surface
