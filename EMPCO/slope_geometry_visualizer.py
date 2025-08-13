@@ -78,7 +78,7 @@ class SlopeGeometryVisualizer:
             self._plot_groundwater_table(ax, slope_points, config.groundwater_depth)
         
         # Plot failure surface if available
-        if analysis_result and analysis_result.critical_slip_surface:
+        if analysis_result and analysis_result.critical_slip_surface and analysis_result.critical_slip_surface is not True:
             self._plot_failure_surface(ax, analysis_result.critical_slip_surface, slope_points)
         
         # Plot pipeline location
@@ -158,14 +158,17 @@ class SlopeGeometryVisualizer:
         # Get template regions
         regions = self._get_template_regions(geometry)
         
-        # Define region materials and colors based on template
+        # Define region materials and colors based on 2-layer system
+        # Use actual soil layer names from configuration
+        layer_names = [layer.name for layer in soil_layers] if len(soil_layers) >= 2 else ['Slope Material', 'Foundation Material']
+        
         region_materials = {
-            1: {'name': 'Foundation Layer', 'color': '#8B4513', 'layer_idx': 1},  # Deep foundation
-            2: {'name': 'Slope Material', 'color': '#D2691E', 'layer_idx': 0},   # Slope face material
-            3: {'name': 'Foundation Material', 'color': '#CD853F', 'layer_idx': 0}, # Around toe
-            4: {'name': 'Soil Layer 1', 'color': '#DEB887', 'layer_idx': 0},     # Upper soil
-            5: {'name': 'Soil Layer 2', 'color': '#BC8F8F', 'layer_idx': 1},     # Middle soil  
-            6: {'name': 'Soil Layer 3', 'color': '#A0522D', 'layer_idx': 1}      # Lower soil
+            1: {'name': layer_names[1] if len(layer_names) > 1 else 'Foundation Material', 'color': '#8B4513', 'layer_idx': 1},  # Deep foundation
+            2: {'name': layer_names[0], 'color': '#D2691E', 'layer_idx': 0},   # Slope face material
+            3: {'name': layer_names[1] if len(layer_names) > 1 else 'Foundation Material', 'color': '#CD853F', 'layer_idx': 1}, # Around toe
+            4: {'name': layer_names[0], 'color': '#DEB887', 'layer_idx': 0},     # Upper soil
+            5: {'name': layer_names[1] if len(layer_names) > 1 else 'Foundation Material', 'color': '#BC8F8F', 'layer_idx': 1},     # Lower soil  
+            6: {'name': layer_names[1] if len(layer_names) > 1 else 'Foundation Material', 'color': '#A0522D', 'layer_idx': 1}      # Deepest soil
         }
         
         # Plot each region
@@ -512,6 +515,8 @@ class SlopeGeometryVisualizer:
         title = f'Slope Stability Analysis - Configuration {config.config_id}\n'
         title += f'Slope: {config.geometry.slope_angle:.0f}° × {config.geometry.slope_height:.0f} ft'
         
+        # Add soil layer count to title
+        title += f' | {len(config.soil_layers)} Soil Layers'
         ax.set_title(title, fontsize=16, fontweight='bold', pad=30)
         
         # Add prominent Factor of Safety display
@@ -571,6 +576,9 @@ class SlopeGeometryVisualizer:
         ax.grid(True, alpha=0.4, linestyle='-', linewidth=0.5)
         ax.set_axisbelow(True)
         
+        # Add soil layer information box
+        self._add_soil_layer_info_box(ax, config)
+        
         # Add legend with better positioning
         legend = ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', 
                           borderaxespad=0, fontsize=10)
@@ -586,14 +594,40 @@ class SlopeGeometryVisualizer:
         
         ax.set_xlim(min(x_coords) - x_margin, max(x_coords) + x_margin)
         ax.set_ylim(min(y_coords) - y_margin, max(y_coords) + y_margin)
+    
+    def _add_soil_layer_info_box(self, ax, config: SlopeConfiguration):
+        """Add detailed soil layer information box to the plot"""
         
-        # Add engineering standards annotation
-        if analysis_result and analysis_result.requires_detailed_analysis:
-            standards_text = 'Requires Detailed Analysis\n(FoS < 1.5)'
-            ax.text(min(x_coords) + x_margin, max(y_coords) - y_margin,
-                   standards_text, ha='left', va='top', fontsize=10,
-                   bbox=dict(boxstyle="round,pad=0.3", facecolor='yellow', alpha=0.8),
-                   color='red', fontweight='bold', zorder=19)
+        # Get plot boundaries for positioning
+        slope_points = self._calculate_slope_boundary_points(config.geometry)
+        x_coords = [p[0] for p in slope_points]
+        y_coords = [p[1] for p in slope_points]
+        x_min, x_max = min(x_coords), max(x_coords)
+        y_min, y_max = min(y_coords), max(y_coords)
+        
+        # Position soil info box in lower left
+        soil_x = x_min + (x_max - x_min) * 0.02
+        soil_y = y_min + (y_max - y_min) * 0.15
+        
+        # Build soil layer information text
+        soil_text = f'SOIL LAYERS ({len(config.soil_layers)} layers)\n'
+        soil_text += '─' * 35 + '\n'
+        
+        for i, layer in enumerate(config.soil_layers, 1):
+            soil_text += f'Layer {i}: {layer.name}\n'
+            soil_text += f'  γ = {layer.unit_weight:.0f} pcf\n'
+            soil_text += f'  c = {layer.cohesion_effective:.0f} psf\n'
+            soil_text += f'  φ = {layer.friction_angle:.0f}°\n'
+            soil_text += f'  t = {layer.thickness:.0f} ft\n'
+            if i < len(config.soil_layers):
+                soil_text += '\n'
+        
+        # Add soil layer information box
+        ax.text(soil_x, soil_y, soil_text, 
+               ha='left', va='bottom', fontsize=9, fontfamily='monospace',
+               bbox=dict(boxstyle="round,pad=0.5", facecolor='lightgray', 
+                        edgecolor='black', linewidth=1, alpha=0.9),
+               color='black', zorder=15)
     
     def _create_geometry_data_file(self, config: SlopeConfiguration, 
                                  analysis_result: Optional[SlopeAnalysisResult],
@@ -736,7 +770,7 @@ class SlopeGeometryVisualizer:
             self._plot_slope_boundary(ax, config.geometry)
             
             # Plot failure surface if available
-            if result and result.critical_slip_surface:
+            if result and result.critical_slip_surface and result.critical_slip_surface is not True:
                 self._plot_failure_surface(ax, result.critical_slip_surface, slope_points)
             
             # Format individual subplot
@@ -744,9 +778,10 @@ class SlopeGeometryVisualizer:
             ax.grid(True, alpha=0.3)
             
             title = f'{config.config_id}\n{config.geometry.slope_angle}° × {config.geometry.slope_height} ft'
+            title += f'\n{len(config.soil_layers)} Soil Layers'
             if result:
-                title += f'\nFoS = {result.effective_stress_fos:.2f}'
-            ax.set_title(title, fontsize=10)
+                title += f' | FoS = {result.effective_stress_fos:.2f}'
+            ax.set_title(title, fontsize=9)
             
             ax.set_xlabel('Distance (ft)', fontsize=8)
             ax.set_ylabel('Elevation (ft)', fontsize=8)

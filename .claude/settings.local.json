@@ -4,7 +4,8 @@
       "Bash(python:*)",
       "Bash(cat:*)",
       "Bash(rm:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
