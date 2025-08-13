@@ -141,6 +141,7 @@ python automated_decision_workflow.py --angles "25,30,35" --heights "40,60,80" -
 - Sizes: 16"-36" diameter
 - Grades: X-52 to X-70
 - Pressures: 1000-1600 psi
+- **PGD Orientations: Parallel AND Perpendicular to slope** ⭐ **NEW**
 
 ### **5. Template Files Generated:**
 - `project_parameters_template.json`
@@ -278,10 +279,13 @@ EMPCO/
 │   └── README.md                     # Examples documentation
 ├── references/                       # 📚 Reference documents and manuals
 ├── analysis_results/                 # 📊 Output directory (created)
+├── test_output/                      # Test results directory (empty after cleanup)
 ├── system_config.json               # System capabilities config
 ├── PARAMETER_INPUT_GUIDE.md          # 📖 User guide for parameters
 └── project_parameters_template.*     # 📋 Template files (created)
 ```
+
+**🧹 Recent Cleanup:** Removed 8 temporary test directories and 33 unused files to streamline the repository.
 
 ## Limitations & Future Enhancements
 

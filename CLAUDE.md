@@ -35,12 +35,19 @@ This repository contains a **production-ready automated geotechnical engineering
 │   │   └── README.md                        # References documentation
 │   ├── system_config.json                   # System capabilities configuration
 │   ├── analysis_results/                    # 📊 Output directory (auto-created)
+│   ├── test_output/                         # Test results directory (cleaned)
 │   ├── PARAMETER_INPUT_GUIDE.md             # 📖 User guide for parameters
 │   └── project_parameters_template.*        # 📋 Template files (created)
 ├── README.md                                # Complete usage documentation
 └── LICENSE                                  # MIT License
 
 ```
+
+**🧹 Repository Cleanup (Latest):** 
+- Removed 8 temporary test output directories (debug_output/, debug_visual/, dramatic_test/, enhanced_test/, geotechnical_test/, mini_workflow_test/, visible_test/, workflow_test/)
+- Cleaned up 33 unused test files and development artifacts
+- Removed obsolete test scripts (test_parameter_integration.py, test_pipeline_parameters.py)
+- Streamlined structure for production focus
 
 ## Key Components
 
@@ -53,7 +60,7 @@ This repository contains a **production-ready automated geotechnical engineering
 - **Key Parameters**:
   - Pipe properties (OD, wall thickness, SMYS, DOC)
   - Soil properties (friction angle, cohesion, unit weight)
-  - PGD characteristics (parallel/perpendicular to pipe)
+  - **PGD characteristics: Both parallel AND perpendicular to pipe orientations** ⭐ **ENHANCED**
 
 ### 2. PyGeoStudio Integration System ⭐ **NEW**
 - **Primary File**: `pygeostudio_interface.py`
@@ -428,6 +435,8 @@ After running the automated workflow, check the `analysis_results/` directory fo
 2. **Multi-Tier Analysis**: Automatic selection of best available analysis method
 3. **Decision Logic**: Engineering thresholds (FoS < 1.5) determine detailed analysis requirements
 4. **Pipeline Integration**: Soil springs calculations for critical configurations
+   - **Pipe Orientations**: Automatically evaluates BOTH parallel and perpendicular to slope orientations ⭐ **ENHANCED**
+   - **PGD Path Analysis**: Different loading mechanisms and failure modes for each orientation
 5. **Comprehensive Reporting**: Executive summaries, visualizations, recommendations with timelines/costs
 
 ### 🔧 **Development Guidelines**
