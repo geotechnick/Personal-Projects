@@ -1,0 +1,66 @@
+{
+  "configuration_id": "PARALLEL",
+  "slope_geometry": {
+    "angle_degrees": 35.0,
+    "height_ft": 60,
+    "horizontal_run_ft": 85.68888040452688,
+    "slope_length_ft": 104.60680773726588,
+    "bench_width_ft": 0,
+    "toe_distance_ft": 50
+  },
+  "soil_layers": [
+    {
+      "name": "Slope Material",
+      "unit_weight_pcf": 120,
+      "cohesion_total_psf": 200,
+      "cohesion_effective_psf": 100,
+      "friction_angle_degrees": 25,
+      "thickness_ft": 20
+    },
+    {
+      "name": "Foundation Material",
+      "unit_weight_pcf": 125,
+      "cohesion_total_psf": 400,
+      "cohesion_effective_psf": 200,
+      "friction_angle_degrees": 35,
+      "thickness_ft": 30
+    }
+  ],
+  "groundwater": {
+    "depth_below_surface_ft": 42
+  },
+  "pipeline": {
+    "diameter_in": 30.0,
+    "diameter_ft": 2.5,
+    "depth_of_cover_ft": 8.0,
+    "centerline_elevation_ft": -9.25
+  },
+  "boundary_points": [
+    [
+      -100,
+      -100
+    ],
+    [
+      265.6888804045269,
+      -100
+    ],
+    [
+      265.6888804045269,
+      60
+    ],
+    [
+      -100,
+      60
+    ],
+    [
+      -100,
+      -100
+    ]
+  ],
+  "analysis_results": {
+    "total_stress_fos": 1.8,
+    "effective_stress_fos": 1.6,
+    "requires_detailed_analysis": null,
+    "critical_slip_surface": false
+  }
+}

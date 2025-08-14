@@ -48,7 +48,8 @@ class SlopeGeometryVisualizer:
                                  config: SlopeConfiguration, 
                                  analysis_result: Optional[SlopeAnalysisResult] = None,
                                  pipe_diameter_in: float = 24.0,
-                                 pipe_depth_ft: float = 4.0) -> str:
+                                 pipe_depth_ft: float = 4.0,
+                                 pgd_path: str = "perpendicular") -> str:
         """
         Create comprehensive slope geometry plot with all elements
         
@@ -57,6 +58,7 @@ class SlopeGeometryVisualizer:
             analysis_result: Analysis results with failure surface
             pipe_diameter_in: Pipeline diameter in inches
             pipe_depth_ft: Pipeline depth of cover in feet
+            pgd_path: Pipeline orientation - "perpendicular" or "parallel" to slope
             
         Returns:
             Path to saved plot file
@@ -82,7 +84,7 @@ class SlopeGeometryVisualizer:
             self._plot_failure_surface(ax, analysis_result.critical_slip_surface, slope_points)
         
         # Plot pipeline location
-        self._plot_pipeline(ax, slope_points, pipe_diameter_in, pipe_depth_ft)
+        self._plot_pipeline(ax, slope_points, pipe_diameter_in, pipe_depth_ft, pgd_path)
         
         # Add dimensions and annotations
         self._add_dimensions_and_annotations(ax, config, analysis_result, pipe_diameter_in, pipe_depth_ft)
@@ -431,51 +433,118 @@ class SlopeGeometryVisualizer:
                        linewidth=8, alpha=0.3, zorder=14)  # Shadow effect
     
     def _plot_pipeline(self, ax, slope_points: List[Tuple[float, float]], 
-                      pipe_diameter_in: float, pipe_depth_ft: float):
-        """Plot pipeline location and details"""
+                      pipe_diameter_in: float, pipe_depth_ft: float, pgd_path: str = "perpendicular"):
+        """Plot pipeline location and details with support for parallel and perpendicular orientations"""
         
         # Convert diameter to feet
         pipe_diameter_ft = pipe_diameter_in / 12.0
         pipe_radius_ft = pipe_diameter_ft / 2.0
         
-        # Determine pipeline location (typically crossing the slope toe area)
+        # Determine pipeline location based on orientation
         x_coords = [p[0] for p in slope_points]
+        y_coords = [p[1] for p in slope_points]
         x_min, x_max = min(x_coords), max(x_coords)
+        y_min, y_max = min(y_coords), max(y_coords)
         
-        # Pipeline typically runs perpendicular to slope, across toe area
-        pipe_y = -pipe_depth_ft - pipe_radius_ft  # Pipe centerline elevation
-        pipe_x_start = x_min + 30
-        pipe_x_end = x_max - 30
-        
-        # Plot pipeline as a thick line
-        ax.plot([pipe_x_start, pipe_x_end], [pipe_y, pipe_y], 
-               color=self.pipe_color, linewidth=6, 
-               label=f'Pipeline ({pipe_diameter_in}" OD)')
-        
-        # Add pipeline circles at key locations to show cross-section
-        key_x_locations = [pipe_x_start + 20, 0, pipe_x_start + (pipe_x_end - pipe_x_start)*0.75]
-        
-        for x_loc in key_x_locations:
-            if pipe_x_start <= x_loc <= pipe_x_end:
-                pipe_circle = Circle((x_loc, pipe_y), pipe_radius_ft,
+        if pgd_path.lower() == "parallel":
+            # Pipeline follows the slope contour at specified depth below surface
+            # Extract slope geometry from slope_points to get actual slope angle
+            toe_x, toe_y = 0, 0  # Slope toe at origin
+            
+            # Find the slope crest point from slope_points
+            crest_x, crest_y = 0, 0
+            for x, y in slope_points:
+                if y > crest_y:  # Find highest point
+                    crest_x, crest_y = x, y
+            
+            # Create parallel pipeline that follows slope contour
+            slope_length = np.sqrt((crest_x - toe_x)**2 + (crest_y - toe_y)**2)
+            slope_angle_rad = np.arctan2(crest_y - toe_y, crest_x - toe_x)
+            
+            # Pipeline runs parallel to slope, offset by depth of cover
+            offset_x = pipe_depth_ft * np.sin(slope_angle_rad)  # Horizontal offset due to depth
+            offset_y = -pipe_depth_ft * np.cos(slope_angle_rad)  # Vertical offset due to depth
+            
+            # Start pipeline from a point partway up the slope
+            start_fraction = 0.2  # Start 20% up the slope
+            end_fraction = 0.8    # End 80% up the slope
+            
+            pipe_x_start = toe_x + start_fraction * (crest_x - toe_x) + offset_x
+            pipe_y_start = toe_y + start_fraction * (crest_y - toe_y) + offset_y
+            pipe_x_end = toe_x + end_fraction * (crest_x - toe_x) + offset_x  
+            pipe_y_end = toe_y + end_fraction * (crest_y - toe_y) + offset_y
+            
+            # Plot pipeline as a thick line following the slope
+            ax.plot([pipe_x_start, pipe_x_end], [pipe_y_start, pipe_y_end], 
+                   color=self.pipe_color, linewidth=6, 
+                   label=f'Pipeline ({pipe_diameter_in}" OD) - Parallel to Slope')
+            
+            # Add pipeline circles at key locations along the slope
+            num_circles = 3
+            for i in range(num_circles):
+                fraction = start_fraction + i * (end_fraction - start_fraction) / (num_circles - 1)
+                circle_x = toe_x + fraction * (crest_x - toe_x) + offset_x
+                circle_y = toe_y + fraction * (crest_y - toe_y) + offset_y
+                
+                pipe_circle = Circle((circle_x, circle_y), pipe_radius_ft,
                                    facecolor=self.pipe_color, alpha=0.3,
                                    edgecolor=self.pipe_color, linewidth=2)
                 ax.add_patch(pipe_circle)
+                
+            # Pipeline centerline for annotations
+            pipe_mid_x = (pipe_x_start + pipe_x_end) / 2
+            pipe_mid_y = (pipe_y_start + pipe_y_end) / 2
+            
+        else:
+            # Perpendicular orientation (original logic)
+            # Pipeline runs horizontally across the toe area
+            pipe_y = -pipe_depth_ft - pipe_radius_ft  # Pipe centerline elevation
+            pipe_x_start = x_min + 30
+            pipe_x_end = x_max - 30
+            
+            # Plot pipeline as a thick horizontal line
+            ax.plot([pipe_x_start, pipe_x_end], [pipe_y, pipe_y], 
+                   color=self.pipe_color, linewidth=6, 
+                   label=f'Pipeline ({pipe_diameter_in}" OD) - Perpendicular to Slope')
+            
+            # Add pipeline circles at key locations to show cross-section
+            key_x_locations = [pipe_x_start + 20, 0, pipe_x_start + (pipe_x_end - pipe_x_start)*0.75]
+            
+            for x_loc in key_x_locations:
+                if pipe_x_start <= x_loc <= pipe_x_end:
+                    pipe_circle = Circle((x_loc, pipe_y), pipe_radius_ft,
+                                       facecolor=self.pipe_color, alpha=0.3,
+                                       edgecolor=self.pipe_color, linewidth=2)
+                    ax.add_patch(pipe_circle)
+                    
+            # Pipeline centerline for annotations
+            pipe_mid_x = (pipe_x_start + pipe_x_end) / 2
+            pipe_mid_y = pipe_y
         
-        # Add pipeline annotations
-        mid_x = (pipe_x_start + pipe_x_end) / 2
-        ax.annotate(f'Pipeline\nOD = {pipe_diameter_in}"\nDOC = {pipe_depth_ft} ft',
-                   xy=(mid_x, pipe_y), xytext=(mid_x, pipe_y - 20),
+        # Add pipeline annotations (using calculated centerline coordinates)
+        orientation_text = "Parallel" if pgd_path.lower() == "parallel" else "Perpendicular"
+        ax.annotate(f'Pipeline ({orientation_text})\nOD = {pipe_diameter_in}"\nDOC = {pipe_depth_ft} ft',
+                   xy=(pipe_mid_x, pipe_mid_y), xytext=(pipe_mid_x, pipe_mid_y - 15),
                    ha='center', va='top', fontsize=9,
                    bbox=dict(boxstyle="round,pad=0.3", facecolor=self.pipe_color, alpha=0.2),
                    arrowprops=dict(arrowstyle='->', lw=1))
         
-        # Add depth of cover dimension
-        ax.annotate('', xy=(mid_x + 40, 0), xytext=(mid_x + 40, pipe_y + pipe_radius_ft),
-                   arrowprops=dict(arrowstyle='<->', lw=1.5, color='blue'))
-        ax.text(mid_x + 45, (0 + pipe_y + pipe_radius_ft)/2, f'{pipe_depth_ft} ft\nDOC', 
-               fontsize=8, color='blue', va='center', ha='left',
-               bbox=dict(boxstyle="round,pad=0.2", facecolor='lightblue', alpha=0.7))
+        # Add depth of cover dimension (adjusted for pipeline orientation)
+        if pgd_path.lower() == "parallel":
+            # For parallel pipelines, show DOC from surface to pipe center
+            surface_y = pipe_mid_y + pipe_depth_ft  # Approximate surface level at pipe location
+            ax.annotate('', xy=(pipe_mid_x + 15, surface_y), xytext=(pipe_mid_x + 15, pipe_mid_y + pipe_radius_ft),
+                       arrowprops=dict(arrowstyle='<->', lw=1.5, color='blue'))
+            ax.text(pipe_mid_x + 20, (surface_y + pipe_mid_y + pipe_radius_ft)/2, f'{pipe_depth_ft} ft\nDOC', 
+                   fontsize=8, color='blue', va='center', ha='left',
+                   bbox=dict(boxstyle="round,pad=0.2", facecolor='lightblue', alpha=0.7))
+        else:
+            # For perpendicular pipelines, show DOC from surface (y=0) to pipe center
+            ax.annotate('', xy=(pipe_mid_x + 40, 0), xytext=(pipe_mid_x + 40, pipe_mid_y + pipe_radius_ft),
+                       arrowprops=dict(arrowstyle='<->', lw=1.5, color='blue'))
+            ax.text(pipe_mid_x + 45, (0 + pipe_mid_y + pipe_radius_ft)/2, f'{pipe_depth_ft} ft\nDOC', 
+                   fontsize=8, color='blue', va='center', ha='left',
+                   bbox=dict(boxstyle="round,pad=0.2", facecolor='lightblue', alpha=0.7))
     
     def _add_dimensions_and_annotations(self, ax, config: SlopeConfiguration, 
                                       analysis_result: Optional[SlopeAnalysisResult],
@@ -693,7 +762,8 @@ class SlopeGeometryVisualizer:
                                   configurations: List[SlopeConfiguration],
                                   analysis_results: List[SlopeAnalysisResult] = None,
                                   pipe_diameter_in: float = 24.0,
-                                  pipe_depth_ft: float = 4.0) -> List[str]:
+                                  pipe_depth_ft: float = 4.0,
+                                  pgd_path: str = "perpendicular") -> List[str]:
         """
         Create slope geometry plots for multiple configurations
         
@@ -713,7 +783,7 @@ class SlopeGeometryVisualizer:
             result = analysis_results[i] if analysis_results and i < len(analysis_results) else None
             
             try:
-                filepath = self.create_slope_geometry_plot(config, result, pipe_diameter_in, pipe_depth_ft)
+                filepath = self.create_slope_geometry_plot(config, result, pipe_diameter_in, pipe_depth_ft, pgd_path)
                 created_files.append(filepath)
             except Exception as e:
                 print(f"Error creating plot for configuration {config.config_id}: {e}")
