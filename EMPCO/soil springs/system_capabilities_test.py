@@ -5,14 +5,14 @@ System Capabilities Test - Verify Static Values.xlsx customizability, coating su
 
 import openpyxl
 import pandas as pd
-from exact_soil_springs_calculator import ExactSoilSpringsCalculator
+from soil_springs_calculator import SoilSpringsCalculator
 
 def test_static_values_customizability():
     """Test what parameters can be customized in Static Values.xlsx"""
     print("🔍 STATIC VALUES.XLSX CUSTOMIZABILITY ANALYSIS")
     print("=" * 60)
     
-    calculator = ExactSoilSpringsCalculator()
+    calculator = SoilSpringsCalculator()
     pipe_assumptions = calculator.load_pipe_assumptions()
     
     customizable_params = []
@@ -48,7 +48,7 @@ def test_pipe_coating_support():
     print("\n🎨 PIPE COATING SUPPORT ANALYSIS")
     print("=" * 60)
     
-    calculator = ExactSoilSpringsCalculator()
+    calculator = SoilSpringsCalculator()
     
     print("✅ SUPPORTED COATINGS IN SYSTEM:")
     for coating, roughness in calculator.roughness_lookup.items():
@@ -84,7 +84,7 @@ def test_pgd_path_support():
     print("\n🔄 PGD PATH SUPPORT ANALYSIS")
     print("=" * 60)
     
-    calculator = ExactSoilSpringsCalculator()
+    calculator = SoilSpringsCalculator()
     
     # Load test soil layer
     soil_layers = calculator.load_soil_assumptions()

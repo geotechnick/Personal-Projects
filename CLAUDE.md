@@ -144,15 +144,14 @@ This repository contains **two distinct production-ready automated geotechnical 
   - GeoStudio CLI detection and execution
   - Automatic capability detection and graceful fallbacks
 
-### 6. Static Values Parametric Analysis System ⭐ **NEW** 
+### 6. Static Values Parametric Analysis System ⭐ **STREAMLINED** 
+- **Single Approach**: One calculator, one workflow, clear results
 - **Primary Files**:
-  - `soil springs/exact_soil_springs_calculator.py`: **Exact Excel formula implementation** ⭐ **ENHANCED**
-  - `soil springs/efficient_static_values_calculator.py`: Fast manual formula calculator
-  - `soil springs/static_values_iterator.py`: Basic parameter combination generator
-  - `soil springs/enhanced_static_values_iterator.py`: Excel integration calculator
+  - `soil springs/soil_springs_calculator.py`: **Single streamlined calculator using exact Excel formulas**
   - `soil springs/system_capabilities_test.py`: **System verification and capabilities testing** ⭐ **NEW**
-  - `soil springs/Static Values.xlsx`: Pipe and soil parameter assumptions
-  - `soil springs/Soil Springs_2024.xlsx`: Pipeline analysis spreadsheet
+  - `soil springs/read_soil_springs.py`: Formula extraction utility
+  - `soil springs/Static Values.xlsx`: **User parameter definitions** - modify min/max ranges here
+  - `soil springs/Soil Springs_2024.xlsx`: Pipeline analysis spreadsheet (source of formulas)
 - **Purpose**: Generate comprehensive parameter analysis for pipe-soil interaction studies
 - **Key Capabilities**:
   - **Parametric Generation**: All combinations of pipe DOC (1-25 ft) and Length (10-100 ft) in 1-foot increments
@@ -164,10 +163,9 @@ This repository contains **two distinct production-ready automated geotechnical 
   - Comprehensive stress analysis with "Exceeds" vs "Does Not Exceed" determination
   - Headers matching Excel cell layout (B3:B9, B13:B17, E3:E6 cell mappings)
 
-### 7. Python Utilities and Templates
+### 7. Templates and Utilities
 - **Files**: 
   - `soil springs/read_soil_springs.py`: Excel formula extraction utility
-  - `soil springs/soil_springs_extractor.py`: Headless soil springs parameter extraction
   - `slope stability/Slope Template/SlopeTemplate.gsz`: Main GeoStudio template for PyGeoStudio
   - `slope stability/Slope Template/uncompressed/SlopeTemplate.xml`: XML fallback template
 - **Purpose**: Support core analysis functions and provide templates
@@ -269,32 +267,35 @@ The new automated system provides a comprehensive workflow:
 
 ## Quick Start Guide
 
-### 🚀 Automatic Setup (Recommended)
+### 🏔️ Slope Stability Analysis
+
+**🚀 Automatic Setup:**
 ```bash
-cd EMPCO
+cd EMPCO/"slope stability"
 python setup_environment.py
 ```
-This will:
-- Install all required dependencies  
-- Detect PyGeoStudio availability
-- Check system capabilities
-- Create configuration file
-- Run system tests
-
-### Manual Installation
-```bash
-# Core dependencies
-pip install xlwings pandas matplotlib seaborn numpy openpyxl
-
-# PyGeoStudio for true GeoStudio integration (HIGHLY RECOMMENDED)
-pip install PyGeoStudio
-```
-
-### Analysis Execution
 
 **🎯 Quick Demo (10 configurations):**
 ```bash
 python automated_decision_workflow.py --limit 10
+```
+
+### ⚡ Soil Springs Analysis
+
+**📝 Single Command Approach:**
+1. **Define parameters** in `Static Values.xlsx` (modify min/max ranges)
+2. **Run analysis** with one command:
+
+```bash
+cd EMPCO/"soil springs"
+python soil_springs_calculator.py
+```
+
+3. **Review results** in `soil_springs_output/` directory
+
+**🔧 System Verification:**
+```bash
+python system_capabilities_test.py
 ```
 
 **⚡ Production Analysis (200+ configurations):**

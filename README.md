@@ -240,32 +240,15 @@ The **Static Values Analysis System** provides comprehensive parametric analysis
 
 ## Static Values Quick Start
 
-### Usage
+### **📝 Single Streamlined Approach**
 
-**⚡ Fast Parametric Analysis (RECOMMENDED):**
+1. **Define parameters** in `Static Values.xlsx`
+2. **Run the analysis** with one command
+3. **Get CSV results** with all combinations
+
 ```bash
 cd EMPCO/"soil springs"
-python efficient_static_values_calculator.py
-```
-
-**🧮 Exact Excel Formula Implementation (BEST):**
-```bash
-python exact_soil_springs_calculator.py
-```
-
-**📊 Basic Parameter Combinations:**
-```bash
-python static_values_iterator.py
-```
-
-**🧮 Enhanced Excel Integration (requires Excel):**
-```bash
-python enhanced_static_values_iterator.py
-```
-
-**🔍 Soil Springs Parameter Extraction:**
-```bash
-python soil_springs_extractor.py
+python soil_springs_calculator.py
 ```
 
 **🔧 System Capabilities Test:**
@@ -273,14 +256,19 @@ python soil_springs_extractor.py
 python system_capabilities_test.py
 ```
 
-**📊 Static Values Analysis Results:**
-Results are automatically saved to `efficient_static_values_output/` directory:
+**📖 Formula Documentation:**
+```bash
+python read_soil_springs.py
+```
+
+**📊 Analysis Results:**
+Results are automatically saved to `soil_springs_output/` directory:
 - **`Stiff_Fat_Clay_calculations.csv`**: 2,275 parameter combinations with stress analysis
 - **`Stiff_Lean_Clay_calculations.csv`**: Complete analysis for lean clay conditions
 - **`Dense_Silty_Sand_Clayey_Sand_calculations.csv`**: Sandy soil parametric analysis
 - **Key Features**: DOC (1-25 ft) and Length (10-100 ft) in 1-foot increments
 - **Stress Assessment**: Clear "Does Not Exceed" vs "Exceeds" allowable stress determination
-- **Engineering Standards**: Based on API RP 1111 and geotechnical engineering principles
+- **Engineering Standards**: Uses exact Excel formulas from Soil Springs_2024.xlsx
 
 ## 🔬 Static Values Analysis Details
 
@@ -415,11 +403,12 @@ python read_soil_springs.py
 
 ### Verify Static Values Analysis:
 ```bash
-# Test static values parametric analysis (FAST)
-python efficient_static_values_calculator.py
+# Test soil springs parametric analysis
+cd EMPCO/"soil springs"
+python soil_springs_calculator.py
 
-# Test soil springs parameter extraction
-python soil_springs_extractor.py
+# Test system capabilities
+python system_capabilities_test.py
 ```
 
 ### Cross-Check Against Manual Calculations:
@@ -459,19 +448,12 @@ EMPCO/
 │   └── project_parameters_template.*  # 📋 Template files (created)
 │
 ├── soil springs/                      # ⚡ SOIL SPRINGS ANALYSIS SYSTEM
-│   ├── exact_soil_springs_calculator.py # 🧮 Exact Excel formula implementation ⭐ BEST
-│   ├── efficient_static_values_calculator.py # ⚡ Fast parametric analysis
-│   ├── static_values_iterator.py     # 📊 Parameter combination generator
-│   ├── enhanced_static_values_iterator.py # 🧮 Excel integration calculator
-│   ├── soil_springs_extractor.py     # ⭐ Headless parameter extraction
+│   ├── soil_springs_calculator.py     # 🎯 Single streamlined calculator
 │   ├── read_soil_springs.py          # Formula extraction utility
-│   ├── system_capabilities_test.py    # 🔍 System verification tool ⭐ NEW
-│   ├── Static Values.xlsx            # 📋 Pipe and soil assumptions
+│   ├── system_capabilities_test.py    # 🔍 System verification tool
+│   ├── Static Values.xlsx            # 📋 Pipe and soil parameter definitions
 │   ├── Soil Springs_2024.xlsx        # Pipeline analysis spreadsheet
-│   ├── exact_soil_springs_output/     # 🧮 Exact calculation results ⭐ BEST
-│   ├── efficient_static_values_output/ # ⚡ Fast analysis results
-│   ├── enhanced_static_values_output/ # 🧮 Excel integration results
-│   └── static_values_output/          # 📈 Basic parameter combinations
+│   └── soil_springs_output/           # 📊 Analysis results (CSV files)
 │
 ├── examples/                          # 📁 Example configuration files
 ├── references/                        # 📚 Reference documents and manuals

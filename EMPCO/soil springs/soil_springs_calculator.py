@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Exact Soil Springs Calculator - Using Actual Excel Formulas
+Soil Springs Calculator
 Uses the exact formulas from Soil Springs_2024.xlsx for precise calculations.
+Single streamlined approach for pipe-soil interaction analysis.
 """
 
 import openpyxl
@@ -17,7 +18,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-class ExactSoilSpringsCalculator:
+class SoilSpringsCalculator:
     def __init__(self, static_values_path: str = "Static Values.xlsx"):
         """Initialize the calculator with Excel file path."""
         self.static_values_path = static_values_path
@@ -301,7 +302,7 @@ class ExactSoilSpringsCalculator:
         return combinations
     
     def save_combinations_to_csv(self, combinations: List[Dict[str, Any]], soil_layer_name: str, 
-                                output_dir: str = "exact_soil_springs_output") -> str:
+                                output_dir: str = "soil_springs_output") -> str:
         """Save parameter combinations with calculated results to CSV file."""
         if not combinations:
             logger.warning(f"No combinations to save for {soil_layer_name}")
@@ -310,7 +311,7 @@ class ExactSoilSpringsCalculator:
         os.makedirs(output_dir, exist_ok=True)
         
         safe_name = soil_layer_name.replace(' ', '_').replace('/', '_').replace('\\', '_')
-        csv_filename = os.path.join(output_dir, f"{safe_name}_exact_calculations.csv")
+        csv_filename = os.path.join(output_dir, f"{safe_name}_calculations.csv")
         
         # Define column order (matching Excel layout)
         column_order = [
@@ -334,7 +335,7 @@ class ExactSoilSpringsCalculator:
         logger.info(f"Saved {len(combinations)} combinations to {csv_filename}")
         return csv_filename
     
-    def run_complete_analysis(self, output_dir: str = "exact_soil_springs_output") -> List[str]:
+    def run_complete_analysis(self, output_dir: str = "soil_springs_output") -> List[str]:
         """Run the complete analysis with exact Excel calculations."""
         logger.info("Starting exact soil springs analysis using Excel formulas...")
         
@@ -358,14 +359,14 @@ class ExactSoilSpringsCalculator:
 
 def main():
     """Main execution function."""
-    calculator = ExactSoilSpringsCalculator()
+    calculator = SoilSpringsCalculator()
     
     # Load and display summary
     calculator.load_pipe_assumptions()
     calculator.load_soil_assumptions()
     
     print("\n" + "="*60)
-    print("EXACT SOIL SPRINGS CALCULATOR")
+    print("SOIL SPRINGS CALCULATOR")
     print("="*60)
     print(f"📁 Static Values File: {calculator.static_values_path}")
     print(f"🏔️ Soil Layers: {len(calculator.soil_layers)}")
@@ -379,11 +380,11 @@ def main():
     print(f"📊 Total combinations per soil layer: {total_combinations:,}")
     
     # Run analysis
-    print(f"\n🚀 Starting CSV generation with exact Excel calculations...")
+    print(f"\n🚀 Starting CSV generation with Excel formulas...")
     generated_files = calculator.run_complete_analysis()
     
-    print(f"\n✅ EXACT ANALYSIS COMPLETE!")
-    print(f"Generated {len(generated_files)} CSV files with exact Excel calculations:")
+    print(f"\n✅ ANALYSIS COMPLETE!")
+    print(f"Generated {len(generated_files)} CSV files:")
     for file_path in generated_files:
         print(f"  📄 {file_path}")
 
