@@ -20,6 +20,8 @@ The **EMPCO (Energy Management and Pipeline Consulting Operations)** project aut
 - **📊 Automated Parametric Analysis**: Tests hundreds of slope configurations varying angle (15-45°), height (20-100 ft), and soil properties  
 - **🎯 Decision Matrix Generation**: Automatically determines which configurations need detailed analysis based on Factor of Safety thresholds
 - **📋 Excel Integration**: Leverages existing `Soil Springs_2024.xlsx` calculations for pipeline analysis in background mode
+- **⚡ Static Values Analysis**: Comprehensive parametric analysis of pipe-soil interactions with 2,275+ combinations per soil layer ⭐ **NEW**
+- **🔧 Stress Assessment**: Automated determination of whether configurations exceed allowable stress limits
 - **📈 Comprehensive Reporting**: Executive summaries, visualization plots, priority classifications with timelines and costs
 - **⚡ Scalable Workflow**: From small studies (10 configs) to large parametric analyses (1000+ configs)
 - **🔄 Intelligent Fallbacks**: Graceful degradation when software unavailable with robust error handling
@@ -77,6 +79,21 @@ python automated_decision_workflow.py --limit 10
 python automated_decision_workflow.py --limit 200
 ```
 
+**⚡ Static Values Parametric Analysis:**
+```bash
+# Fast parametric analysis (RECOMMENDED - 2,275 combinations per soil layer)
+python efficient_static_values_calculator.py
+
+# Basic parameter combinations (static values only)
+python static_values_iterator.py
+
+# Enhanced Excel integration (requires Excel)
+python enhanced_static_values_iterator.py
+
+# Extract soil springs parameter combinations (9,000 total)
+python soil_springs_extractor.py
+```
+
 **🔧 Advanced Options:**
 ```bash
 # Custom output directory
@@ -90,11 +107,20 @@ python setup_environment.py
 ```
 
 **📊 View Results:**
-Results are automatically saved to `analysis_results/` directory with:
+
+**Slope Analysis Results** (saved to `analysis_results/`):
 - **CSV files**: Comprehensive decision matrices and recommendations
 - **Statistical plots**: Factor of Safety distributions and priority analysis  
 - **Slope geometry plots**: Detailed visualizations showing slope profiles, soil layers, failure surfaces, and pipeline locations
 - **Executive summary**: Management report with key findings and action items
+
+**Static Values Analysis Results** ⭐ **NEW** (saved to `efficient_static_values_output/`):
+- **`Stiff_Fat_Clay_calculations.csv`**: 2,275 parameter combinations with stress analysis
+- **`Stiff_Lean_Clay_calculations.csv`**: Complete analysis for lean clay conditions
+- **`Dense_Silty_Sand_Clayey_Sand_calculations.csv`**: Sandy soil parametric analysis
+- **Key Features**: DOC (1-25 ft) and Length (10-100 ft) in 1-foot increments
+- **Stress Assessment**: Clear "Does Not Exceed" vs "Exceeds" allowable stress determination
+- **Engineering Standards**: Based on API RP 1111 and geotechnical engineering principles
 
 ## 📋 Parameter Input Methods
 
@@ -205,6 +231,70 @@ The system automatically detects available capabilities and handles errors grace
 **📋 Reports:**
 - **`executive_summary.txt`**: Executive summary with key findings and recommendations
 
+## 🔬 Static Values Analysis Details ⭐ **NEW**
+
+### **Parametric Analysis Scope:**
+- **Total Configurations**: 2,275 parameter combinations per soil layer
+- **Pipe DOC Range**: 1-25 feet in 1-foot increments (25 values)
+- **Pipe Length Range**: 10-100 feet in 1-foot increments (91 values)
+- **Soil Layers**: 3 distinct soil types (Stiff Fat Clay, Stiff Lean Clay, Dense Silty Sand/Clayey Sand)
+- **Total Analysis**: 6,825 configurations across all soil types
+
+### **CSV Output Format:**
+Each CSV file contains the following columns (matching Excel Soil Springs_2024.xlsx layout):
+
+**📋 Input Parameters** (Excel cells B3:B9):
+- `Pipe OD (in)`: Pipe outer diameter (16 inches - static)
+- `Pipe wt (in)`: Wall thickness (0.375 inches - static)  
+- `Pipe SMYS (psi)`: Specified minimum yield strength (X-42 - static)
+- `Pipe DOC (ft)`: Depth of cover (1-25 ft - variable)
+- `Length of Pipe in PGD (ft)`: Length in permanent ground deformation zone (10-100 ft - variable)
+- `Pipe Coating`: Surface coating type (Rough Steel - static)
+- `Internal Pressure (psi)`: Operating pressure (1500 psi - static)
+
+**🌍 Soil Parameters** (Excel cells E3:E6):
+- `Soil Friction Angle (φ degrees)`: Internal friction angle (varies by soil type)
+- `Soil Cohesion (c, psf)`: Cohesive strength (varies by soil type)
+- `Soil Effective Unit Weight (γ', psf)`: Effective unit weight (varies by soil type)
+- `PGD Path (perpendicular/parallel to pipe)`: Loading orientation (Parallel - static)
+
+**⚙️ Calculated Results** (Excel cells B13:B17):
+- `Longitudinal Force (lb/ft)`: Soil resistance force per unit length
+- `Axial Stress (psi)`: Calculated axial stress in pipe wall
+- `Remaining Allowable Stress (psi)`: Available stress capacity before failure
+- `Allowable Pipe Length in PGD (ft)`: Maximum safe length for current conditions
+- `Exceeds Allowable`: **Critical determination: "Does Not Exceed" or "Exceeds"**
+
+### **Engineering Calculations:**
+The analysis uses advanced soil springs formulas based on:
+- **API RP 1111**: Recommended Practice for Design, Construction, and Inspection of Offshore Hydrocarbon Pipelines
+- **Geotechnical Standards**: Passive earth pressure theory, soil-structure interaction
+- **Pipeline Stress Analysis**: Combined axial and hoop stress calculations
+- **Safety Factors**: Industry-standard allowable stress criteria (72% of SMYS)
+
+### **Stress Assessment Logic:**
+- **"Does Not Exceed"**: Total applied stress ≤ Allowable stress (Safe operation)
+- **"Exceeds"**: Total applied stress > Allowable stress (Requires engineering attention)
+- **Conservative Approach**: Combines axial stress from soil loading with hoop stress from internal pressure
+
+### **Example Results by Soil Type:**
+
+**Stiff Fat Clay (CH)**:
+- Friction Angle: 26°, Cohesion: 100 psf, Unit Weight: 120 pcf
+- Example: DOC=1ft, Length=10ft → Axial Stress=258 psi → "Does Not Exceed"
+- Example: DOC=25ft, Length=100ft → Axial Stress=34,547 psi → "Exceeds"
+
+**Dense Silty Sand/Clayey Sand (SM/SC)**:
+- Friction Angle: 35°, Cohesion: 100 psf, Unit Weight: 120 pcf
+- Higher friction angle results in increased soil resistance
+- More configurations likely to exceed allowable stress limits
+
+### **Using the Results:**
+1. **Filter for "Exceeds" cases**: Focus on configurations requiring design modifications
+2. **Analyze DOC vs Length trends**: Identify safe operating envelopes  
+3. **Compare soil types**: Understand soil-dependent risk factors
+4. **Engineering Decision**: Use results for pipeline route planning and design optimization
+
 ### Priority Classifications:
 - **Critical (1)**: FoS < 1.0 or pipeline stress exceeds allowable - Immediate action (0-7 days)
 - **High (2)**: FoS < 1.2 - Short-term action (1-4 weeks)
@@ -245,6 +335,12 @@ python soil_springs_integration.py
 
 # Extract formulas for documentation  
 python read_soil_springs.py
+
+# Test static values parametric analysis (FAST)
+python efficient_static_values_calculator.py
+
+# Test soil springs parameter extraction
+python soil_springs_extractor.py
 ```
 
 ## Engineering Standards
@@ -269,6 +365,11 @@ EMPCO/
 ├── parameter_input_system.py         # 📋 User parameter input system
 ├── setup_environment.py              # 🚀 Automatic setup utility
 ├── read_soil_springs.py             # Formula extraction utility
+├── soil_springs_extractor.py        # ⭐ Headless soil springs extraction
+├── static_values_iterator.py        # 📊 Static values parameter combinations
+├── enhanced_static_values_iterator.py # 🧮 Enhanced Excel integration
+├── efficient_static_values_calculator.py # ⚡ Fast parametric analysis
+├── Static Values.xlsx               # 📋 Pipe and soil assumptions
 ├── Soil Springs_2024.xlsx           # Pipeline analysis spreadsheet
 ├── Slope Template/                   # GeoStudio templates
 │   ├── SlopeTemplate.gsz            # ⭐ Main template for PyGeoStudio
@@ -280,6 +381,9 @@ EMPCO/
 ├── references/                       # 📚 Reference documents and manuals
 ├── analysis_results/                 # 📊 Output directory (created)
 ├── test_output/                      # Test results directory (empty after cleanup)
+├── static_values_output/             # 📈 Static values basic output
+├── enhanced_static_values_output/    # 🧮 Enhanced Excel calculations
+├── efficient_static_values_output/   # ⚡ Fast parametric analysis results
 ├── system_config.json               # System capabilities config
 ├── PARAMETER_INPUT_GUIDE.md          # 📖 User guide for parameters
 └── project_parameters_template.*     # 📋 Template files (created)

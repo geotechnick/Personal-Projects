@@ -19,6 +19,11 @@ This repository contains a **production-ready automated geotechnical engineering
 │   ├── parameter_input_system.py           # 📋 User parameter input system
 │   ├── setup_environment.py                # 🚀 Automatic environment setup
 │   ├── read_soil_springs.py                 # Excel formula extraction utility
+│   ├── soil_springs_extractor.py           # ⭐ Headless soil springs parameter extraction
+│   ├── static_values_iterator.py           # 📊 Static values parameter combination generator
+│   ├── enhanced_static_values_iterator.py  # 🧮 Enhanced Excel integration calculator
+│   ├── efficient_static_values_calculator.py # ⚡ Fast manual formula calculator
+│   ├── Static Values.xlsx                  # 📋 Pipe and soil parameter assumptions
 │   ├── Slope Template/                      # GeoStudio templates
 │   │   ├── SlopeTemplate.gsz                # ⭐ Main template for PyGeoStudio
 │   │   └── uncompressed/                    # XML fallback data
@@ -36,6 +41,9 @@ This repository contains a **production-ready automated geotechnical engineering
 │   ├── system_config.json                   # System capabilities configuration
 │   ├── analysis_results/                    # 📊 Output directory (auto-created)
 │   ├── test_output/                         # Test results directory (cleaned)
+│   ├── static_values_output/                # 📈 Static values basic output
+│   ├── enhanced_static_values_output/       # 🧮 Enhanced Excel calculations output
+│   ├── efficient_static_values_output/     # ⚡ Efficient calculations output
 │   ├── PARAMETER_INPUT_GUIDE.md             # 📖 User guide for parameters
 │   └── project_parameters_template.*        # 📋 Template files (created)
 ├── README.md                                # Complete usage documentation
@@ -118,9 +126,27 @@ This repository contains a **production-ready automated geotechnical engineering
   - GeoStudio CLI detection and execution
   - Automatic capability detection and graceful fallbacks
 
-### 6. Python Utilities and Templates
+### 6. Static Values Parametric Analysis System ⭐ **NEW**
+- **Primary Files**:
+  - `efficient_static_values_calculator.py`: Fast manual formula calculator
+  - `static_values_iterator.py`: Basic parameter combination generator
+  - `enhanced_static_values_iterator.py`: Excel integration calculator
+  - `Static Values.xlsx`: Pipe and soil parameter assumptions
+- **Purpose**: Generate comprehensive parameter analysis for pipe-soil interaction studies
+- **Key Capabilities**:
+  - **Parametric Generation**: All combinations of pipe DOC (1-25 ft) and Length (10-100 ft) in 1-foot increments
+  - **Multi-Soil Analysis**: Separate analysis for each soil layer (Stiff Fat Clay, Stiff Lean Clay, Dense Silty Sand)
+  - **Stress Assessment**: Calculates whether configurations exceed allowable stress limits
+  - **Engineering Calculations**: Advanced soil springs formulas based on API RP 1111 standards
+- **Output Formats**:
+  - Individual CSV files per soil layer with 2,275+ parameter combinations each
+  - Comprehensive stress analysis with "Exceeds" vs "Does Not Exceed" determination
+  - Headers matching Excel cell layout (B3:B9, B13:B17, E3:E6 cell mappings)
+
+### 7. Python Utilities and Templates
 - **Files**: 
   - `read_soil_springs.py`: Excel formula extraction utility
+  - `soil_springs_extractor.py`: Headless soil springs parameter extraction
   - `Slope Template/SlopeTemplate.gsz`: Main GeoStudio template for PyGeoStudio
   - `Slope Template/uncompressed/SlopeTemplate.xml`: XML fallback template
 - **Purpose**: Support core analysis functions and provide templates
@@ -129,7 +155,7 @@ This repository contains a **production-ready automated geotechnical engineering
   - Effective Stress analysis  
 - **Usage**: Automated parameter modification and formula documentation
 
-### 7. Reference Documentation and Examples
+### 8. Reference Documentation and Examples
 - **`references/`**: Complete collection of technical manuals, procedures, and standards
   - Bank Stability Assessment Manual (Draft WCP)
   - VIV Evaluation Procedure  
@@ -280,6 +306,15 @@ python geostudio_cli_interface.py
 
 # Extract Excel formulas for documentation
 python read_soil_springs.py
+
+# Run Static Values parametric analysis (FAST - recommended)
+python efficient_static_values_calculator.py
+
+# Run basic Static Values parameter combinations
+python static_values_iterator.py
+
+# Run enhanced Static Values with Excel integration (requires Excel)
+python enhanced_static_values_iterator.py
 ```
 
 ### Analysis Outputs
@@ -311,6 +346,19 @@ After running the automated workflow, check the `analysis_results/` directory fo
 - **`executive_summary.txt`**: Executive summary with key findings and recommendations
 - **`workflow_YYYYMMDD_HHMMSS.log`**: Detailed execution log
 - **`system_config.json`**: System capabilities configuration
+
+**⚡ Static Values Analysis Results:** ⭐ **NEW**
+After running Static Values analysis, check the output directories:
+- **`efficient_static_values_output/`** (FAST - recommended):
+  - `Stiff_Fat_Clay_calculations.csv`: 2,275 parameter combinations with stress analysis
+  - `Stiff_Lean_Clay_calculations.csv`: Complete parametric analysis for lean clay
+  - `Dense_Silty_Sand_Clayey_Sand_calculations.csv`: Sandy soil analysis results
+- **Key CSV Columns**:
+  - Input Parameters: Pipe OD, Wall Thickness, DOC (1-25 ft), Length (10-100 ft)
+  - Soil Properties: Friction Angle, Cohesion, Unit Weight, PGD Path
+  - Calculated Results: Longitudinal Force, Axial Stress, Remaining Allowable Stress
+  - **Stress Assessment**: "Does Not Exceed" vs "Exceeds" allowable stress determination
+- **Analysis Scope**: 2,275 combinations per soil layer = 6,825 total configurations
 
 ### Validation and Quality Assurance
 - **Manual Cross-Check**: Compare automated Factor of Safety results with manual GeoStudio runs
@@ -452,6 +500,8 @@ After running the automated workflow, check the `analysis_results/` directory fo
 - **Production Run**: `python automated_decision_workflow.py --limit 200`
 - **Custom Analysis**: `python automated_decision_workflow.py --config-json "project.json" --limit 50`
 - **Fast Processing**: `python automated_decision_workflow.py --no-plots --limit 100` (skips visualizations)
+- **Static Values Analysis**: `python efficient_static_values_calculator.py` (2,275 combinations per soil layer)
+- **Soil Springs Extraction**: `python soil_springs_extractor.py` (9,000 parameter combinations)
 - **Capability Check**: System automatically detects PyGeoStudio, Excel, GeoStudio CLI availability
 
 ### 🚀 **Production Readiness**
