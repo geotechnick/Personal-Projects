@@ -1,34 +1,52 @@
 # CLAUDE.md - Personal Projects
 
 ## Project Overview
-This repository contains a **production-ready automated geotechnical engineering analysis system** focused on the EMPCO (Energy Management and Pipeline Consulting Operations) project. The system provides **true headless GeoStudio integration** via PyGeoStudio for automated slope stability analysis, combined with Excel-based soil springs calculations to generate comprehensive engineering decision matrices.
+This repository contains **two distinct production-ready automated geotechnical engineering analysis systems** focused on the EMPCO (Energy Management and Pipeline Consulting Operations) project:
 
-**🚀 Key Innovation**: The system uses PyGeoStudio for direct .gsz file manipulation, enabling real GeoStudio slope stability analysis without GUI interaction - suitable for batch processing, server deployment, and large-scale parametric studies.
+1. **🏔️ Slope Stability Analysis System**: True headless GeoStudio integration via PyGeoStudio for automated slope stability analysis
+2. **⚡ Soil Springs Parametric Analysis System**: Excel-based soil springs calculations for comprehensive pipe-soil interaction analysis
+
+**🚀 Key Innovations**: 
+- **PyGeoStudio Integration**: Direct .gsz file manipulation for real GeoStudio slope stability analysis without GUI
+- **Comprehensive SMYS Support**: All 5 industry-standard pipe grades (Grade B, X-42, X-52, X-60, X-70)
+- **Complete Coating Library**: All 6 major pipe coating types with accurate roughness coefficients
+- **Dual PGD Path Analysis**: Both parallel and perpendicular permanent ground deformation orientations
 
 ## Project Structure
 ```
 /workspaces/Personal-Projects/
 ├── EMPCO/                                    # Main engineering project directory
-│   ├── automated_decision_workflow.py       # 🎯 Main workflow orchestrator
-│   ├── slope_stability_automation.py        # Slope analysis engine with PyGeoStudio
-│   ├── pygeostudio_interface.py            # ⭐ PyGeoStudio integration
-│   ├── soil_springs_integration.py          # Excel integration with headless mode
-│   ├── slope_geometry_visualizer.py         # ⭐ Advanced slope geometry visualization system
-│   ├── headless_excel_analyzer.py          # Headless Excel processing alternatives
-│   ├── geostudio_cli_interface.py          # GeoStudio CLI fallback methods
-│   ├── parameter_input_system.py           # 📋 User parameter input system
-│   ├── setup_environment.py                # 🚀 Automatic environment setup
-│   ├── read_soil_springs.py                 # Excel formula extraction utility
-│   ├── soil_springs_extractor.py           # ⭐ Headless soil springs parameter extraction
-│   ├── static_values_iterator.py           # 📊 Static values parameter combination generator
-│   ├── enhanced_static_values_iterator.py  # 🧮 Enhanced Excel integration calculator
-│   ├── efficient_static_values_calculator.py # ⚡ Fast manual formula calculator
-│   ├── Static Values.xlsx                  # 📋 Pipe and soil parameter assumptions
-│   ├── Slope Template/                      # GeoStudio templates
-│   │   ├── SlopeTemplate.gsz                # ⭐ Main template for PyGeoStudio
-│   │   └── uncompressed/                    # XML fallback data
-│   │       └── SlopeTemplate.xml            # XML template for CLI methods
-│   ├── Soil Springs_2024.xlsx               # Pipeline analysis spreadsheet
+│   ├── slope stability/                     # 🏔️ SLOPE STABILITY ANALYSIS SYSTEM
+│   │   ├── automated_decision_workflow.py   # 🎯 Main workflow orchestrator
+│   │   ├── slope_stability_automation.py    # Slope analysis engine with PyGeoStudio
+│   │   ├── pygeostudio_interface.py        # ⭐ PyGeoStudio integration
+│   │   ├── soil_springs_integration.py      # Excel integration with headless mode
+│   │   ├── slope_geometry_visualizer.py     # ⭐ Advanced slope geometry visualization system
+│   │   ├── headless_excel_analyzer.py      # Headless Excel processing alternatives
+│   │   ├── geostudio_cli_interface.py      # GeoStudio CLI fallback methods
+│   │   ├── parameter_input_system.py       # 📋 User parameter input system
+│   │   ├── setup_environment.py            # 🚀 Automatic environment setup
+│   │   ├── Slope Template/                  # GeoStudio templates
+│   │   │   ├── SlopeTemplate.gsz            # ⭐ Main template for PyGeoStudio
+│   │   │   └── uncompressed/                # XML fallback data
+│   │   │       └── SlopeTemplate.xml        # XML template for CLI methods
+│   │   ├── analysis_results/                # 📊 Slope analysis output directory
+│   │   ├── test_output/                     # Test results directory
+│   │   └── project_parameters_template.*    # 📋 Template files (created)
+│   ├── soil springs/                        # ⚡ SOIL SPRINGS ANALYSIS SYSTEM
+│   │   ├── exact_soil_springs_calculator.py # 🧮 Exact Excel formula implementation
+│   │   ├── efficient_static_values_calculator.py # ⚡ Fast parametric analysis
+│   │   ├── static_values_iterator.py       # 📊 Parameter combination generator
+│   │   ├── enhanced_static_values_iterator.py # 🧮 Excel integration calculator
+│   │   ├── soil_springs_extractor.py       # ⭐ Headless parameter extraction
+│   │   ├── read_soil_springs.py            # Excel formula extraction utility
+│   │   ├── system_capabilities_test.py     # 🔍 System verification tool
+│   │   ├── Static Values.xlsx              # 📋 Pipe and soil parameter assumptions
+│   │   ├── Soil Springs_2024.xlsx          # Pipeline analysis spreadsheet
+│   │   ├── exact_soil_springs_output/       # 🧮 Exact calculation results
+│   │   ├── efficient_static_values_output/  # ⚡ Fast analysis results
+│   │   ├── enhanced_static_values_output/   # 🧮 Excel integration results
+│   │   └── static_values_output/            # 📈 Basic parameter combinations
 │   ├── examples/                            # 📁 Example configuration files
 │   │   ├── example_project_config.json      # Complete project example
 │   │   ├── simple_config.yaml               # Minimal configuration
@@ -38,40 +56,40 @@ This repository contains a **production-ready automated geotechnical engineering
 │   │   ├── *.docx                           # Documentation and reports
 │   │   ├── *.txt                            # Analysis outputs and explanations
 │   │   └── README.md                        # References documentation
-│   ├── system_config.json                   # System capabilities configuration
-│   ├── analysis_results/                    # 📊 Output directory (auto-created)
-│   ├── test_output/                         # Test results directory (cleaned)
-│   ├── static_values_output/                # 📈 Static values basic output
-│   ├── enhanced_static_values_output/       # 🧮 Enhanced Excel calculations output
-│   ├── efficient_static_values_output/     # ⚡ Efficient calculations output
-│   ├── PARAMETER_INPUT_GUIDE.md             # 📖 User guide for parameters
-│   └── project_parameters_template.*        # 📋 Template files (created)
+│   └── PARAMETER_INPUT_GUIDE.md             # 📖 User guide for parameters
 ├── README.md                                # Complete usage documentation
 └── LICENSE                                  # MIT License
 
 ```
 
-**🧹 Repository Cleanup (Latest):** 
-- Removed 8 temporary test output directories (debug_output/, debug_visual/, dramatic_test/, enhanced_test/, geotechnical_test/, mini_workflow_test/, visible_test/, workflow_test/)
-- Cleaned up 33 unused test files and development artifacts
-- Removed obsolete test scripts (test_parameter_integration.py, test_pipeline_parameters.py)
-- Streamlined structure for production focus
+**🧹 Repository Organization (Latest):** 
+- **Organized into two distinct systems**: `slope stability/` and `soil springs/` folders for clear separation
+- **Complete SMYS support verification**: All 5 industry-standard pipe grades (Grade B, X-42, X-52, X-60, X-70)
+- **Comprehensive coating library**: All 6 major pipe coating types with accurate roughness coefficients
+- **Dual PGD path validation**: Both parallel and perpendicular orientations fully operational
+- **System capabilities testing**: Automated verification of all supported features
 
 ## Key Components
 
-### 1. Soil Springs Analysis (`EMPCO/`)
+### 1. Soil Springs Analysis System (`soil springs/`)
 - **Primary Tool**: `Soil Springs_2024.xlsx`
 - **Purpose**: Calculate soil spring properties for pipeline analysis under Permanent Ground Deformation (PGD)
-- **Sheets**:
-  - `Input&Summary`: User input parameters and results summary
-  - `Calcs`: Detailed engineering calculations
+- **Complete System Capabilities** ⭐ **VERIFIED**:
+  - **All 5 SMYS Grades**: Grade B (35k), X-42 (42k), X-52 (52k), X-60 (60k), X-70 (70k) psi
+  - **All 6 Pipe Coatings**: Polyethylene (0.6), FBE (0.6), Smooth Steel (0.7), Rough Steel (0.8), Coal Tar (0.9), Concrete (1.0) roughness coefficients
+  - **Both PGD Orientations**: Parallel and Perpendicular to pipe with realistic force ratios (1.5x multiplier)
+  - **Parametric Analysis**: 2,275 combinations per soil layer (DOC 1-25 ft × Length 10-100 ft)
+- **Analysis Types**:
+  - **Exact Excel Implementation**: Precise replication of Soil Springs_2024.xlsx formulas
+  - **Fast Parametric Analysis**: 6,825+ total combinations across 3 soil types
+  - **Stress Assessment**: Automatic "Exceeds" vs "Does Not Exceed" determination
 - **Key Parameters**:
-  - Pipe properties (OD, wall thickness, SMYS, DOC)
+  - Pipe properties (OD, wall thickness, SMYS, DOC, coating, pressure)
   - Soil properties (friction angle, cohesion, unit weight)
   - **PGD characteristics: Both parallel AND perpendicular to pipe orientations** ⭐ **ENHANCED**
 
 ### 2. PyGeoStudio Integration System ⭐ **NEW**
-- **Primary File**: `pygeostudio_interface.py`
+- **Primary File**: `slope stability/pygeostudio_interface.py`
 - **Purpose**: True headless GeoStudio analysis via PyGeoStudio library
 - **Key Capabilities**:
   - **Direct .gsz Manipulation**: Read/modify GeoStudio files without GUI
@@ -81,9 +99,9 @@ This repository contains a **production-ready automated geotechnical engineering
 
 ### 3. Automated Decision Workflow System  
 - **Primary Files**: 
-  - `automated_decision_workflow.py`: Main workflow orchestrator with PyGeoStudio
-  - `slope_stability_automation.py`: Enhanced analysis engine with multi-tier capabilities
-  - `soil_springs_integration.py`: Headless Excel integration
+  - `slope stability/automated_decision_workflow.py`: Main workflow orchestrator with PyGeoStudio
+  - `slope stability/slope_stability_automation.py`: Enhanced analysis engine with multi-tier capabilities
+  - `slope stability/soil_springs_integration.py`: Headless Excel integration
 - **Purpose**: Generate comprehensive decision matrices for slope configurations
 - **Analysis Hierarchy**:
   1. **PyGeoStudio** (Best): Real GeoStudio analysis without GUI
@@ -99,7 +117,7 @@ This repository contains a **production-ready automated geotechnical engineering
   - Executive summary and visualization reports
 
 ### 4. Advanced Slope Geometry Visualization System ⭐ **NEW**
-- **Primary File**: `slope_geometry_visualizer.py`
+- **Primary File**: `slope stability/slope_geometry_visualizer.py`
 - **Purpose**: Generate detailed engineering visualizations of slope configurations, soil strata, failure surfaces, and pipeline locations
 - **Key Capabilities**:
   - **Comprehensive Slope Plots**: Accurate geometry with dimensions and engineering annotations
@@ -116,9 +134,9 @@ This repository contains a **production-ready automated geotechnical engineering
 
 ### 5. Headless Processing Systems
 - **Files**: 
-  - `headless_excel_analyzer.py`: Alternative Excel processing without visible interface
-  - `geostudio_cli_interface.py`: GeoStudio command-line integration
-  - `setup_environment.py`: Automatic environment setup and capability detection
+  - `slope stability/headless_excel_analyzer.py`: Alternative Excel processing without visible interface
+  - `slope stability/geostudio_cli_interface.py`: GeoStudio command-line integration
+  - `slope stability/setup_environment.py`: Automatic environment setup and capability detection
 - **Purpose**: Enable truly headless operation for batch processing and server deployment
 - **Key Features**:
   - Excel background processing with `xlwings` (visible=False)
@@ -126,12 +144,15 @@ This repository contains a **production-ready automated geotechnical engineering
   - GeoStudio CLI detection and execution
   - Automatic capability detection and graceful fallbacks
 
-### 6. Static Values Parametric Analysis System ⭐ **NEW**
+### 6. Static Values Parametric Analysis System ⭐ **NEW** 
 - **Primary Files**:
-  - `efficient_static_values_calculator.py`: Fast manual formula calculator
-  - `static_values_iterator.py`: Basic parameter combination generator
-  - `enhanced_static_values_iterator.py`: Excel integration calculator
-  - `Static Values.xlsx`: Pipe and soil parameter assumptions
+  - `soil springs/exact_soil_springs_calculator.py`: **Exact Excel formula implementation** ⭐ **ENHANCED**
+  - `soil springs/efficient_static_values_calculator.py`: Fast manual formula calculator
+  - `soil springs/static_values_iterator.py`: Basic parameter combination generator
+  - `soil springs/enhanced_static_values_iterator.py`: Excel integration calculator
+  - `soil springs/system_capabilities_test.py`: **System verification and capabilities testing** ⭐ **NEW**
+  - `soil springs/Static Values.xlsx`: Pipe and soil parameter assumptions
+  - `soil springs/Soil Springs_2024.xlsx`: Pipeline analysis spreadsheet
 - **Purpose**: Generate comprehensive parameter analysis for pipe-soil interaction studies
 - **Key Capabilities**:
   - **Parametric Generation**: All combinations of pipe DOC (1-25 ft) and Length (10-100 ft) in 1-foot increments
@@ -145,10 +166,10 @@ This repository contains a **production-ready automated geotechnical engineering
 
 ### 7. Python Utilities and Templates
 - **Files**: 
-  - `read_soil_springs.py`: Excel formula extraction utility
-  - `soil_springs_extractor.py`: Headless soil springs parameter extraction
-  - `Slope Template/SlopeTemplate.gsz`: Main GeoStudio template for PyGeoStudio
-  - `Slope Template/uncompressed/SlopeTemplate.xml`: XML fallback template
+  - `soil springs/read_soil_springs.py`: Excel formula extraction utility
+  - `soil springs/soil_springs_extractor.py`: Headless soil springs parameter extraction
+  - `slope stability/Slope Template/SlopeTemplate.gsz`: Main GeoStudio template for PyGeoStudio
+  - `slope stability/Slope Template/uncompressed/SlopeTemplate.xml`: XML fallback template
 - **Purpose**: Support core analysis functions and provide templates
 - **Analysis Types**: 
   - Total Stress analysis (Spencer method)

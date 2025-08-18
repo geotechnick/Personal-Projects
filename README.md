@@ -40,7 +40,7 @@ The **EMPCO (Energy Management and Pipeline Consulting Operations)** slope stabi
 
 **🚀 Automatic Setup (Recommended):**
 ```bash
-cd EMPCO
+cd EMPCO/"slope stability"
 python setup_environment.py
 ```
 
@@ -77,7 +77,7 @@ pip install PyGeoStudio
 
 **🎯 Quick Demo (10 slope configurations):**
 ```bash
-cd EMPCO
+cd EMPCO/"slope stability"
 python automated_decision_workflow.py --limit 10
 ```
 
@@ -244,8 +244,13 @@ The **Static Values Analysis System** provides comprehensive parametric analysis
 
 **⚡ Fast Parametric Analysis (RECOMMENDED):**
 ```bash
-cd EMPCO
+cd EMPCO/"soil springs"
 python efficient_static_values_calculator.py
+```
+
+**🧮 Exact Excel Formula Implementation (BEST):**
+```bash
+python exact_soil_springs_calculator.py
 ```
 
 **📊 Basic Parameter Combinations:**
@@ -263,6 +268,11 @@ python enhanced_static_values_iterator.py
 python soil_springs_extractor.py
 ```
 
+**🔧 System Capabilities Test:**
+```bash
+python system_capabilities_test.py
+```
+
 **📊 Static Values Analysis Results:**
 Results are automatically saved to `efficient_static_values_output/` directory:
 - **`Stiff_Fat_Clay_calculations.csv`**: 2,275 parameter combinations with stress analysis
@@ -274,12 +284,39 @@ Results are automatically saved to `efficient_static_values_output/` directory:
 
 ## 🔬 Static Values Analysis Details
 
+### **🚀 Complete System Capabilities** ⭐ **VERIFIED**
+
+**🔧 All SMYS Grades Supported (5 total):**
+- Grade B: 35,000 psi
+- X-42: 42,000 psi  
+- X-52: 52,000 psi
+- X-60: 60,000 psi
+- X-70: 70,000 psi
+
+**🎨 All Pipe Coatings Supported (6 total):**
+- Polyethylene: 0.6 roughness coefficient
+- Fusion Bonded Epoxy: 0.6 roughness coefficient
+- Smooth Steel: 0.7 roughness coefficient
+- Rough Steel: 0.8 roughness coefficient (currently active)
+- Coal Tar: 0.9 roughness coefficient
+- Concrete: 1.0 roughness coefficient
+
+**🔄 Both PGD Paths Operational:**
+- **Parallel to Pipe**: Longitudinal force calculations
+- **Perpendicular to Pipe**: Transverse force (1.5× multiplier) 
+- **Force Ratio**: Perpendicular = 1.50 × Parallel (validated)
+
 ### **Parametric Analysis Scope:**
 - **Total Configurations**: 2,275 parameter combinations per soil layer
 - **Pipe DOC Range**: 1-25 feet in 1-foot increments (25 values)
 - **Pipe Length Range**: 10-100 feet in 1-foot increments (91 values)
 - **Soil Layers**: 3 distinct soil types (Stiff Fat Clay, Stiff Lean Clay, Dense Silty Sand/Clayey Sand)
 - **Total Analysis**: 6,825 configurations across all soil types
+
+### **🎯 Customizability Options:**
+- **✅ Variable Parameters**: DOC (1-25 ft), Length (10-100 ft)
+- **❌ Static Parameters**: OD (16"), wt (0.375"), SMYS (X-42), Coating (Rough Steel), Pressure (1500 psi)
+- **📝 Easy Expansion**: Modify Static Values.xlsx to change min≠max for any parameter
 
 ### **CSV Output Format:**
 Each CSV file contains the following columns (matching Excel Soil Springs_2024.xlsx layout):
@@ -404,46 +441,42 @@ Both systems follow established engineering practices:
 
 ```
 EMPCO/
-├── # SLOPE STABILITY SYSTEM
-├── automated_decision_workflow.py    # 🎯 Main workflow orchestrator
-├── slope_stability_automation.py     # Slope analysis engine  
-├── pygeostudio_interface.py         # ⭐ PyGeoStudio integration
-├── soil_springs_integration.py       # Excel integration
-├── slope_geometry_visualizer.py      # ⭐ Advanced slope geometry visualization
-├── parameter_input_system.py         # 📋 User parameter input system
-├── 
-├── # STATIC VALUES SYSTEM
-├── efficient_static_values_calculator.py # ⚡ Fast parametric analysis
-├── static_values_iterator.py        # 📊 Static values parameter combinations
-├── enhanced_static_values_iterator.py # 🧮 Enhanced Excel integration
-├── soil_springs_extractor.py        # ⭐ Headless soil springs extraction
-├── Static Values.xlsx               # 📋 Pipe and soil assumptions
-├── 
-├── # SHARED COMPONENTS
-├── headless_excel_analyzer.py        # Headless Excel processing
-├── geostudio_cli_interface.py        # GeoStudio CLI fallback
-├── setup_environment.py              # 🚀 Automatic setup utility
-├── read_soil_springs.py             # Formula extraction utility
-├── Soil Springs_2024.xlsx           # Pipeline analysis spreadsheet
-├── 
-├── # TEMPLATES & DATA
-├── Slope Template/                   # GeoStudio templates
-│   ├── SlopeTemplate.gsz            # ⭐ Main template for PyGeoStudio
-│   └── uncompressed/SlopeTemplate.xml # XML fallback
-├── examples/                         # 📁 Example configuration files
-├── references/                       # 📚 Reference documents and manuals
-├── 
-├── # OUTPUT DIRECTORIES
-├── analysis_results/                 # 📊 Slope analysis output
-├── static_values_output/             # 📈 Static values basic output
-├── enhanced_static_values_output/    # 🧮 Enhanced Excel calculations
-├── efficient_static_values_output/   # ⚡ Fast parametric analysis results
-├── test_output/                      # Test results directory
-├── 
-├── # CONFIGURATION & DOCUMENTATION
-├── system_config.json               # System capabilities config
-├── PARAMETER_INPUT_GUIDE.md          # 📖 User guide for parameters
-└── project_parameters_template.*     # 📋 Template files (created)
+├── slope stability/                   # 🏔️ SLOPE STABILITY ANALYSIS SYSTEM
+│   ├── automated_decision_workflow.py # 🎯 Main workflow orchestrator
+│   ├── slope_stability_automation.py  # Slope analysis engine  
+│   ├── pygeostudio_interface.py      # ⭐ PyGeoStudio integration
+│   ├── soil_springs_integration.py    # Excel integration
+│   ├── slope_geometry_visualizer.py   # ⭐ Advanced slope geometry visualization
+│   ├── parameter_input_system.py      # 📋 User parameter input system
+│   ├── headless_excel_analyzer.py     # Headless Excel processing
+│   ├── geostudio_cli_interface.py     # GeoStudio CLI fallback
+│   ├── setup_environment.py           # 🚀 Automatic setup utility
+│   ├── Slope Template/                # GeoStudio templates
+│   │   ├── SlopeTemplate.gsz         # ⭐ Main template for PyGeoStudio
+│   │   └── uncompressed/SlopeTemplate.xml # XML fallback
+│   ├── analysis_results/              # 📊 Slope analysis output
+│   ├── test_output/                   # Test results directory
+│   └── project_parameters_template.*  # 📋 Template files (created)
+│
+├── soil springs/                      # ⚡ SOIL SPRINGS ANALYSIS SYSTEM
+│   ├── exact_soil_springs_calculator.py # 🧮 Exact Excel formula implementation ⭐ BEST
+│   ├── efficient_static_values_calculator.py # ⚡ Fast parametric analysis
+│   ├── static_values_iterator.py     # 📊 Parameter combination generator
+│   ├── enhanced_static_values_iterator.py # 🧮 Excel integration calculator
+│   ├── soil_springs_extractor.py     # ⭐ Headless parameter extraction
+│   ├── read_soil_springs.py          # Formula extraction utility
+│   ├── system_capabilities_test.py    # 🔍 System verification tool ⭐ NEW
+│   ├── Static Values.xlsx            # 📋 Pipe and soil assumptions
+│   ├── Soil Springs_2024.xlsx        # Pipeline analysis spreadsheet
+│   ├── exact_soil_springs_output/     # 🧮 Exact calculation results ⭐ BEST
+│   ├── efficient_static_values_output/ # ⚡ Fast analysis results
+│   ├── enhanced_static_values_output/ # 🧮 Excel integration results
+│   └── static_values_output/          # 📈 Basic parameter combinations
+│
+├── examples/                          # 📁 Example configuration files
+├── references/                        # 📚 Reference documents and manuals
+├── PARAMETER_INPUT_GUIDE.md           # 📖 User guide for parameters
+└── system_config.json                # System capabilities config (if present)
 ```
 
 ## Limitations & Future Enhancements

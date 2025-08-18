@@ -7,7 +7,8 @@
       "Bash(grep:*)",
       "Bash(git add:*)",
       "Bash(grep:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(true)"
     ],
     "deny": [],
     "ask": []
