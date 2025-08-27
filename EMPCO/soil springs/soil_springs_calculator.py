@@ -121,8 +121,12 @@ class SoilSpringsCalculator:
                 min_val = param_data['min']
                 max_val = param_data['max']
                 
-                if 'DOC' in param_name or 'Length' in param_name:
-                    # Generate 1-foot increments
+                if 'DOC' in param_name:
+                    # Generate 0.1-foot increments for DOC
+                    values = [round(min_val + i * 0.1, 1) for i in range(int((max_val - min_val) / 0.1) + 1)]
+                    parameter_ranges[param_name] = values
+                elif 'Length' in param_name:
+                    # Generate 1-foot increments for Length
                     values = list(range(int(min_val), int(max_val) + 1, 1))
                     parameter_ranges[param_name] = values
                 else:
